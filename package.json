@@ -4,12 +4,17 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/server/main.js -w src/server",
+    "dev": "concurrently \"vite\" \"nodemon src/server/main.js -w src/server\"",
     "start": "NODE_ENV=production node src/server/main.js",
     "build": "vite build"
   },
   "dependencies": {
     "@tailwindcss/container-queries": "^0.1.1",
+    "@tanstack/react-query": "^4.35.7",
+    "@tanstack/react-query-devtools": "^4.35.7",
+    "axios": "^1.5.1",
+    "concurrently": "^8.2.1",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
