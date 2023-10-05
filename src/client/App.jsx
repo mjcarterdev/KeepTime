@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 function App() {
-  const { isLoading, error, data, isFetching } = useQuery({
+  const { isLoading, error, data } = useQuery({
     queryKey: ['repoData'],
     queryFn: () =>
       axios.get('http://localhost:3001/home').then((res) => {
@@ -13,6 +13,8 @@ function App() {
   });
 
   if (isLoading) return 'Loading...';
+
+  if (error) return 'Error!';
 
   return (
     <>
