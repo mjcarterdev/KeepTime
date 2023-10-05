@@ -4,7 +4,7 @@
       "path": "."
     }
   ],
-  "settings": {},
+
   "extensions": {
     "recommendations": [
       "ms-vscode-remote.remote-containers",
@@ -14,5 +14,11 @@
       "prisma.prisma",
       "bradlc.vscode-tailwindcss"
     ]
+  },
+  "settings": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+
   }
 }
+
