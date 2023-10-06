@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "heybourn.headwind",
+    "aaron-bond.better-comments",
+    "ms-vscode-remote.remote-containers",
+    "ms-azuretools.vscode-docker",
+    "bradlc.vscode-tailwindcss",
+    "prisma.prisma",
+    "esbenp.prettier-vscode",
+    "christian-kohler.npm-intellisense",
+    "eamodio.gitlens",
+    "dbaeumer.vscode-eslint"
+  ]
+}
