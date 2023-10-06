@@ -16,6 +16,6 @@ module.exports = {
     'react/react-in-jsx-scope': 0,
     'react/button-has-type': 'off',
     'global-require': 'off',
-    'jsx-quotes': 'prefer-single',
+    'implicit-arrow-linebreak': 'below',
   },
 };
