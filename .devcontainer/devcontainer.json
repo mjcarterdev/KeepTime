@@ -11,6 +11,7 @@
     "ghcr.io/devcontainers-contrib/features/apt-packages:1": {}
   },
 
+
   // Features to add to the dev container. More info: https://containers.dev/features.
   // "features": {},
 
@@ -19,7 +20,7 @@
   "forwardPorts": [3000, 5432],
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  // "postCreateCommand": "yarn install",
+  "postCreateCommand": "npm install && npm run dev",
 
   // Configure tool-specific properties.
   "customizations": {
