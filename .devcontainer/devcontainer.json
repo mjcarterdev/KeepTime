@@ -6,13 +6,14 @@
   "service": "app",
   "workspaceFolder": "/workspaces/KeepTime",
   "shutdownAction": "stopCompose",
-  "features": {
-    "ghcr.io/devcontainers-contrib/features/act:1": {},
-    "ghcr.io/devcontainers-contrib/features/apt-packages:1": {}
-  },
 
   // Features to add to the dev container. More info: https://containers.dev/features.
-  // "features": {},
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers-contrib/features/apt-packages:1": {},
+    "ghcr.io/devcontainers-contrib/features/bash-command:1": {},
+    "ghcr.io/eliises/devcontainer-features/bash-profile:1": {}
+  },
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // This can be used to network with other containers or with the host.
@@ -25,16 +26,16 @@
   "customizations": {
     "vscode": {
       "extensions": [
-		"aaron-bond.better-comments",
-		"ms-azuretools.vscode-docker",
-		"dbaeumer.vscode-eslint",
-		"eamodio.gitlens",
-		"christian-kohler.npm-intellisense",
-		"esbenp.prettier-vscode",
-		"Prisma.prisma",
-		"bradlc.vscode-tailwindcss",
-		"heybourn.headwind"
-	]
+        "aaron-bond.better-comments",
+        "ms-azuretools.vscode-docker",
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
+        "christian-kohler.npm-intellisense",
+        "esbenp.prettier-vscode",
+        "Prisma.prisma",
+        "bradlc.vscode-tailwindcss",
+        "heybourn.headwind"
+      ]
     }
   }
 
