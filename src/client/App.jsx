@@ -29,7 +29,7 @@ function App() {
         <div className='card-body'>
           <h2 className='card-title'>Shoes!</h2>
           <p className='" bg-sky-700 text-white hover:bg-sky-800" px-4 py-2 sm:px-8 sm:py-3'>
-            If a dog chews shoes whose shoes does he choose?This is working woohoo
+            If a dog chews shoes whose shoes does he choose?Testing
           </p>
           <p>{data}</p>
           <div className='card-actions justify-end'>

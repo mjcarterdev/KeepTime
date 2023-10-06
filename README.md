@@ -2,7 +2,17 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-### Starting Development Container in VS Code
+### Start Development Container in VS Code from local repo
+
+- Git clone repo to host
+- In VS Code ensure you have 'Dev Containers' extention installed [https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers]
+- Open folder of downloaded repo
+- VS Code should recognise the devcontainer.json and ask to start in a container, accept this prompt.
+- VS Code will open the container and install the package.json
+- Run `npm run dev`
+- The application will start on `http://localhost:5173/`
+
+### Starting Development Container in VS Code downloading from repo
 
 - In VS Code ensure you have 'Dev Containers' extention installed [https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers]
 - From VS Code open the pallete with `ctrl + shift + P` and type and select `Dev Containers: Clone Repository in Container Volume...`
@@ -12,4 +22,5 @@ This template provides a minimal setup to get React working in Vite with HMR and
 - Container should start to build
 - Once it has finished running the repository will be mounted inside the container.
 - Run `npm install`
+- Run `npm run dev`
 - The application will start on `http://localhost:5173/`
