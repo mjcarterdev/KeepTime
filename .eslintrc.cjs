@@ -3,7 +3,8 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['airbnb', 'airbnb/hooks', 'plugin:react/recommended'],
+  extends: ["eslint:recommended", "prettier", "plugin:react/recommended"],
+  parser: "babel-eslint",
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -11,7 +12,7 @@ module.exports = {
     ecmaVersion: 15,
     sourceType: 'module',
   },
-  plugins: ['react'],
+  plugins: ['react', "react-hooks"],
   rules: {
     'react/react-in-jsx-scope': 0,
     'react/button-has-type': 'off',

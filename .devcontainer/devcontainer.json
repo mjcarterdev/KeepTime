@@ -2,7 +2,7 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/javascript-node-postgres
 {
   "name": "keeptime-dev-container",
-  "dockerComposeFile": "../docker-compose.yml",
+  "dockerComposeFile": "./docker-compose.yml",
   "service": "app",
   "workspaceFolder": "/workspaces/KeepTime",
   "shutdownAction": "stopCompose",
@@ -12,12 +12,16 @@
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers-contrib/features/apt-packages:1": {},
     "ghcr.io/devcontainers-contrib/features/bash-command:1": {},
-    "ghcr.io/eliises/devcontainer-features/bash-profile:1": {}
+    "ghcr.io/eliises/devcontainer-features/bash-profile:1": {},
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+    "ghcr.io/dhoeric/features/flyctl:1": {
+      "version": "0.1.104"
+    }
   },
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // This can be used to network with other containers or with the host.
-  "forwardPorts": [3000, 5432],
+  "forwardPorts": [5432],
 
   // Use 'postCreateCommand' to run commands after the container is created.
   "postCreateCommand": "npm install",
@@ -34,11 +38,13 @@
         "esbenp.prettier-vscode",
         "Prisma.prisma",
         "bradlc.vscode-tailwindcss",
-        "heybourn.headwind"
+        "heybourn.headwind",
+        "cweijan.vscode-postgresql-client2",
+        "pkief.material-icon-theme"
       ]
     }
-  }
+  },
 
   // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-  // "remoteUser": "root"
+  "remoteUser": "root"
 }
