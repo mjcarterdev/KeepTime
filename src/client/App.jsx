@@ -4,17 +4,17 @@ import axios from 'axios';
 import { lazy } from 'react';
 
 function App() {
-  // const { isLoading, error, data } = useQuery({
-  //   queryKey: ['repoData'],
-  //   queryFn: () =>
-  //     axios.get('http://localhost:3001/api/home').then((res) => {
-  //       console.log(res);
-  //       return res.data;
-  //     }),
-  // });
+  const { isLoading, error, data } = useQuery({
+    queryKey: ['repoData'],
+    queryFn: () =>
+      axios.get('http://localhost:3001/api/home').then((res) => {
+        console.log(res);
+        return res.data;
+      }),
+  });
 
-  // if (isLoading) return 'Loading...';
-  // if (error) return 'Error!';
+  if (isLoading) return 'Loading...';
+  if (error) return 'Error!';
 
   return (
     <>
@@ -25,7 +25,7 @@ function App() {
           <p className="px-4 py-2 text-white sm:px-8 sm:py-3 bg-sky-700 hover:bg-sky-200">
             If a dog chews shoes whose shoes does he choose?
           </p>
-          {/* <p>{data}</p> */}
+          <p>{data}</p>
           <div className="justify-end card-actions">
             <button className="btn btn-primary">Buy Now</button>
           </div>
