@@ -6,15 +6,16 @@
   "scripts": {
     "clean": "rimraf dist",
     "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "prod": "concurrently \"npm run start\" \"npm run serve\"",
     "client:dev": "vite",
     "server:dev": "nodemon src/server/server.js",
-    "server:build": "babel --verbose --out-dir dist --only 'src/server/server.js,src/lib/' src",
+    "server:build": "babel --verbose --out-dir dist --only 'src/server/server.js,src/server/' src",
     "client:build": "vite build",
-    "build": "npm run server:build && npm run client:build",
+    "build": "npm run client:build && npm run server:build",
     "serve": "vite preview",
     "prepare": "husky install",
     "test": "prettier --check . && eslint . && stylelint \"**/*.css\"",
-    "start": "node dist/server.js"
+    "start": "node dist/server/server.js"
   },
   "devDependencies": {
     "@babel/cli": "^7.15.7",
