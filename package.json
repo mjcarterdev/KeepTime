@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
-    "prod": "concurrently \"npm run start\" \"npm run serve\"",
+    "prod": "concurrently \"npm run serve\" \"npm run start\"",
     "client:dev": "vite",
     "server:dev": "nodemon src/server/server.js",
     "server:build": "babel --verbose --out-dir dist --only 'src/server/server.js,src/server/' src",

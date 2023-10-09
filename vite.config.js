@@ -8,10 +8,13 @@ const { PORT = 3001 } = process.env;
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  preview: {
+    port: 8080,
+  },
   server: {
     host: true,
     strictPort: true,
-    port: 8080,
+    port: PORT,
     proxy: {
       '/api': {
         target: `http://localhost:${PORT}`,
