@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import axios from 'axios';
-import { lazy } from 'react';
+import LandingPage from './pages/LandingPage';
 
 function App() {
   const { isLoading, error, data } = useQuery({
@@ -31,6 +31,7 @@ function App() {
           </div>
         </div>
       </div>
+      <LandingPage />
       <ReactQueryDevtools initialIsOpen />
     </>
   );
