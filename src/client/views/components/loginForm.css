@@ -1,0 +1,75 @@
+/* src/client/views/components/LoginForm.css */
+
+/* Estilos para centrar el formulario en la pantalla */
+.login-form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Ocupa toda la altura de la pantalla */
+  background-color: white; /* Fondo blanco */
+  text-align: center;
+}
+
+.logo-container { 
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-text {
+  font-family: Roboto;
+  font-size: 96px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-right: 0px; /* Espacio entre "Keep" y "Time" */
+}
+
+.keep {
+  color: var(--Primary, #5288EC); /* Color para "Keep" */
+}
+
+.time {
+  color: var(--accent-2, #37D59B); /* Color para "Time" */
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
+
+/* Estilos para los campos de texto y etiquetas */
+.form-group {
+  margin: 10px 0; /* Espacio entre los grupos de campos */
+  text-align: left; /* Alinea el texto a la izquierda */
+}
+
+.form-label {
+  font-weight: bold; /* Texto en negrita para las etiquetas */
+}
+
+.form-input {
+  width: 100%; /* Ancho del campo de texto al 100% */
+  padding: 5px;
+  border: 1px solid #ccc; /* Borde para los campos de texto */
+  border-radius: 5px; /* Bordes redondeados */
+}
+
+/* Estilos para el botón con contorno */
+.outlined-button {
+  background-color: transparent;
+  border: 2px solid #007BFF; /* Color del contorno del botón */
+  color: #007BFF; /* Color del texto del botón */
+  padding: 10px 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.outlined-button:hover {
+  background-color: #007BFF; /* Cambia el color de fondo al pasar el mouse */
+  color: white; /* Cambia el color del texto al pasar el mouse */
+}
