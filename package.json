@@ -5,17 +5,14 @@
   "type": "module",
   "scripts": {
     "clean": "rimraf dist",
-    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
-    "prod": "concurrently \"npm run serve\" \"npm run start\"",
+    "dev": "nodemon src/server/server.js -w src/server",
+    "prod": "NODE_ENV=production node dist/server/server.js",
     "client:dev": "vite",
-    "server:dev": "nodemon src/server/server.js",
     "server:build": "babel --verbose --out-dir dist --only 'src/server/server.js,src/server/' src",
     "client:build": "vite build",
     "build": "npm run client:build && npm run server:build",
     "serve": "vite preview",
-    "prepare": "husky install",
-    "test": "vitest",
-    "start": "node dist/server/server.js"
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@babel/cli": "^7.15.7",
@@ -62,6 +59,7 @@
     "prettier": "^3.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "6.16.0"
+    "react-router-dom": "6.16.0",
+    "vite-express": "^0.10.0"
   }
 }

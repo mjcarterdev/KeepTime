@@ -10,24 +10,7 @@ const { PORT = 3001 } = process.env;
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react({ fastRefresh: false })],
-  preview: {
-    port: 3000,
-  },
-  server: {
-    host: '0.0.0.0',
-    strictPort: true,
-    port: 8080,
-    proxy: {
-      '/api': {
-        target: `http://localhost:${PORT}`,
-        changeOrigin: true,
-      },
-      build: {
-        outDir: 'dist/app',
-      },
-    },
-  },
+  plugins: [react()],
   build: {
     chunkSizeWarningLimit: 300,
     rollupOptions: {
@@ -37,16 +20,6 @@ export default defineConfig({
         }
         warn(warning);
       },
-    },
-  },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    css: true,
-    setupFiles: './src/test/setup.js',
-    browser: {
-      enabled: false,
-      name: 'chrome', // browser name is required
     },
   },
 });
