@@ -13,9 +13,6 @@ function App() {
       }),
   });
 
-  if (isLoading) return 'Loading...';
-  if (error) return 'Error!';
-
   return (
     <>
       <h1 className="text-3xl font-bold underline">Hello world!</h1>
@@ -23,15 +20,15 @@ function App() {
         <div className="card-body">
           <h2 className="card-title">Shoes!</h2>
           <p className="px-4 py-2 text-white sm:px-8 sm:py-3 bg-sky-700 hover:bg-sky-200">
-            If a dog chews shoes whose shoes does he choose?
+            If a dog chews shoes whosed shoes does he choose?
           </p>
-          <p>{data}</p>
+          {isLoading ? <p>Loading...</p> : <p>{data}</p>}
+          {error && <p>Error!</p>}
           <div className="justify-end card-actions">
             <button className="btn btn-primary">Buy Now</button>
           </div>
         </div>
       </div>
-      <LandingPage />
       <ReactQueryDevtools initialIsOpen />
     </>
   );
