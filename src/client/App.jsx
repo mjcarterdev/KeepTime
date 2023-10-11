@@ -2,12 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import axios from 'axios';
 import { lazy } from 'react';
-
-// import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-
-import LoginForm from './views/components/loginForm';
-import RegisterForm from './views/components/registerForm';
-
+import { Routes, Route } from 'react-router-dom';
+import Login from './views/components/loginForm';
+import Register from './views/components/registerForm';
+import Home from './views/components/home';
 
 function App() {
   const { isLoading, error, data } = useQuery({
@@ -22,11 +20,16 @@ function App() {
   if (isLoading) return 'Loading...';
   if (error) return 'Error!';
 
+
   return (
     <>
-      <LoginForm />
-
-      {/*<ReactQueryDevtools initialIsOpen />*/}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/projects" />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/next" />
+      </Routes>
     </>
   );
 }

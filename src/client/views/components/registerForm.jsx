@@ -1,22 +1,33 @@
 // src/client/views/components/RegisterForm.jsx
 import React, { useState } from 'react';
 import './RegisterForm.css'; // Make sure you have a CSS file for custom styles
+import { Link } from 'react-router-dom';
+
 
 function RegisterForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordMatch, setPasswordMatch] = useState(true); // Check if passwords match
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Here you can add the logic for user registration
-    // For now, we'll just log the entered values
-    console.log('Name:', name);
-    console.log('Email:', email);
-    console.log('Password:', password);
-    console.log('Confirm Password:', confirmPassword);
+
+    if (password === confirmPassword) {
+
+      setPasswordMatch(true);
+
+      console.log('Name:', name);
+      console.log('Email:', email);
+      console.log('Password:', password);
+    } else {
+      setPasswordMatch(false);
+    }
   };
+
+  
 
   return (
     <div className="register-form-container">
@@ -68,8 +79,10 @@ function RegisterForm() {
             required
             className="form-input"
           />
+          {!passwordMatch && <p className="error-message">Passwords don't match!</p>}
         </div>
         <button type="submit" className="outlined-button">Sign Up</button>
+        <Link to="/" className="home-button">Back to Home</Link>
       </form>
     </div>
   );

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import './LoginForm.css';
+import { Link } from 'react-router-dom';
 
 function LoginForm() {
   const [email, setEmail] = useState('');
@@ -46,6 +47,7 @@ function LoginForm() {
           />
         </div>
         <button type="submit" className="outlined-button">Log In</button>
+        <Link to="/" className="home-button">Back to Home</Link>
       </form>
     </div>
   );

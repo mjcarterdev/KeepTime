@@ -75,6 +75,11 @@
     background-color: #007BFF; /* Change background color on hover */
     color: white; /* Change text color on hover */
   }
+
+  .error-message {
+    color: red; /* Texto en color rojo */
+    text-align: center; /* Centrar el texto */
+    margin-top: 5px; /* Espacio superior para separar del campo de confirmar contraseña */
+  }
   
-  /* Additional styles for customization can be added as needed */
   
