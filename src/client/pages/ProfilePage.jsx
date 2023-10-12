@@ -1,8 +1,8 @@
 const ProfilePage = () => {
   return (
-    <>
-      <div>Profile Page</div>
-    </>
+    <div className="min-h-screen bg-base-200">
+      <p>Profile Page</p>
+    </div>
   );
 };
 

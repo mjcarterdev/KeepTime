@@ -2,11 +2,11 @@ import { Link } from 'react-router-dom';
 
 const NavBar = () => {
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-100 .items-stretch">
       <div className="navbar-start">
-        <a className="text-xl normal-case btn btn-ghost">
+        <span className="text-xl normal-case btn btn-ghost">
           <Link to={`/`}>KeepTime</Link>
-        </a>
+        </span>
       </div>
       <div className="hidden navbar-end lg:flex">
         <ul className="px-1 menu menu-horizontal">
@@ -27,7 +27,7 @@ const NavBar = () => {
           </li>
         </ul>
       </div>
-      <div className="navbar-end">
+      <div className="navbar-end lg:hidden">
         <div className="dropdown dropdown-end">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
             <svg

@@ -1,8 +1,8 @@
 const ProjectPage = () => {
   return (
-    <>
-      <div>Project Page</div>
-    </>
+    <div className="min-h-screen bg-base-200">
+      <p>Project Pagedss</p>
+    </div>
   );
 };
 

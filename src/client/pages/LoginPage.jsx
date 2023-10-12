@@ -1,8 +1,8 @@
 const LoginPage = () => {
   return (
-    <>
-      <div>Login Page</div>
-    </>
+    <div className="min-h-screen hero bg-base-200">
+      <p>Login Page</p>
+    </div>
   );
 };
 

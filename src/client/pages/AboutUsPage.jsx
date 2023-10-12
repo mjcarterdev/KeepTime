@@ -1,8 +1,8 @@
 const AboutUsPage = () => {
   return (
-    <>
-      <div>AboutUs Page</div>
-    </>
+    <div className="min-h-screen hero bg-base-200">
+      <p>About Us Page</p>
+    </div>
   );
 };
 
