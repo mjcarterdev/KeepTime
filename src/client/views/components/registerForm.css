@@ -1,0 +1,85 @@
+/* src/client/views/components/RegisterForm.css */
+
+/* Styles to center the form on the screen */
+.register-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Takes up the full height of the screen */
+    background-color: white; /* White background */
+    text-align: center;
+  }
+  
+  /* Styles for the logo */
+  .logo-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .logo-text {
+    font-family: Roboto;
+    font-size: 96px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-right: 0px; /* Space between "Keep" and "Time" */
+  }
+  
+  .keep {
+    color: var(--Primary, #5288EC); /* Color for "Keep" */
+  }
+  
+  .time {
+    color: var(--accent-2, #37D59B); /* Color for "Time" */
+  }
+  
+  /* Styles for the form */
+  .form {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+  }
+  
+  /* Styles for form elements and labels */
+  .form-group {
+    margin: 10px 0; /* Space between form groups */
+    text-align: left; /* Left-align text */
+  }
+  
+  .form-label {
+    font-weight: bold; /* Bold text for labels */
+  }
+  
+  .form-input {
+    width: 100%; /* 100% width for input fields */
+    padding: 5px;
+    border: 1px solid #ccc; /* Border for input fields */
+    border-radius: 5px; /* Rounded corners */
+  }
+  
+  /* Styles for the outlined button */
+  .outlined-button {
+    background-color: transparent;
+    border: 2px solid #007BFF; /* Button border color */
+    color: #007BFF; /* Button text color */
+    padding: 10px 20px;
+    margin-top: 10px; /* Space above the button */
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .outlined-button:hover {
+    background-color: #007BFF; /* Change background color on hover */
+    color: white; /* Change text color on hover */
+  }
+
+  .error-message {
+    color: red; /* Texto en color rojo */
+    text-align: center; /* Centrar el texto */
+    margin-top: 5px; /* Espacio superior para separar del campo de confirmar contraseña */
+  }
+  
+  
