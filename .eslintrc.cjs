@@ -14,9 +14,5 @@ module.exports = {
   },
   plugins: ['react', 'react-hooks'],
   rules: {
-    // 'react/react-in-jsx-scope': 0,
-    // 'react/button-has-type': 'off',
-    // 'global-require': 'off',
-    // 'jsx-quotes': 'prefer-single',
   },
 };
