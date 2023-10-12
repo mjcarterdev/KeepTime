@@ -1,6 +1,6 @@
 const SignUpPage = () => {
   return (
-    <div className="min-h-screen hero bg-base-200">
+    <div className="h-[calc(100vh-4rem)] hero bg-base-100">
       <p>Sign Up Page</p>
     </div>
   );

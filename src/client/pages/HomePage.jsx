@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 const HomePage = () => {
   return (
     <>
-      <div className="min-h-screen hero bg-base-200">
+      <div className="h-[calc(100vh-4rem)] hero bg-base-100">
         <div className="text-center hero-content">
           <div className="max-w-md">
             <h1 className="text-5xl font-bold">Hello there</h1>

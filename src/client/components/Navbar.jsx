@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const NavBar = () => {
   return (
-    <div className="navbar bg-base-100 .items-stretch">
+    <div className="navbar bg-neutral text-neutral-content .min-h-16 .p-0">
       <div className="navbar-start">
         <span className="text-xl normal-case btn btn-ghost">
           <Link to={`/`}>KeepTime</Link>
@@ -47,7 +47,7 @@ const NavBar = () => {
           </label>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content  mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+            className="menu menu-sm dropdown-content  mt-3 z-[1] p-2 shadow bg-neutral text-neutral-content w-52"
           >
             <li>
               <Link to={`login`}>Login</Link>
