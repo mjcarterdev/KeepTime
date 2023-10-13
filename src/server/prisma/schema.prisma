@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id          Int       @id @default(autoincrement())
+  title       String    @db.VarChar(255)
+  createdAt   DateTime  @default(now()) @db.Timestamp(6)
+  description String    @db.VarChar(255)
+  creatorId     Int
+  user        User      @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subTask     SubTask[]
+}
+
+model SubTask {
+  id          Int          @id @default(autoincrement())
+  title       String       @db.VarChar(255)
+  description String       @db.VarChar(255)
+  projectId   Int
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  timeRecords TimeRecord[]
+}
+
+model TimeRecord {
+  id        Int      @id @default(autoincrement())
+  subTaskId Int
+  date      DateTime
+  startTime DateTime
+  endTime   DateTime
+  subTask   SubTask  @relation(fields: [subTaskId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Profile {
+  id          Int  @id @default(autoincrement())
+  preferences Json
+  userId      Int  @unique
+  user        User @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model User {
+  id      Int       @id @default(autoincrement())
+  name    String?   @db.VarChar(255)
+  email   String    @unique @db.VarChar(255)
+  password String
+  projects    Project[]
+  profile Profile?
+}

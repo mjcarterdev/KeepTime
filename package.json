@@ -38,6 +38,7 @@
     "nodemon": "^2.0.13",
     "postcss": "^8.4.31",
     "prettier-plugin-tailwindcss": "^0.5.5",
+    "prisma": "^5.4.2",
     "rimraf": "^3.0.2",
     "stylelint": "^15.10.3",
     "stylelint-config-prettier": "^8.0.2",
@@ -48,6 +49,7 @@
     "webdriverio": "^8.17.0"
   },
   "dependencies": {
+    "@prisma/client": "^5.4.2",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/typography": "^0.5.10",
     "@tanstack/react-query": "^4.36.1",
@@ -59,7 +61,9 @@
     "prettier": "^3.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.47.0",
     "react-router-dom": "6.16.0",
-    "vite-express": "^0.10.0"
+    "vite-express": "^0.10.0",
+    "zod": "^3.22.4"
   }
 }
