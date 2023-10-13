@@ -13,44 +13,45 @@ export default {
     themes: [
       {
         light: {
-          primary: '#0e7777',
+          primary: '#238fc2',
 
-          secondary: '#c41b78',
+          secondary: '#a3e635',
 
-          accent: '#8eed9c',
+          accent: '#f43f5e',
 
-          neutral: '#221d2b',
+          neutral: '#142440',
+          'neutral-focus': '#238fc2',
 
-          'base-100': '#e1eaef',
+          'base-100': '#e5e7eb',
 
-          info: '#87d8f8',
+          info: '#3670ce',
 
-          success: '#18aa7c',
+          success: '#86efac',
 
-          warning: '#f1b127',
+          warning: '#fbbf24',
 
-          error: '#ee2f5c',
+          error: '#ef4444',
         },
       },
       {
         dark: {
-          primary: '#a9fcdd',
+          primary: '#443dc6',
 
-          secondary: '#b0bf2f',
+          secondary: '#29f4aa',
 
-          accent: '#eda8b2',
+          accent: '#919cff',
 
-          neutral: '#1f2d38',
+          neutral: '#232a34',
 
-          'base-100': '#434856',
+          'base-100': '#3b3f54',
 
-          info: '#9db6f6',
+          info: '#3956db',
 
-          success: '#0b5b42',
+          success: '#289f81',
 
-          warning: '#f7be55',
+          warning: '#edc61d',
 
-          error: '#ea346d',
+          error: '#fb467c',
         },
       },
     ],

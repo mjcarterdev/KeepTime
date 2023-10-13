@@ -5,7 +5,7 @@ export default function ErrorPage() {
   console.error(error);
 
   return (
-    <div id="error-page" className="min-h-screen hero bg-base-200">
+    <div id="error-page" className="h-[calc(100vh-4rem)] hero bg-base-100">
       <h1>Oops!</h1>
       <p>Sorry, an unexpected error has occurred.</p>
       <p>

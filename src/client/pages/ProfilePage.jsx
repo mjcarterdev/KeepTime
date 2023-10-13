@@ -1,6 +1,6 @@
 const ProfilePage = () => {
   return (
-    <div className="min-h-screen bg-base-200">
+    <div className="h-[calc(100vh-4rem)] hero bg-base-100">
       <p>Profile Page</p>
     </div>
   );

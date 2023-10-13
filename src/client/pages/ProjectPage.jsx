@@ -1,6 +1,6 @@
 const ProjectPage = () => {
   return (
-    <div className="min-h-screen bg-base-200">
+    <div className="h-[calc(100vh-4rem)] hero bg-base-100">
       <p>Project Pagedss</p>
     </div>
   );

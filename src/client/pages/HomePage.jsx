@@ -1,18 +1,26 @@
+import Logo from '../components/Logo';
 import { Link } from 'react-router-dom';
 
 const HomePage = () => {
   return (
     <>
-      <div className="min-h-screen hero bg-base-200">
+      <div className="h-[calc(100vh-4rem)] hero bg-base-100">
         <div className="text-center hero-content">
           <div className="max-w-md">
-            <h1 className="text-5xl font-bold">Hello there</h1>
-            <p className="py-6">
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi.
+            <Logo className={'text-7xl lg:text-8xl font-bold'} />
+            <p className="py-6 text-1xl lg:text-2xl">
+              Unlock your productivity potential.
+              <br />
+              Your Time. Your Way.
             </p>
-            <button className="btn btn-primary">Get Started</button>
+            <div className="flex justify-evenly">
+              <button className="w-24 btn btn-primary">
+                <Link to={'/login'}>Login</Link>
+              </button>
+              <button className="w-24 btn btn-primary">
+                <Link to={'/signup'}>Sign Up</Link>
+              </button>
+            </div>
           </div>
         </div>
       </div>
