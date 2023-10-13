@@ -17,31 +17,19 @@ const NavBar = () => {
       </div>
       <div className="hidden navbar-end lg:flex">
         <ul className="px-1 menu-lg menu-horizontal">
-          <li
-            className={location.pathname === '/login' ? selectedStyle : style}
-          >
+          <li className={location.pathname === '/login' ? selectedStyle : style}>
             <Link to={`login`}>Login</Link>
           </li>
-          <li
-            className={location.pathname === '/signup' ? selectedStyle : style}
-          >
+          <li className={location.pathname === '/signup' ? selectedStyle : style}>
             <Link to={`signup`}>Sign Up</Link>
           </li>
-          <li
-            className={
-              location.pathname === '/projects' ? selectedStyle : style
-            }
-          >
+          <li className={location.pathname === '/projects' ? selectedStyle : style}>
             <Link to={`projects`}>Projects</Link>
           </li>
-          <li
-            className={location.pathname === '/profile' ? selectedStyle : style}
-          >
+          <li className={location.pathname === '/profile' ? selectedStyle : style}>
             <Link to={`profile`}>Profile</Link>
           </li>
-          <li
-            className={location.pathname === '/about' ? selectedStyle : style}
-          >
+          <li className={location.pathname === '/about' ? selectedStyle : style}>
             <Link to={`about`}>About Us</Link>
           </li>
         </ul>
@@ -56,47 +44,26 @@ const NavBar = () => {
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
             </svg>
           </label>
           <ul
             tabIndex={0}
             className="menu-sm dropdown-content  mt-3 z-[1] p-2 shadow bg-neutral text-neutral-content w-52"
           >
-            <li
-              className={location.pathname === '/login' ? selectedStyle : style}
-            >
+            <li className={location.pathname === '/login' ? selectedStyle : style}>
               <Link to={`login`}>Login</Link>
             </li>
-            <li
-              className={
-                location.pathname === '/signup' ? selectedStyle : style
-              }
-            >
+            <li className={location.pathname === '/signup' ? selectedStyle : style}>
               <Link to={`signup`}>Sign Up</Link>
             </li>
-            <li
-              className={
-                location.pathname === '/projects' ? selectedStyle : style
-              }
-            >
+            <li className={location.pathname === '/projects' ? selectedStyle : style}>
               <Link to={`projects`}>Projects</Link>
             </li>
-            <li
-              className={
-                location.pathname === '/profile' ? selectedStyle : style
-              }
-            >
+            <li className={location.pathname === '/profile' ? selectedStyle : style}>
               <Link to={`profile`}>Profile</Link>
             </li>
-            <li
-              className={location.pathname === '/about' ? selectedStyle : style}
-            >
+            <li className={location.pathname === '/about' ? selectedStyle : style}>
               <Link to={`about`}>About Us</Link>
             </li>
           </ul>
