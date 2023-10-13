@@ -60,15 +60,15 @@ const LoginPage = () => {
               <label className="label">
                 <span className={errors.password ? visible : hidden}>Min. of 8 characters</span>
               </label>
-              <div className="flex pt-4 justify-evenly">
-                <button className="w-24 btn btn-primary">
-                  <Link to={'/'}>Back</Link>
-                </button>
-                <button type="submit" onClick={handleSubmit(onSubmit)} className="w-24 btn btn-primary">
-                  <Link to={'/projects'}>Login</Link>
-                </button>
-              </div>
             </form>
+            <div className="flex pt-4 justify-evenly">
+              <button className="w-24 btn btn-primary">
+                <Link to={'/'}>Back</Link>
+              </button>
+              <button type="submit" onClick={handleSubmit(onSubmit)} className="w-24 btn btn-primary">
+                <Link to={'/projects'}>Login</Link>
+              </button>
+            </div>
           </div>
         </div>
       </div>
