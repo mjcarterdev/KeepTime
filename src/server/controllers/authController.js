@@ -1,32 +1,34 @@
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import { addRefreshTokenToWhitelist } from '../models/authModel.js';
+import { findUserByEmail, createUserByEmailAndPassword } from '../models/userModel.js';
+import { v4 } from 'uuid';
+import { generateTokens } from '../utils/jwt.js';
 
-export const login = async (req, res) => {
+export const register = async (req, res, next) => {
+  console.log(req.body);
   try {
-  } catch (error) {}
-};
+    const { email, password, name } = req.body;
+    if (!email || !password || !name) {
+      res.status(400);
+      throw new Error('You must provide an email and a password and name.');
+    }
 
-export const register = async (req, res) => {
-  try {
-  } catch (error) {}
-};
+    const existingUser = await findUserByEmail(email);
 
-export const logout = async (req, res) => {
-  try {
-  } catch (error) {}
-};
+    if (existingUser) {
+      res.status(400);
+      throw new Error('Email already in use.');
+    }
 
-export const refreshToken = async (req, res) => {
-  try {
-  } catch (error) {}
-};
+    const user = await createUserByEmailAndPassword({ email, password, name });
+    const jtid = v4();
+    const { accessToken, refreshToken } = generateTokens(user, jtid);
+    await addRefreshTokenToWhitelist({ jtid, refreshToken, userId: user.id });
 
-export const restPasswordByUserId = async (req, res) => {
-  try {
-  } catch (error) {}
-};
-
-export const resetPasswordByEmail = async (req, res) => {
-  try {
-  } catch (error) {}
+    res.json({
+      accessToken,
+      refreshToken,
+    });
+  } catch (err) {
+    next(err);
+  }
 };

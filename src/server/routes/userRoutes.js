@@ -1,6 +1,6 @@
 import express from 'express';
 import { getUserProfile, getUserPreferences, setUserPreferences } from '../controllers/userController';
-import authenticationToken from '../middlewares/authJWT';
+import authenticationToken from '../utils/authJWT';
 
 const userRouter = new express.Router();
 
