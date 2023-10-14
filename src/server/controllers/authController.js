@@ -1,5 +1,10 @@
-import { addRefreshTokenToWhitelist, deleteRefreshToken, findRefreshTokenById } from '../models/authModel.js';
-import { findUserByEmail, createUserByEmailAndPassword } from '../models/userModel.js';
+import {
+  addRefreshTokenToWhitelist,
+  deleteRefreshToken,
+  findRefreshTokenById,
+  revokeTokens,
+} from '../models/authModel.js';
+import { findUserByEmail, createUserByEmailAndPassword, findUserById } from '../models/userModel.js';
 import { v4 } from 'uuid';
 import { generateTokens } from '../utils/jwt.js';
 import bcrypt from 'bcrypt';
@@ -73,7 +78,6 @@ export const login = async (req, res, next) => {
 export const refreshToken = async (req, res, next) => {
   try {
     const { refreshToken } = req.body;
-    console.log(req.body);
     if (!refreshToken) {
       res.status(400);
       throw new Error('Missing refresh token.');

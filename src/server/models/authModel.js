@@ -2,10 +2,10 @@ import hashToken from '../utils/hashToken.js';
 import db from '../utils/database.js';
 
 // used when we create a refresh token.
-export const addRefreshTokenToWhitelist = ({ jti, refreshToken, userId }) => {
+export const addRefreshTokenToWhitelist = ({ jtid, refreshToken, userId }) => {
   return db.refreshToken.create({
     data: {
-      id: jti,
+      id: jtid,
       hashedToken: hashToken(refreshToken),
       userId,
     },
@@ -13,8 +13,8 @@ export const addRefreshTokenToWhitelist = ({ jti, refreshToken, userId }) => {
 };
 
 // used to check if the token sent by the client is in the database.
-export const findRefreshTokenById = (id) => {
-  return db.refreshToken.findUnique({
+export const findRefreshTokenById = async (id) => {
+  return await db.refreshToken.findUnique({
     where: {
       id,
     },

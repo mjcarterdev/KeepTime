@@ -1,12 +1,10 @@
 import express from 'express';
-import { getUserProfile, getUserPreferences, setUserPreferences } from '../controllers/userController';
-import { isAuthenticated } from '../middleware/middleware';
+import { getUserById } from '../controllers/userController.js';
+import { isAuthenticated } from '../middleware/middleware.js';
 
 const userRouter = new express.Router();
 
 userRouter.use(isAuthenticated);
-userRouter.get('/profile', getUserProfile);
-userRouter.get('/preferences/', getUserPreferences);
-userRouter.post('/preferences', setUserPreferences);
+userRouter.get('/profile', getUserById);
 
 export default userRouter;
