@@ -1,10 +1,10 @@
 import express from 'express';
 import { getUserProfile, getUserPreferences, setUserPreferences } from '../controllers/userController';
-import authenticationToken from '../utils/authJWT';
+import { isAuthenticated } from '../middleware/middleware';
 
 const userRouter = new express.Router();
 
-userRouter.use(authenticationToken);
+userRouter.use(isAuthenticated);
 userRouter.get('/profile', getUserProfile);
 userRouter.get('/preferences/', getUserPreferences);
 userRouter.post('/preferences', setUserPreferences);
