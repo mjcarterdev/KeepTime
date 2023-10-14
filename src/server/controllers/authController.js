@@ -12,7 +12,6 @@ import jwt from 'jsonwebtoken';
 import hashToken from '../utils/hashToken.js';
 
 export const register = async (req, res, next) => {
-  console.log(req.body);
   try {
     const { email, password, name } = req.body;
     if (!email || !password || !name) {
@@ -83,9 +82,7 @@ export const refreshToken = async (req, res, next) => {
       throw new Error('Missing refresh token.');
     }
     const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-    console.log('payload ', payload);
     const savedRefreshToken = await findRefreshTokenById(payload.jtid);
-    console.log('savedRefreshToken ', savedRefreshToken);
 
     if (!savedRefreshToken || savedRefreshToken.revoked === true) {
       res.status(401);

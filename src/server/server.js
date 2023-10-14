@@ -14,14 +14,7 @@ const PORT = process.env.NODE_ENV === 'production' ? 3000 : 3001;
 
 app.use(bodyParser.json());
 
-app.use(
-  cors({
-    origin:
-      process.env.NODE_ENV === 'development' || !process.env.NODE_ENV ? 'http://localhost:5173' : process.env.FRONT_URL,
-    allowedHeaders: ['Access-Control-Allow-Origin', 'Content-Type', 'Authorization'],
-    credentials: true,
-  }),
-);
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
