@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const REFRESH_TOKEN_URL = '/auth/refreshToken';
-const BASE_URL = 'http://localhost:5000/api/';
 
 let failedQueue = [];
 let isRefreshing = false;
@@ -21,7 +20,7 @@ const processQueue = (error) => {
 
 export const axiosClient = () => {
   const client = axios.create({
-    baseURL: BASE_URL,
+    baseURL: window.location.protocol + '//' + window.location.hostname + '/api',
     timeout: 300000,
     withCredentials: true,
     headers: {
@@ -54,7 +53,7 @@ export const axiosClient = () => {
 
       const logout = async () => {
         const navigate = useNavigate();
-        client.get('/auth/revokeRefreshTokens');
+        client.get('/auth/logout');
         navigate('/login');
       };
 

@@ -144,7 +144,7 @@ export const revokeRefreshTokens = async (req, res, next) => {
     res
       .status(200)
       .clearCookie('keeptime', { path: '/' })
-      .json({ message: `Tokens revoked for user with id #${userId}` });
+      .json({ message: `User with id #${userId} logged out successfully` });
   } catch (err) {
     next(err);
   }

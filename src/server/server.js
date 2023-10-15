@@ -10,7 +10,7 @@ import userRouter from './routes/userRoutes.js';
 dotenv.config();
 const app = express();
 
-const allowedOrigins = ['https://keeptime-prod.fly.dev', 'http://localhost:3001'];
+const allowedOrigins = ['https://keeptime-prod.fly.dev', 'http://localhost:3001', 'http://localhost:3000'];
 
 const PORT = process.env.NODE_ENV === 'production' ? 3000 : 3001;
 
