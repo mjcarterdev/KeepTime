@@ -6,6 +6,8 @@ import ViteExpress from 'vite-express';
 import dotenv from 'dotenv';
 import authRouter from './routes/authRoutes.js';
 import userRouter from './routes/userRoutes.js';
+import projectRouter from './routes/projectRoutes.js';
+import swaggerRouter from './routes/swaggerRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -35,8 +37,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use('/api/auth', authRouter);
-// app.use('/api/project', projectRouter);
+app.use('/api/project', projectRouter);
 app.use('/api/user', userRouter);
+app.use('/api/swagger', swaggerRouter);
 
 ViteExpress.listen(app, PORT, () =>
   console.log(`Server is listening on port ${PORT} in ${process.env.NODE_ENV ? 'production' : 'dev'} mode`),

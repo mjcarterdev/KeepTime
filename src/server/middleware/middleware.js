@@ -2,8 +2,9 @@ import jwt from 'jsonwebtoken';
 
 export const isAuthenticated = (req, res, next) => {
   const keeptimeCookie = req.cookies.keeptime;
-
-  if (!keeptimeCookie) {
+  const { authorization } = req.headers;
+  
+  if (!authorization) {
     res.status(401);
     throw new Error('Un-Authorized no access token found');
   }
