@@ -82,7 +82,7 @@ export const login = async (req, res, next) => {
         },
       )
       .status(200)
-      .json({ message: 'Logged in successfully 😊 👌' });
+      .json({ token: accessToken, message: 'Logged in successfully 😊 👌' });
   } catch (err) {
     next(err);
   }
