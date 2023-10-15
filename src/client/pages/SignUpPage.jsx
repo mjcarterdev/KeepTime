@@ -1,28 +1,25 @@
 import Logo from '../components/Logo';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { registration } from '../api/services';
+import { useMutation } from '@tanstack/react-query';
 
 const SignUpPage = () => {
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    watch,
-    clearErrors,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => postRegistration(data);
+
+  const mutation = useMutation(registration, {
+    onSuccess: () => navigate('/auth/profile'),
+  });
+
+  const onSubmit = (data) => mutation.mutate(data);
 
   const hidden = 'invisible label-text-alt';
   const visible = 'label-text-alt';
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      clearErrors();
-    }, 10000);
-    return () => clearTimeout(timer);
-  }, [errors]);
 
   return (
     <>
@@ -36,6 +33,19 @@ const SignUpPage = () => {
               Your Time. Your Way.
             </p>
             <form className="form-control">
+              <label className="label">
+                <span className="label-text">Name</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Type here"
+                className="w-full input input-bordered input-primary"
+                {...register('name', { required: true, minLength: 2 })}
+              />
+              <label className="label">
+                <span className={errors.name ? visible : hidden}>This is required</span>
+              </label>
+
               <label className="label">
                 <span className="label-text">Email</span>
               </label>
@@ -59,7 +69,19 @@ const SignUpPage = () => {
                 {...register('password', { required: true, minLength: 8 })}
               />
               <label className="label">
-                <span className={errors.password ? visible : hidden}>Min. of 8 characters</span>
+                <span className={errors.confirm ? visible : hidden}>Min. of 8 characters</span>
+              </label>
+              <label className="pt-2 label">
+                <span className="label-text">Confirm Password</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Type here"
+                className="w-full input input-bordered input-primary"
+                {...register('confirm', { required: true, minLength: 8 })}
+              />
+              <label className="label">
+                <span className={errors.confirm ? visible : hidden}>Min. of 8 characters</span>
               </label>
             </form>
             <div className="flex pt-4 justify-evenly">
