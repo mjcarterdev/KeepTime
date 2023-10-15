@@ -16,6 +16,7 @@
     "swagger": "node ./src/server/swagger.js"
   },
   "devDependencies": {
+    "@babel/plugin-syntax-import-assertions": "^7.22.5",
     "@babel/cli": "^7.15.7",
     "@babel/core": "^7.15.7",
     "@babel/eslint-parser": "^7.22.15",
@@ -52,7 +53,6 @@
     "webdriverio": "^8.17.0"
   },
   "dependencies": {
-    "@babel/plugin-syntax-import-assertions": "^7.22.5",
     "@prisma/client": "^5.4.2",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/typography": "^0.5.10",
