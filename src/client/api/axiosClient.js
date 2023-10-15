@@ -2,7 +2,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const REFRESH_TOKEN_URL = '/auth/refreshToken';
-
+const baseURLDev = `${window.location.protocol}//${window.location.hostname}:3001/api`;
+const baseURLProd = `${window.location.protocol}//${window.location.hostname}/api`;
 let failedQueue = [];
 let isRefreshing = false;
 
@@ -18,30 +19,15 @@ const processQueue = (error) => {
   failedQueue = [];
 };
 
-export const axiosClient = () => {
+const createAxiosClient = () => {
   const client = axios.create({
-    baseURL: window.location.protocol + '//' + window.location.hostname + '/api',
+    baseURL: process.env.NODE_ENV === 'production' ? baseURLProd : baseURLDev,
     timeout: 300000,
     withCredentials: true,
     headers: {
       'Content-Type': 'application/json',
     },
   });
-
-  // client.interceptors.request.use(
-  //   (config) => {
-  //     if (config.authorization !== false) {
-  //       const token = getCurrentAccessToken();
-  //       if (token) {
-  //         config.headers.Authorization = 'Bearer ' + token;
-  //       }
-  //     }
-  //     return config;
-  //   },
-  //   (error) => {
-  //     return Promise.reject(error);
-  //   },
-  // );
 
   client.interceptors.response.use(
     (response) => {
@@ -51,7 +37,7 @@ export const axiosClient = () => {
       const originalRequest = error.config;
       originalRequest.headers = JSON.parse(JSON.stringify(originalRequest.headers || {}));
 
-      const logout = async () => {
+      const logout = () => {
         const navigate = useNavigate();
         client.get('/auth/logout');
         navigate('/login');
@@ -106,3 +92,5 @@ export const axiosClient = () => {
   );
   return client;
 };
+
+export const axiosClient = createAxiosClient();

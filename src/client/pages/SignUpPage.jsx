@@ -1,9 +1,10 @@
 import Logo from '../components/Logo';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 
 const SignUpPage = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -11,7 +12,7 @@ const SignUpPage = () => {
     clearErrors,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => postRegistration(data);
 
   const hidden = 'invisible label-text-alt';
   const visible = 'label-text-alt';
@@ -62,15 +63,12 @@ const SignUpPage = () => {
               </label>
             </form>
             <div className="flex pt-4 justify-evenly">
-              <Link to={'/'}>
-                <button className="w-24 btn btn-primary">Back</button>
-              </Link>
-
-              <Link to={'/projects'}>
-                <button type="submit" onClick={handleSubmit(onSubmit)} className="w-24 btn btn-primary">
-                  Sign Up
-                </button>
-              </Link>
+              <button className="w-24 btn btn-primary" onClick={() => navigate(-1)}>
+                Back
+              </button>
+              <button type="submit" onClick={handleSubmit(onSubmit)} className="w-24 btn btn-primary">
+                Sign Up
+              </button>
             </div>
           </div>
         </div>
