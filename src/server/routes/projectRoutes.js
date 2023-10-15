@@ -1,6 +1,6 @@
 import express from 'express';
 import { isAuthenticated, validate } from '../middleware/middleware.js';
-import { projectSchema } from '../../validationSchemas/projectSchema.js';
+import { projectSchema } from '../validationSchemas/projectSchema.js';
 import * as projectController from '../controllers/projectController.js';
 
 const projectRouter = new express.Router();
