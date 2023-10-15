@@ -23,11 +23,11 @@ const NavBar = () => {
           <li className={location.pathname === '/signup' ? selectedStyle : style}>
             <Link to={`signup`}>Sign Up</Link>
           </li>
-          <li className={location.pathname === '/projects' ? selectedStyle : style}>
-            <Link to={`projects`}>Projects</Link>
+          <li className={location.pathname === '/auth/projects' ? selectedStyle : style}>
+            <Link to={`/auth/projects`}>Projects</Link>
           </li>
-          <li className={location.pathname === '/profile' ? selectedStyle : style}>
-            <Link to={`profile`}>Profile</Link>
+          <li className={location.pathname === '/auth/profile' ? selectedStyle : style}>
+            <Link to={`/auth/profile`}>Profile</Link>
           </li>
           <li className={location.pathname === '/about' ? selectedStyle : style}>
             <Link to={`about`}>About Us</Link>
@@ -57,11 +57,11 @@ const NavBar = () => {
             <li className={location.pathname === '/signup' ? selectedStyle : style}>
               <Link to={`signup`}>Sign Up</Link>
             </li>
-            <li className={location.pathname === '/projects' ? selectedStyle : style}>
-              <Link to={`projects`}>Projects</Link>
+            <li className={location.pathname === '/auth/projects' ? selectedStyle : style}>
+              <Link to={`/auth/projects`}>Projects</Link>
             </li>
-            <li className={location.pathname === '/profile' ? selectedStyle : style}>
-              <Link to={`profile`}>Profile</Link>
+            <li className={location.pathname === '/auth/profile' ? selectedStyle : style}>
+              <Link to={`/auth/profile`}>Profile</Link>
             </li>
             <li className={location.pathname === '/about' ? selectedStyle : style}>
               <Link to={`about`}>About Us</Link>

@@ -1,27 +1,25 @@
 import Logo from '../components/Logo';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { login } from '../api/services.js';
+import { useMutation } from '@tanstack/react-query';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    watch,
-    clearErrors,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+
+  const mutation = useMutation(login, {
+    onSuccess: () => navigate('/auth/profile'),
+  });
+
+  const onSubmit = (data) => mutation.mutate(data);
 
   const hidden = 'invisible label-text-alt';
   const visible = 'label-text-alt';
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      clearErrors();
-    }, 10000);
-    return () => clearTimeout(timer);
-  }, [errors]);
 
   return (
     <>
@@ -61,12 +59,13 @@ const LoginPage = () => {
                 <span className={errors.password ? visible : hidden}>Min. of 8 characters</span>
               </label>
             </form>
+
             <div className="flex pt-4 justify-evenly">
-              <button className="w-24 btn btn-primary">
-                <Link to={'/'}>Back</Link>
+              <button className="w-24 btn btn-primary" onClick={() => navigate(-1)}>
+                Back
               </button>
               <button type="submit" onClick={handleSubmit(onSubmit)} className="w-24 btn btn-primary">
-                <Link to={'/projects'}>Login</Link>
+                Login
               </button>
             </div>
           </div>
