@@ -41,15 +41,6 @@ export const registerSchema = z.object({
     }),
 });
 
-export const refreshTokenSchema = z.object({
-  body: z.object({
-    refreshToken: z
-      .string()
-      .min(1, { message: 'Refresh Token is missing' })
-      .max(300, { message: 'Refresh Token is to long' }),
-  }),
-});
-
 export const revokeRefreshTokensSchema = z.object({
   body: z.object({
     userId: z.string().uuid({ message: 'Not a uuid' }).min(1, { message: 'userId is missing' }),

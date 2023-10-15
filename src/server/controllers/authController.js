@@ -31,10 +31,17 @@ export const register = async (req, res, next) => {
     const { accessToken, refreshToken } = generateTokens(user, jtid);
     await addRefreshTokenToWhitelist({ jtid, refreshToken, userId: user.id });
 
-    res.json({
-      accessToken,
-      refreshToken,
-    });
+    res
+      .cookie(
+        'keeptime',
+        { accessToken, refreshToken },
+        {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+        },
+      )
+      .status(200)
+      .json({ message: 'Registered successfully 😊 👌' });
   } catch (err) {
     next(err);
   }
@@ -65,10 +72,17 @@ export const login = async (req, res, next) => {
     const { accessToken, refreshToken } = generateTokens(existingUser, jtid);
     await addRefreshTokenToWhitelist({ jtid, refreshToken, userId: existingUser.id });
 
-    res.json({
-      accessToken,
-      refreshToken,
-    });
+    res
+      .cookie(
+        'keeptime',
+        { accessToken, refreshToken },
+        {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+        },
+      )
+      .status(200)
+      .json({ message: 'Logged in successfully 😊 👌' });
   } catch (err) {
     next(err);
   }
@@ -76,12 +90,12 @@ export const login = async (req, res, next) => {
 
 export const refreshToken = async (req, res, next) => {
   try {
-    const { refreshToken } = req.body;
-    if (!refreshToken) {
+    const keeptimeCookie = req.cookies.keeptime;
+    if (!keeptimeCookie) {
       res.status(400);
       throw new Error('Missing refresh token.');
     }
-    const payload = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    const payload = jwt.verify(keeptimeCookie.refreshToken, process.env.JWT_REFRESH_SECRET);
     const savedRefreshToken = await findRefreshTokenById(payload.jtid);
 
     if (!savedRefreshToken || savedRefreshToken.revoked === true) {
@@ -89,7 +103,7 @@ export const refreshToken = async (req, res, next) => {
       throw new Error('Unauthorized');
     }
 
-    const hashedToken = hashToken(refreshToken);
+    const hashedToken = hashToken(keeptimeCookie.refreshToken);
     if (hashedToken !== savedRefreshToken.hashedToken) {
       res.status(401);
       throw new Error('Unauthorized');
@@ -106,10 +120,17 @@ export const refreshToken = async (req, res, next) => {
     const { accessToken, refreshToken: newRefreshToken } = generateTokens(user, jtid);
     await addRefreshTokenToWhitelist({ jtid, refreshToken: newRefreshToken, userId: user.id });
 
-    res.json({
-      accessToken,
-      refreshToken: newRefreshToken,
-    });
+    res
+      .cookie(
+        'keeptime',
+        { accessToken, refreshToken: newRefreshToken },
+        {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+        },
+      )
+      .status(200)
+      .json({ message: 'Token refreshed in successfully 😊 👌' });
   } catch (err) {
     next(err);
   }
@@ -117,9 +138,13 @@ export const refreshToken = async (req, res, next) => {
 
 export const revokeRefreshTokens = async (req, res, next) => {
   try {
-    const { userId } = req.body;
+    console.log(req.payload);
+    const { userId } = req.payload;
     await revokeTokens(userId);
-    res.json({ message: `Tokens revoked for user with id #${userId}` });
+    res
+      .status(200)
+      .clearCookie('keeptime', { path: '/' })
+      .json({ message: `Tokens revoked for user with id #${userId}` });
   } catch (err) {
     next(err);
   }

@@ -10,11 +10,27 @@ import userRouter from './routes/userRoutes.js';
 dotenv.config();
 const app = express();
 
+const allowedOrigins = ['https://keeptime-prod.fly.dev', 'http://localhost:3001'];
+
 const PORT = process.env.NODE_ENV === 'production' ? 3000 : 3001;
 
 app.use(bodyParser.json());
 
-app.use(cors());
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // allow requests with no origin
+      // (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        var msg = 'The CORS policy for this site does not ' + 'allow access from the specified Origin.';
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    withCredentials: true,
+  }),
+);
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
