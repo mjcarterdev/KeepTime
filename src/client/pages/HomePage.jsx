@@ -14,12 +14,25 @@ const HomePage = () => {
               Your Time. Your Way.
             </p>
             <div className="flex justify-evenly">
-              <button className="w-24 btn btn-primary">
-                <Link to={'/login'}>Login</Link>
-              </button>
-              <button className="w-24 btn btn-primary">
-                <Link to={'/signup'}>Sign Up</Link>
-              </button>
+
+                <Link to={'/login'} className="w-24 btn btn-primary">
+                  <div>
+                  Login    
+                  </div>
+                </Link>
+             
+                <Link to={'/signup'} className="w-24 btn btn-primary">
+                  <div>
+                    Sign Up
+                  </div>
+                </Link>
+
+                <Link to={'/timer'} className="w-24 btn btn-primary">
+                  <div>
+                    Timer    
+                  </div>
+                </Link>
+
             </div>
           </div>
         </div>

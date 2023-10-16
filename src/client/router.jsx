@@ -5,9 +5,11 @@ import SignUpPage from './pages/SignUpPage';
 import ProjectPage from './pages/ProjectPage';
 import ProfilePage from './pages/ProfilePage';
 import AboutUsPage from './pages/AboutUsPage';
+import TimerPage from './pages/timerPage';
 import App from './App';
 import { createBrowserRouter, redirect } from 'react-router-dom';
 import { authProvider } from './hooks/authProvider';
+import Timer from './pages/timerPage';
 
 //Creating routing in browers
 const router = createBrowserRouter([
@@ -47,6 +49,10 @@ const router = createBrowserRouter([
       {
         path: 'about',
         element: <AboutUsPage />,
+      },
+      {
+        path: 'timer',
+        element: <TimerPage />,
       },
     ],
   },
