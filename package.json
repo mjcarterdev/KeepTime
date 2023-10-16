@@ -52,6 +52,7 @@
     "webdriverio": "^8.17.0"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.3.2",
     "@prisma/client": "^5.4.2",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/typography": "^0.5.10",
@@ -64,7 +65,9 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
+    "npm": "^10.2.0",
     "prettier": "^3.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

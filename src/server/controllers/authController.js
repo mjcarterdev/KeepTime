@@ -41,7 +41,7 @@ export const register = async (req, res, next) => {
         },
       )
       .status(200)
-      .json({ message: 'Registered successfully 😊 👌' });
+      .json({ message: 'Registered successfully 😊 👌', isAuthenticated: true });
   } catch (err) {
     next(err);
   }
@@ -82,7 +82,7 @@ export const login = async (req, res, next) => {
         },
       )
       .status(200)
-      .json({ token: accessToken, message: 'Logged in successfully 😊 👌' });
+      .json({ message: 'Logged in successfully 😊 👌', isAuthenticated: true });
   } catch (err) {
     next(err);
   }
@@ -130,7 +130,7 @@ export const refreshToken = async (req, res, next) => {
         },
       )
       .status(200)
-      .json({ message: 'Token refreshed in successfully 😊 👌' });
+      .json({ message: 'Token refreshed in successfully 😊 👌', isAuthenticated: true });
   } catch (err) {
     next(err);
   }
@@ -144,7 +144,7 @@ export const revokeRefreshTokens = async (req, res, next) => {
     res
       .status(200)
       .clearCookie('keeptime', { path: '/' })
-      .json({ message: `User with id #${userId} logged out successfully` });
+      .json({ message: `User with id #${userId} logged out successfully`, isAuthenticated: false });
   } catch (err) {
     next(err);
   }

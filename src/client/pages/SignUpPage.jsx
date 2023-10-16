@@ -1,7 +1,7 @@
 import Logo from '../components/Logo';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { registration } from '../api/services';
+import { postRegistration } from '../api/services';
 import { useMutation } from '@tanstack/react-query';
 
 const SignUpPage = () => {
@@ -12,7 +12,7 @@ const SignUpPage = () => {
     formState: { errors },
   } = useForm();
 
-  const mutation = useMutation(registration, {
+  const mutation = useMutation(postRegistration, {
     onSuccess: () => navigate('/auth/profile'),
   });
 

@@ -1,7 +1,8 @@
 const ProjectPage = () => {
   return (
-    <div className="h-[calc(100vh-4rem)] hero bg-base-100">
-      <p>Project Pagedss</p>
+    <div className="h-[calc(100vh-4rem)] bg-base-100">
+      <h1>Protected </h1>
+      <p>Project Pages</p>
     </div>
   );
 };

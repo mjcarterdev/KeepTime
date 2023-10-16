@@ -4,7 +4,7 @@ export const isAuthenticated = (req, res, next) => {
   const keeptimeCookie = req.cookies.keeptime;
 
   if (!keeptimeCookie) {
-    res.status(401);
+    res.status(401).json({ message: 'Cookie is missing' });
     throw new Error('Un-Authorized no access token found');
   }
 

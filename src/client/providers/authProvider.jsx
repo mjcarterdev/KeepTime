@@ -1,15 +1,17 @@
+import { getLogout, postLogin } from '../api/services';
+import { useMutation } from '@tanstack/react-query';
+
 export const authProvider = {
   isAuthenticated: false,
-  username: null,
 
-  async signIn(username) {
-    await new Promise((r) => setTimeout(r, 500)); // fake delay
-    authProvider.isAuthenticated = true;
-    authProvider.username = username;
+  async login(email, password) {
+    const response = await postLogin(email, password);
+    console.log(`response: `, response);
+    authProvider.isAuthenticated = response.data.isAuthenticated;
   },
-  async signout() {
-    await new Promise((r) => setTimeout(r, 500)); // fake delay
-    authProvider.isAuthenticated = false;
-    authProvider.username = '';
+  async logOut() {
+    const response = await getLogout();
+    console.log(`response: `, response);
+    authProvider.isAuthenticated = response.data.isAuthenticated;
   },
 };
