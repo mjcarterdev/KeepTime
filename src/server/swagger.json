@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "KeepTime API",
-    "description": "API endpoint for KeepTime app",
+    "description": "API endpoints for KeepTime app. Note: Endpoints marked with a lock icon require a login to save auth info in cookies.",
     "version": "1.0.0"
   },
   "host": "localhost:3001",
@@ -11,6 +11,7 @@
   "paths": {
     "/api/auth/register": {
       "post": {
+        "tags": ["Auth"],
         "description": "",
         "parameters": [
           {
@@ -44,6 +45,7 @@
     },
     "/api/auth/login": {
       "post": {
+        "tags": ["Auth"],
         "description": "",
         "parameters": [
           {
@@ -74,14 +76,8 @@
     },
     "/api/auth/refreshToken": {
       "get": {
+        "tags": ["Auth"],
         "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
         "responses": {
           "400": {
             "description": "Bad Request"
@@ -94,14 +90,8 @@
     },
     "/api/auth/logout": {
       "get": {
+        "tags": ["Auth"],
         "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -114,13 +104,10 @@
     },
     "/api/project/createNew": {
       "post": {
+        "tags": ["Project"],
+        "summary": "Create a new project",
         "description": "",
         "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
           {
             "name": "body",
             "in": "body",
@@ -147,16 +134,44 @@
           "401": {
             "description": "Unauthorized"
           }
-        }
+        },
+        "security": [
+          {
+            "cookieAuth:": []
+          }
+        ]
       }
     },
     "/api/project/getUserProjects": {
       "get": {
+        "tags": ["Project"],
+        "summary": "Get all project for authorized user",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth:": []
+          }
+        ]
+      }
+    },
+    "/api/project/getById/{id}": {
+      "get": {
+        "tags": ["Project"],
+        "summary": "Get project by Id",
         "description": "",
         "parameters": [
           {
-            "name": "authorization",
-            "in": "header",
+            "name": "id",
+            "in": "path",
+            "required": true,
             "type": "string"
           }
         ],
@@ -167,16 +182,58 @@
           "401": {
             "description": "Unauthorized"
           }
-        }
+        },
+        "security": [
+          {
+            "cookieAuth:": []
+          }
+        ]
       }
     },
-    "/api/project/delete": {
+    "/api/project/delete/{id}": {
       "delete": {
+        "tags": ["Project"],
+        "summary": "Delete a project by Id",
         "description": "",
         "parameters": [
           {
-            "name": "authorization",
-            "in": "header",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth:": []
+          }
+        ]
+      }
+    },
+    "/api/project/update/{id}": {
+      "put": {
+        "tags": ["Project"],
+        "summary": "Update a project data",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
             "type": "string"
           },
           {
@@ -185,7 +242,10 @@
             "schema": {
               "type": "object",
               "properties": {
-                "projectId": {
+                "title": {
+                  "example": "any"
+                },
+                "description": {
                   "example": "any"
                 }
               }
@@ -201,19 +261,38 @@
           },
           "401": {
             "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth:": []
+          }
+        ]
+      }
+    },
+    "/api/user/profile": {
+      "get": {
+        "tags": ["User"],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
     },
-    "/api/project/update": {
-      "put": {
+    "/api/subtask/createNew": {
+      "post": {
+        "tags": ["SubTask"],
+        "summary": "Create a new project",
         "description": "",
         "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
           {
             "name": "body",
             "in": "body",
@@ -243,16 +322,24 @@
           "401": {
             "description": "Unauthorized"
           }
-        }
+        },
+        "security": [
+          {
+            "cookieAuth:": []
+          }
+        ]
       }
     },
-    "/api/user/profile": {
+    "/api/subtask/getProjectSubtasks/{projectId}": {
       "get": {
+        "tags": ["SubTask"],
+        "summary": "Get list of project subtasks",
         "description": "",
         "parameters": [
           {
-            "name": "authorization",
-            "in": "header",
+            "name": "projectId",
+            "in": "path",
+            "required": true,
             "type": "string"
           }
         ],
@@ -263,7 +350,117 @@
           "401": {
             "description": "Unauthorized"
           }
-        }
+        },
+        "security": [
+          {
+            "cookieAuth:": []
+          }
+        ]
+      }
+    },
+    "/api/subtask/getById/{id}": {
+      "get": {
+        "tags": ["SubTask"],
+        "summary": "Get subtask by Id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth:": []
+          }
+        ]
+      }
+    },
+    "/api/subtask/delete/{id}": {
+      "delete": {
+        "tags": ["SubTask"],
+        "summary": "Delete subtask by Id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth:": []
+          }
+        ]
+      }
+    },
+    "/api/subtask/update/{id}": {
+      "put": {
+        "tags": ["SubTask"],
+        "summary": "Update subtask by Id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth:": []
+          }
+        ]
       }
     },
     "/api/swagger/api-docs": {

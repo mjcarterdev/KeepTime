@@ -3,7 +3,7 @@ import swaggerAutogen from 'swagger-autogen';
 const doc = {
   info: {
     title: 'KeepTime API',
-    description: 'API endpoints for KeepTime app'
+    description: 'API endpoints for KeepTime app. Note: Endpoints marked with a lock icon require a login to save auth info in cookies.'
   },
   host: 'localhost:3001'
 };
