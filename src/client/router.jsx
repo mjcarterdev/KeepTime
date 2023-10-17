@@ -33,16 +33,30 @@ const loginAction = async ({ request }) => {
   return redirect('/auth/projects');
 };
 
-const loginLoader = () => {
-  console.log('loginLoader: ', authProvider.isAuthenticated);
+const authenticationLoader = () => {
+  console.log('authenticationLoader: ', authProvider.isAuthenticated);
   if (authProvider.isAuthenticated) {
     return redirect('/auth/projects');
   }
   return null;
 };
 
-const registerAction = ({}) => {};
-const registerLoader = ({}) => {};
+const registerAction = async ({ request }) => {
+  let formData = await request.formData();
+  let email = formData.get('email');
+  let password = formData.get('password');
+  let name = formData.get('name');
+  let confirm = formData.get('confirm');
+
+  try {
+    await authProvider.register({ email, password, name, confirm });
+  } catch (error) {
+    return {
+      error: 'Invalid login attempt',
+    };
+  }
+  return redirect('/auth/projects');
+};
 
 //Creating routing in browers
 const router = createBrowserRouter([
@@ -62,13 +76,13 @@ const router = createBrowserRouter([
       {
         path: 'login',
         action: loginAction,
-        loader: loginLoader,
+        loader: authenticationLoader,
         Component: LoginPage,
       },
       {
         path: 'signup',
         action: registerAction,
-        loader: registerLoader,
+        loader: authenticationLoader,
         Component: SignUpPage,
       },
       {
