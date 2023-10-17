@@ -1,19 +1,9 @@
-import { useFetcher, useRouteLoaderData } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { getUserProfile } from '../api/services';
+import { useFetcher } from 'react-router-dom';
 
 const ProfilePage = () => {
   let fetcher = useFetcher();
 
   let isLoggingOut = fetcher.formData != null;
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['user'],
-    queryFn: () => getUserProfile(),
-  });
-  console.log(data);
-
-  if (error) {
-  }
 
   return (
     <>
