@@ -78,8 +78,9 @@ const SignUpPage = () => {
                     <span className="label-text">Confirm Password</span>
                   </label>
                   <input
-                    type="text"
+                    type="password"
                     placeholder="Type here"
+                    autoComplete="on"
                     className="w-full input input-bordered input-primary"
                     {...register('confirm', { required: true, minLength: 8 })}
                   />
