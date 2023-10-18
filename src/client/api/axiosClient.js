@@ -1,6 +1,4 @@
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { authProvider } from '../providers/authProvider';
 
 const REFRESH_TOKEN_URL = '/auth/refreshToken';
 const baseURLDev = `${window.location.protocol}//${window.location.hostname}:3001/api`;
