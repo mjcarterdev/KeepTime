@@ -17,6 +17,7 @@ export const getAllByUserId = (userId) => {
     },
     include: {
       subTasks: true,
+      timeRecords: true,
     },
   });
 };
@@ -47,6 +48,7 @@ export const findProjectById = (id) => {
     },
     include: {
       subTasks: true,
+      timeRecords: true,
     },
   });
 };

@@ -17,6 +17,7 @@ model Project {
   creatorId   String
   user        User      @relation(fields: [creatorId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   subTasks    SubTask[]
+  timeRecords TimeRecord[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @default(now()) @updatedAt
 }
@@ -38,6 +39,7 @@ model TimeRecord {
   subTaskId String?
   startTime DateTime @default(now())
   endTime   DateTime?
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   subTask   SubTask? @relation(fields: [subTaskId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt

@@ -8,8 +8,8 @@ const projectRouter = new express.Router();
 projectRouter.use(isAuthenticated);
 projectRouter.post('/createNew', validate(projectSchema.required()), projectController.create);
 projectRouter.get('/getUserProjects', projectController.getAllUserProjects);
-projectRouter.get('/getById/:id', projectController.getProjectById);
+projectRouter.get('/:id', projectController.getProjectById);
 projectRouter.delete('/delete/:id', projectController.deleteProject);
-projectRouter.put('/update/:id', projectController.update);
+projectRouter.put('/update/:id', validate(projectSchema.required()), projectController.update);
 
 export default projectRouter;

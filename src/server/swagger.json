@@ -125,8 +125,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Created"
           },
           "400": {
             "description": "Bad Request"
@@ -162,7 +162,7 @@
         ]
       }
     },
-    "/api/project/getById/{id}": {
+    "/api/project/{id}": {
       "get": {
         "tags": ["Project"],
         "summary": "Get project by Id",
@@ -290,7 +290,7 @@
     "/api/subtask/createNew": {
       "post": {
         "tags": ["SubTask"],
-        "summary": "Create a new project",
+        "summary": "Create a new subtask for a project",
         "description": "",
         "parameters": [
           {
@@ -313,8 +313,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Created"
           },
           "400": {
             "description": "Bad Request"
@@ -358,7 +358,7 @@
         ]
       }
     },
-    "/api/subtask/getById/{id}": {
+    "/api/subtask/{id}": {
       "get": {
         "tags": ["SubTask"],
         "summary": "Get subtask by Id",
@@ -463,14 +463,236 @@
         ]
       }
     },
-    "/api/swagger/api-docs": {
-      "get": {
+    "/api/timeRecord/start": {
+      "post": {
+        "tags": ["TimeRecord"],
+        "summary": "Start timer",
         "description": "",
-        "responses": {
-          "default": {
-            "description": ""
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "projectId": {
+                  "example": "any"
+                },
+                "subtaskId": {
+                  "example": "any"
+                }
+              }
+            }
           }
-        }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth:": []
+          }
+        ]
+      }
+    },
+    "/api/timeRecord/stop/{id}": {
+      "put": {
+        "tags": ["TimeRecord"],
+        "summary": "Stop timer by Id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth:": []
+          }
+        ]
+      }
+    },
+    "/api/timeRecord/allByProjectId/{projectId}": {
+      "get": {
+        "tags": ["TimeRecord"],
+        "summary": "Get list of project time records",
+        "description": "",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth:": []
+          }
+        ]
+      }
+    },
+    "/api/timeRecord/allBySubtaskId/{subtaskId}": {
+      "get": {
+        "tags": ["TimeRecord"],
+        "summary": "Get list of subtask time records",
+        "description": "",
+        "parameters": [
+          {
+            "name": "subtaskId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth:": []
+          }
+        ]
+      }
+    },
+    "/api/timeRecord/{id}": {
+      "get": {
+        "tags": ["TimeRecord"],
+        "summary": "Get time record by Id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth:": []
+          }
+        ]
+      }
+    },
+    "/api/timeRecord/delete/{id}": {
+      "delete": {
+        "tags": ["TimeRecord"],
+        "summary": "Delete time record by Id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth:": []
+          }
+        ]
+      }
+    },
+    "/api/timeRecord/update/{id}": {
+      "put": {
+        "tags": ["TimeRecord"],
+        "summary": "Update time record by Id",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "startTime": {
+                  "example": "any"
+                },
+                "endTime": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth:": []
+          }
+        ]
       }
     }
   }

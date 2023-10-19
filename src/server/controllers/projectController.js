@@ -9,15 +9,15 @@ export const create = async (req, res, next) => {
   try {
     const { title, description } = req.body;
     if (!title) {
-      res.status(400);
-      throw new Error('You must provide a project title.');
+      res.status(400).json({ error: 'You must provide a project title.' });
     }
 
     const { userId } = req.payload;
 
     let project = await projectModel.create({ title, description, userId: userId });
-    res.json(project);
+    res.status(201).json(project);
   } catch (err) {
+    console.log(err);
     next(err);
   }
 };
@@ -31,16 +31,14 @@ export const deleteProject = async (req, res, next) => {
   try {
     const projectId = req.params.id;
     if (!projectId) {
-      res.status(400);
-      throw new Error('You must provide a project id.');
+      res.status(400).json({ error: 'You must provide a project id.' });
     }
 
     const { userId } = req.payload;
     // Validate project belongs to token user
     const project = await projectModel.findProjectById(projectId);
     if (project.creatorId != userId) {
-      res.status(403);
-      throw new Error('You do not have permission to delete this project.');
+      res.status(403).json({ error: 'You do not have permission to delete this project.' });
     }
 
     await projectModel.deleteById(projectId);
@@ -93,16 +91,14 @@ export const update = async (req, res, next) => {
     const projectId = req.params.id;
 
     if (!projectId) {
-      res.status(400);
-      throw new Error('You must provide a project id.');
+      res.status(400).json({ error: 'You must provide a project id.' });
     }
 
     const { userId } = req.payload;
     // Validate project belongs to user
     const projectToUpdate = await projectModel.findProjectById(projectId);
     if (projectToUpdate.creatorId != userId) {
-      res.status(403);
-      throw new Error('You do not have permission to update this project.');
+      res.status(403).json({ error: 'You do not have permission to update this project.' });
     }
 
     let project = await projectModel.update({ title, description, projectId });

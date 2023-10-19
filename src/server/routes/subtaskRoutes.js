@@ -9,8 +9,8 @@ subtaskRouter.use(isAuthenticated);
 
 subtaskRouter.post('/createNew', validate(subtaskSchema.required()), subtaskController.create);
 subtaskRouter.get('/getProjectSubtasks/:projectId', subtaskController.getProjectSubtasks);
-subtaskRouter.get('/getById/:id', subtaskController.getById);
+subtaskRouter.get('/:id', subtaskController.getById);
 subtaskRouter.delete('/delete/:id', subtaskController.deleteSubtask);
-subtaskRouter.put('/update/:id', subtaskController.update);
+subtaskRouter.put('/update/:id', validate(subtaskSchema.required()), subtaskController.update);
 
 export default subtaskRouter;
