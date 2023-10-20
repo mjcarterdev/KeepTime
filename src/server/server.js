@@ -1,42 +1,53 @@
 import express from 'express';
 import cors from 'cors';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import ViteExpress from 'vite-express';
-import { PrismaClient } from '@prisma/client';
+import dotenv from 'dotenv';
+import authRouter from './routes/authRoutes.js';
+import userRouter from './routes/userRoutes.js';
+import projectRouter from './routes/projectRoutes.js';
+import subtaskRouter from './routes/subtaskRoutes.js';
+import timeRecordRouter from './routes/timeRecordRoutes.js';
+import swaggerRouter from './routes/swaggerRoutes.js';
 
+dotenv.config();
 const app = express();
-const prisma = new PrismaClient();
+
+const allowedOrigins = ['https://keeptime-prod.fly.dev', 'http://localhost:3001', 'http://localhost:3000'];
+
 const PORT = process.env.NODE_ENV === 'production' ? 3000 : 3001;
 
-app.use(cors());
+app.use(bodyParser.json());
 
-app.use(express.json());
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // allow requests with no origin
+      // (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        var msg = 'The CORS policy for this site does not ' + 'allow access from the specified Origin.';
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    withCredentials: true,
+  }),
+);
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-app.get('/api/home', (_req, res) => {
-  res.send('Hello Home');
-});
+app.use('/api/auth', authRouter);
+app.use('/api/project', projectRouter);
+app.use('/api/user', userRouter);
+app.use('/api/subtask', subtaskRouter);
+app.use('/api/timeRecord', timeRecordRouter);
 
-app.get('/api/about', async (_req, res) => {
-  let allUsers = await prisma.user.findMany();
-  if (allUsers.length === 0) {
-    console.log('user is being created');
-    await prisma.user.create({
-      data: {
-        name: ' Bob',
-        email: 'bob@bobbinton.com',
-        password: 'bobbob',
-        projects: {
-          create: {
-            title: 'test',
-            description: 'test goes here',
-          },
-        },
-      },
-    });
-    allUsers = await prisma.user.findMany();
-  }
-  res.send(JSON.stringify(allUsers));
-});
+if (process.env.NODE_ENV != 'production') {
+  app.use('/api/swagger', swaggerRouter);
+}
 
-ViteExpress.listen(app, 3000, () =>
+ViteExpress.listen(app, PORT, () =>
   console.log(`Server is listening on port ${PORT} in ${process.env.NODE_ENV ? 'production' : 'dev'} mode`),
 );

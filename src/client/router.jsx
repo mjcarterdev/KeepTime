@@ -7,7 +7,7 @@ import ProfilePage from './pages/ProfilePage';
 import AboutUsPage from './pages/AboutUsPage';
 import App from './App';
 import { createBrowserRouter, redirect } from 'react-router-dom';
-import { authProvider } from './hooks/authProvider';
+import { authProvider } from './providers/authProvider';
 
 //Creating routing in browers
 const router = createBrowserRouter([

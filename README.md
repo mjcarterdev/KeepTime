@@ -28,4 +28,10 @@ This template provides a minimal setup to get React working in Vite with HMR and
 ### Prisma and Postgres Setup
 
 - Run `npx prisma generate` from the server root folder
-- When you make a change to the prisma schema you need to run `npm prisma migrate dev` to update postges.
+- When you make a change to the prisma schema you need to run `npx prisma migrate dev` to update postges.
+
+### Swagger API
+
+- List of APIs can be accessed via `http://localhost:3001/api/swagger/api-docs/`
+- You need an authorization token to test endpoints
+
