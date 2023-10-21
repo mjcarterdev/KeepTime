@@ -5,8 +5,6 @@ const ProfilePage = ({ useLoader }) => {
   const { authContext } = useLoader();
   const { isAuth, user } = authContext.session();
 
-  console.log('profile: ', user);
-
   const handleLogout = async () => {
     const res = await authContext.logout();
     if (!res.data.isAuthenticated) {
