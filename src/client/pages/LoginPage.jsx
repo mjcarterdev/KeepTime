@@ -1,15 +1,26 @@
+import { useEffect } from 'react';
 import Logo from '../components/Logo';
-import { useNavigation } from 'react-router-dom';
-import Form from '../components/Form';
-import { z } from 'zod';
+import router from '../router';
+import { useForm } from 'react-hook-form';
 
-const validation = z.object({
-  password: z.string().trim().min(8).max(255),
-  email: z.string().trim().min(1).max(255).email(),
-});
+const LoginPage = ({ useLoader }) => {
+  const { authContext } = useLoader();
+  const { isAuth } = authContext.session();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = async (data) => {
+    await authContext.login(data);
+  };
 
-const LoginPage = () => {
-  const { state } = useNavigation();
+  useEffect(() => {
+    if (isAuth) {
+      router.navigate('/projects');
+    }
+  }, [isAuth]);
 
   const hidden = 'invisible label-text-alt';
   const visible = 'label-text-alt text-error';
@@ -25,46 +36,41 @@ const LoginPage = () => {
               <br />
               Your Time. Your Way.
             </p>
-            <Form className="form-control" validator={validation} action="/profile">
-              {(register, errors) => (
-                <>
-                  <label className="label">
-                    <span className="label-text">Email</span>
-                  </label>
-                  <input
-                    id="email"
-                    type="text"
-                    placeholder="Type here"
-                    className="w-full input input-bordered input-primary"
-                    {...register('email')}
-                  />
-                  <label className="label">
-                    <span className={errors.email ? visible : hidden}>This is required</span>
-                  </label>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <label className="label">
+                <span className="label-text">Email</span>
+              </label>
+              <input
+                id="email"
+                type="text"
+                placeholder="Type here"
+                className="w-full input input-bordered input-primary"
+                {...register('email')}
+              />
+              <label className="label">
+                <span className={errors.email ? visible : hidden}>This is required</span>
+              </label>
 
-                  <label className="pt-2 label">
-                    <span className="label-text">Password</span>
-                  </label>
-                  <input
-                    placeholder="Type here"
-                    className="w-full input input-bordered input-primary"
-                    type="password"
-                    name="password"
-                    autoComplete="on"
-                    {...register('password')}
-                  />
-                  <label className="label">
-                    <span className={errors.password ? visible : hidden}>Min. of 8 characters</span>
-                  </label>
-                  <div className="flex pt-4 justify-evenly">
-                    <button type="submit" disabled={state === 'submitting'} className="w-24 btn btn-primary">
-                      {state === 'submitting' && <span className="loading loading-spinner loading-sm" />}
-                      Login
-                    </button>
-                  </div>
-                </>
-              )}
-            </Form>
+              <label className="pt-2 label">
+                <span className="label-text">Password</span>
+              </label>
+              <input
+                placeholder="Type here"
+                className="w-full input input-bordered input-primary"
+                type="password"
+                name="password"
+                autoComplete="on"
+                {...register('password')}
+              />
+              <label className="label">
+                <span className={errors.password ? visible : hidden}>Min. of 8 characters</span>
+              </label>
+              <div className="flex pt-4 justify-evenly">
+                <button type="submit" className="w-24 btn btn-primary">
+                  Login
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

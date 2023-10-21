@@ -1,21 +1,35 @@
-import { useFetcher } from 'react-router-dom';
+import { useEffect } from 'react';
+import router from '../router';
 
-const ProfilePage = () => {
-  let fetcher = useFetcher();
+const ProfilePage = ({ useLoader }) => {
+  const { authContext } = useLoader();
+  const { isAuth, user } = authContext.session();
 
-  let isLoggingOut = fetcher.formData != null;
+  console.log('profile: ', user);
+
+  const handleLogout = async () => {
+    const res = await authContext.logout();
+    if (!res.data.isAuthenticated) {
+      router.navigate('/');
+    }
+  };
+
+  useEffect(() => {
+    if (!isAuth) {
+      router.navigate('/');
+    }
+  }, [status]);
 
   return (
     <>
       <div className="h-[calc(100vh-4rem)] bg-base-100">
         <br />
         <h1>Protected</h1>
+        <p>{JSON.stringify(user)}</p>
         <br />
-        <fetcher.Form method="post" action="/auth/logout">
-          <button type="submit" className="btn btn-primary" disabled={isLoggingOut}>
-            {isLoggingOut ? 'Signing out...' : 'Sign out'}
-          </button>
-        </fetcher.Form>
+        <button type="submit" onClick={() => handleLogout()} className="btn btn-primary">
+          Sign out
+        </button>
       </div>
     </>
   );

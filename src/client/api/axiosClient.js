@@ -39,7 +39,6 @@ const createAxiosClient = () => {
       // If error, process all the requests in the queue and logout the user.
       const handleError = (error) => {
         processQueue(error);
-        authProvider.logOut();
         return Promise.reject(error);
       };
       if (error.response?.status === 401 && error.response.data.message === 'TokenExpiredError') {
