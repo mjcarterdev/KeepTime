@@ -5,5 +5,5 @@ RUN npm install
 COPY . .
 ENV NODE_ENV=production
 RUN npm run build
-RUN npx prisma migrate deploy
+RUN cd ./src/server && npx prisma migrate deploy
 CMD [ "npm", "run", "prod"]
