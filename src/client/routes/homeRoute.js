@@ -8,7 +8,6 @@ export const homeRoute = new Route({
   beforeLoad: ({ context }) => {
     const { isAuth } = context.authContext.session();
     if (isAuth) {
-      context.authContext.getUser();
       throw redirect({
         to: '/projects',
       });
