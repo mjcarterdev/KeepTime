@@ -16,7 +16,7 @@ export const isAuthenticated = (req, res, next) => {
     if (err.name === 'TokenExpiredError') {
       throw new Error(err.name);
     }
-    throw new Error(`Un-Authorized other error ${err}`);
+    throw new Error(`Un-Authorized no access other error ${err}`);
   }
 
   return next();

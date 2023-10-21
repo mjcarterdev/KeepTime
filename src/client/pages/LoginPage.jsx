@@ -1,27 +1,30 @@
-import Logo from '../components/Logo';
-import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
+import Logo from '../components/Logo';
+import router from '../router';
+import { useForm } from 'react-hook-form';
+import { Link } from '@tanstack/react-router';
 
-const LoginPage = () => {
+const LoginPage = ({ useLoader }) => {
+  const { authContext } = useLoader();
+  const { isAuth } = authContext.session();
   const {
     register,
     handleSubmit,
     watch,
-    clearErrors,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
-
-  const hidden = 'invisible label-text-alt';
-  const visible = 'label-text-alt';
+  const onSubmit = async (data) => {
+    await authContext.login(data);
+  };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      clearErrors();
-    }, 10000);
-    return () => clearTimeout(timer);
-  }, [errors]);
+    if (isAuth) {
+      router.navigate('/projects');
+    }
+  }, [isAuth]);
+
+  const hidden = 'invisible label-text-alt';
+  const visible = 'label-text-alt text-error';
 
   return (
     <>
@@ -34,15 +37,16 @@ const LoginPage = () => {
               <br />
               Your Time. Your Way.
             </p>
-            <form className="form-control">
+            <form onSubmit={handleSubmit(onSubmit)}>
               <label className="label">
                 <span className="label-text">Email</span>
               </label>
               <input
+                id="email"
                 type="text"
                 placeholder="Type here"
                 className="w-full input input-bordered input-primary"
-                {...register('email', { required: true, maxLength: 20 })}
+                {...register('email')}
               />
               <label className="label">
                 <span className={errors.email ? visible : hidden}>This is required</span>
@@ -52,23 +56,22 @@ const LoginPage = () => {
                 <span className="label-text">Password</span>
               </label>
               <input
-                type="text"
                 placeholder="Type here"
                 className="w-full input input-bordered input-primary"
-                {...register('password', { required: true, minLength: 8 })}
+                type="password"
+                name="password"
+                autoComplete="on"
+                {...register('password')}
               />
               <label className="label">
                 <span className={errors.password ? visible : hidden}>Min. of 8 characters</span>
               </label>
+              <div className="flex pt-4 justify-evenly">
+                <button type="submit" className="w-24 btn btn-primary">
+                  Login
+                </button>
+              </div>
             </form>
-            <div className="flex pt-4 justify-evenly">
-              <button className="w-24 btn btn-primary">
-                <Link to={'/'}>Back</Link>
-              </button>
-              <button type="submit" onClick={handleSubmit(onSubmit)} className="w-24 btn btn-primary">
-                <Link to={'/projects'}>Login</Link>
-              </button>
-            </div>
           </div>
         </div>
       </div>
