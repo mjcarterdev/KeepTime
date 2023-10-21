@@ -15,8 +15,6 @@ const authContext = {
   session: () => getSession(),
   login: async (data) => {
     const res = await postLogin(data);
-    console.log(res);
-
     if (res.status == '200') {
       localStorage.setItem(localStorageKey, JSON.stringify({ isAuth: res.data.isAuthenticated, user: res.data.user }));
     }
