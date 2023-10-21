@@ -12,6 +12,9 @@ import jwt from 'jsonwebtoken';
 import hashToken from '../utils/hashToken.js';
 
 export const register = async (req, res, next) => {
+  /* 
+    #swagger.tags = ['Auth']
+  */
   try {
     const { email, password, name } = req.body;
     if (!email || !password || !name) {
@@ -48,6 +51,9 @@ export const register = async (req, res, next) => {
 };
 
 export const login = async (req, res, next) => {
+  /* 
+    #swagger.tags = ['Auth']
+  */
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -89,6 +95,9 @@ export const login = async (req, res, next) => {
 };
 
 export const refreshToken = async (req, res, next) => {
+  /* 
+    #swagger.tags = ['Auth']
+  */
   try {
     const keeptimeCookie = req.cookies.keeptime;
     if (!keeptimeCookie) {
@@ -137,6 +146,9 @@ export const refreshToken = async (req, res, next) => {
 };
 
 export const revokeRefreshTokens = async (req, res, next) => {
+  /* 
+    #swagger.tags = ['Auth']
+  */
   try {
     console.log(req.payload);
     const { userId } = req.payload;
