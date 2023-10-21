@@ -12,6 +12,9 @@ import jwt from 'jsonwebtoken';
 import hashToken from '../utils/hashToken.js';
 
 export const register = async (req, res, next) => {
+  /* 
+    #swagger.tags = ['Auth']
+  */
   try {
     const { email, password, name } = req.body;
     if (!email || !password || !name) {
@@ -41,13 +44,16 @@ export const register = async (req, res, next) => {
         },
       )
       .status(200)
-      .json({ message: 'Registered successfully 😊 👌' });
+      .json({ message: 'Registered successfully 😊 👌', isAuthenticated: true, user });
   } catch (err) {
     next(err);
   }
 };
 
 export const login = async (req, res, next) => {
+  /* 
+    #swagger.tags = ['Auth']
+  */
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -82,13 +88,16 @@ export const login = async (req, res, next) => {
         },
       )
       .status(200)
-      .json({ token: accessToken, message: 'Logged in successfully 😊 👌' });
+      .json({ message: 'Logged in successfully 😊 👌', isAuthenticated: true, user: existingUser });
   } catch (err) {
     next(err);
   }
 };
 
 export const refreshToken = async (req, res, next) => {
+  /* 
+    #swagger.tags = ['Auth']
+  */
   try {
     const keeptimeCookie = req.cookies.keeptime;
     if (!keeptimeCookie) {
@@ -130,13 +139,16 @@ export const refreshToken = async (req, res, next) => {
         },
       )
       .status(200)
-      .json({ message: 'Token refreshed in successfully 😊 👌' });
+      .json({ message: 'Token refreshed in successfully 😊 👌', isAuthenticated: true, user });
   } catch (err) {
     next(err);
   }
 };
 
 export const revokeRefreshTokens = async (req, res, next) => {
+  /* 
+    #swagger.tags = ['Auth']
+  */
   try {
     console.log(req.payload);
     const { userId } = req.payload;
@@ -144,7 +156,7 @@ export const revokeRefreshTokens = async (req, res, next) => {
     res
       .status(200)
       .clearCookie('keeptime', { path: '/' })
-      .json({ message: `User with id #${userId} logged out successfully` });
+      .json({ message: `User with id #${userId} logged out successfully`, isAuthenticated: false, user: {} });
   } catch (err) {
     next(err);
   }

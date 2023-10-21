@@ -1,6 +1,6 @@
 import db from '../utils/database.js';
 
-const create = (projectData) => {
+export const create = (projectData) => {
   return db.project.create({
     data: {
       title: projectData.title,
@@ -10,39 +10,45 @@ const create = (projectData) => {
   });
 };
 
-const getAllByUserId = (userId) => {
+export const getAllByUserId = (userId) => {
   return db.project.findMany({
     where: {
-      creatorId: userId
+      creatorId: userId,
+    },
+    include: {
+      subTasks: true,
+      timeRecords: true,
     },
   });
 };
 
-const deleteById = (projectId) => {
+export const deleteById = (projectId) => {
   return db.project.delete({
     where: {
-      id: projectId
+      id: projectId,
     },
   });
 };
 
-const update = (projectData) => {
+export const update = (projectData) => {
   return db.project.update({
     where: { id: projectData.projectId },
     data: {
       title: projectData.title || undefined,
       description: projectData.description || undefined,
-      updatedAt: new Date()
-    }
-  });
-};
-
-const findProjectById = (id) => {
-  return db.project.findUnique({
-    where: {
-      id,
+      updatedAt: new Date(),
     },
   });
 };
 
-export { create, getAllByUserId, deleteById, update, findProjectById };
+export const findProjectById = (id) => {
+  return db.project.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      subTasks: true,
+      timeRecords: true,
+    },
+  });
+};

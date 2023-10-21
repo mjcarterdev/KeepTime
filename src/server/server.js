@@ -7,6 +7,8 @@ import dotenv from 'dotenv';
 import authRouter from './routes/authRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import projectRouter from './routes/projectRoutes.js';
+import subtaskRouter from './routes/subtaskRoutes.js';
+import timeRecordRouter from './routes/timeRecordRoutes.js';
 import swaggerRouter from './routes/swaggerRoutes.js';
 
 dotenv.config();
@@ -39,7 +41,12 @@ app.use(cookieParser());
 app.use('/api/auth', authRouter);
 app.use('/api/project', projectRouter);
 app.use('/api/user', userRouter);
-app.use('/api/swagger', swaggerRouter);
+app.use('/api/subtask', subtaskRouter);
+app.use('/api/timeRecord', timeRecordRouter);
+
+if (process.env.NODE_ENV != 'production') {
+  app.use('/api/swagger', swaggerRouter);
+}
 
 ViteExpress.listen(app, PORT, () =>
   console.log(`Server is listening on port ${PORT} in ${process.env.NODE_ENV ? 'production' : 'dev'} mode`),

@@ -1,36 +1,44 @@
 import * as projectModel from '../models/projectModel.js';
 
-const create = async (req, res, next) => {
+export const create = async (req, res, next) => {
+  /* 
+    #swagger.tags = ['Project']
+    #swagger.summary = 'Create a new project'
+    #swagger.security = [{"cookieAuth:": [] }]
+  */
   try {
     const { title, description } = req.body;
     if (!title) {
-      res.status(400);
-      throw new Error('You must provide a project title.');
+      res.status(400).json({ error: 'You must provide a project title.' });
     }
 
     const { userId } = req.payload;
 
     let project = await projectModel.create({ title, description, userId: userId });
-    res.json(project);
+    res.status(201).json(project);
   } catch (err) {
+    console.log(err);
     next(err);
   }
 };
 
-const deleteProject = async (req, res, next) => {
+export const deleteProject = async (req, res, next) => {
+  /* 
+    #swagger.tags = ['Project']
+    #swagger.summary = 'Delete a project by Id'
+    #swagger.security = [{"cookieAuth:": [] }]
+  */
   try {
-    const { projectId } = req.body;
+    const projectId = req.params.id;
     if (!projectId) {
-      res.status(400);
-      throw new Error('You must provide a project id.');
+      res.status(400).json({ error: 'You must provide a project id.' });
     }
 
     const { userId } = req.payload;
     // Validate project belongs to token user
-    const projectToUpdate = await projectModel.findProjectById(projectId)
-    if (projectToUpdate.creatorId != userId) {
-      res.status(403);
-      throw new Error('You do not have permission to delete this project.');
+    const project = await projectModel.findProjectById(projectId);
+    if (project.creatorId != userId) {
+      res.status(403).json({ error: 'You do not have permission to delete this project.' });
     }
 
     await projectModel.deleteById(projectId);
@@ -40,7 +48,12 @@ const deleteProject = async (req, res, next) => {
   }
 };
 
-const getAllUserProjects = async (req, res, next) => {
+export const getAllUserProjects = async (req, res, next) => {
+  /* 
+    #swagger.tags = ['Project']
+    #swagger.summary = 'Get all project for authorized user'
+    #swagger.security = [{"cookieAuth:": [] }]
+  */
   try {
     const { userId } = req.payload;
 
@@ -51,21 +64,41 @@ const getAllUserProjects = async (req, res, next) => {
   }
 };
 
-const update = async (req, res, next) => {
+export const getProjectById = async (req, res, next) => {
+  /* 
+    #swagger.tags = ['Project']
+    #swagger.summary = 'Get project by Id'
+    #swagger.security = [{"cookieAuth:": [] }]
+  */
   try {
-    const { title, description, projectId } = req.body;
+    const projectId = req.params.id;
+
+    let project = await projectModel.findProjectById(projectId);
+    res.json(project);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const update = async (req, res, next) => {
+  /* 
+    #swagger.tags = ['Project']
+    #swagger.summary = 'Update a project data'
+    #swagger.security = [{"cookieAuth:": [] }]
+  */
+  try {
+    const { title, description } = req.body;
+    const projectId = req.params.id;
 
     if (!projectId) {
-      res.status(400);
-      throw new Error('You must provide a project id.');
+      res.status(400).json({ error: 'You must provide a project id.' });
     }
 
     const { userId } = req.payload;
-    // Validate project belongs to user 
-    const projectToUpdate = await projectModel.findProjectById(projectId)
+    // Validate project belongs to user
+    const projectToUpdate = await projectModel.findProjectById(projectId);
     if (projectToUpdate.creatorId != userId) {
-      res.status(403);
-      throw new Error('You do not have permission to update this project.');
+      res.status(403).json({ error: 'You do not have permission to update this project.' });
     }
 
     let project = await projectModel.update({ title, description, projectId });
@@ -74,5 +107,3 @@ const update = async (req, res, next) => {
     next(err);
   }
 };
-
-export { create, getAllUserProjects, deleteProject, update };

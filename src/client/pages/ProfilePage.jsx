@@ -1,31 +1,34 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getUserProfile, logout } from '../api/services.js';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import router from '../router';
 
-const ProfilePage = () => {
-  const { isLoading, error, data } = useQuery(['profile'], getUserProfile);
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const mutation = useMutation(logout, {
-    onSuccess: () => {
-      queryClient.removeQueries({ queryKey: ['profile'] });
-      navigate('/');
-    },
-  });
+const ProfilePage = ({ useLoader }) => {
+  const { authContext } = useLoader();
+  const { isAuth, user } = authContext.session();
 
-  const handleLogout = () => mutation.mutate();
+  console.log('profile: ', user);
 
-  if (error) {
-    return <p>Error {error}</p>;
-  }
+  const handleLogout = async () => {
+    const res = await authContext.logout();
+    if (!res.data.isAuthenticated) {
+      router.navigate('/');
+    }
+  };
+
+  useEffect(() => {
+    if (!isAuth) {
+      router.navigate('/');
+    }
+  }, [status]);
+
   return (
     <>
       <div className="h-[calc(100vh-4rem)] bg-base-100">
         <br />
-        {isLoading ? <p>isLoading...</p> : <p>{JSON.stringify(data?.data)}</p>}
+        <h1>Protected</h1>
+        <p>{JSON.stringify(user)}</p>
         <br />
-        <button className={'btn btn-primary'} onClick={() => handleLogout()}>
-          Logout
+        <button type="submit" onClick={() => handleLogout()} className="btn btn-primary">
+          Sign out
         </button>
       </div>
     </>

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 const REFRESH_TOKEN_URL = '/auth/refreshToken';
 const baseURLDev = `${window.location.protocol}//${window.location.hostname}:3001/api`;
@@ -37,22 +36,18 @@ const createAxiosClient = () => {
       const originalRequest = error.config;
       originalRequest.headers = JSON.parse(JSON.stringify(originalRequest.headers || {}));
 
-      const logout = () => {
-        const navigate = useNavigate();
-        client.get('/auth/logout');
-        navigate('/login');
-      };
-
       // If error, process all the requests in the queue and logout the user.
       const handleError = (error) => {
         processQueue(error);
-        logout();
         return Promise.reject(error);
       };
+      if (error.response?.status === 401 && error.response.data.message === 'TokenExpiredError') {
+        handleError(error);
+        return Promise.reject(error);
+      }
 
       // Refresh token conditions
       if (
-        error.response?.status === 401 &&
         error.response.data.message === 'TokenExpiredError' &&
         originalRequest?.url !== REFRESH_TOKEN_URL &&
         originalRequest?._retry !== true

@@ -1,6 +1,6 @@
 import z from 'zod';
 
-export const projectSchema = z.object({
+export const subtaskSchema = z.object({
   body: z.object({
     title: z
       .string()
