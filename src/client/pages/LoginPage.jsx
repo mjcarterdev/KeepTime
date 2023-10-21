@@ -71,6 +71,15 @@ const LoginPage = ({ useLoader }) => {
                 </button>
               </div>
             </form>
+            <div className="flex pt-4 justify-evenly">
+              <Link to={'/'} className="w-24 btn btn-primary">
+                <div>Back</div>
+              </Link>
+
+              <Link to={'/projects'} type="submit" onClick={handleSubmit(onSubmit)} className="w-24 btn btn-primary">
+                <div>Login</div>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
