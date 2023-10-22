@@ -35,23 +35,19 @@ const createAxiosClient = () => {
     async (error) => {
       const originalRequest = error.config;
       originalRequest.headers = JSON.parse(JSON.stringify(originalRequest.headers || {}));
-
       // If error, process all the requests in the queue and logout the user.
       const handleError = (error) => {
         processQueue(error);
         return Promise.reject(error);
       };
-      if (error.response?.status === 401 && error.response.data.message === 'TokenExpiredError') {
-        handleError(error);
-        return Promise.reject(error);
-      }
 
       // Refresh token conditions
       if (
-        error.response.data.message === 'TokenExpiredError' &&
+        error.response.data.error.name === 'TokenExpiredError' &&
         originalRequest?.url !== REFRESH_TOKEN_URL &&
         originalRequest?._retry !== true
       ) {
+        console.log('token refresh');
         if (isRefreshing) {
           try {
             await new Promise(function (resolve, reject) {
@@ -64,7 +60,7 @@ const createAxiosClient = () => {
         }
         isRefreshing = true;
         originalRequest._retry = true;
-        return client
+        const res = await client
           .get(REFRESH_TOKEN_URL)
           .then(() => {
             processQueue(null);
@@ -73,6 +69,7 @@ const createAxiosClient = () => {
           .finally(() => {
             isRefreshing = false;
           });
+        return res;
       }
 
       // Refresh token missing or expired => logout user...
