@@ -42,7 +42,7 @@ const Timer = () => {
 
       <img src={MainButtonSVG} alt="Main Button" className="max-w-full" />
 
-      <button class="btn btn-circle w-16 h-16 sm:w-22 sm:h-22 absolute z-10 bg-primary text-neutral-content hover:bg-primary-focus">
+      <button className="absolute z-10 w-16 h-16 btn btn-circle sm:w-22 sm:h-22 bg-primary text-primary-content hover:bg-primary-focus">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="36"
@@ -50,10 +50,10 @@ const Timer = () => {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="feather feather-refresh-ccw"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="feather feather-refresh-ccw"
         >
           <polyline points="1 4 1 10 7 10"></polyline>
           <polyline points="23 20 23 14 17 14"></polyline>

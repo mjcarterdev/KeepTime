@@ -2,34 +2,26 @@
 export default {
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
+    fontFamily: {
+      sans: ['roboto'],
+    },
     extend: {},
   },
-  plugins: [
-    require('@tailwindcss/container-queries'),
-    require('@tailwindcss/typography'),
-    require('daisyui'),
-  ],
+  plugins: [require('@tailwindcss/container-queries'), require('@tailwindcss/typography'), require('daisyui')],
   daisyui: {
     themes: [
       {
         light: {
           primary: '#238fc2',
-
+          'primary-content': '#ffffff',
           secondary: '#a3e635',
-
           accent: '#f43f5e',
-
           neutral: '#142440',
           'neutral-focus': '#238fc2',
-
           'base-100': '#e5e7eb',
-
           info: '#3670ce',
-
           success: '#86efac',
-
           warning: '#fbbf24',
-
           error: '#ef4444',
         },
       },

@@ -8,7 +8,6 @@ export const signUpRoute = new Route({
   component: SignUpPage,
   beforeLoad: ({ context }) => {
     const { isAuth } = context.authContext.session();
-    console.log(isAuth);
     if (isAuth) {
       throw redirect({
         to: '/projects',

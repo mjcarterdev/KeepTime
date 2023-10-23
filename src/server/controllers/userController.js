@@ -1,4 +1,3 @@
-import { addRefreshTokenToWhitelist, deleteRefreshToken, findRefreshTokenById } from '../models/authModel.js';
 import { findUserById } from '../models/userModel.js';
 
 export const getUserById = async (req, res, next) => {

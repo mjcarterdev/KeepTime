@@ -1,33 +1,26 @@
 import { useEffect } from 'react';
 import router from '../router';
+import PageTitle from '../components/PageTitle';
 
 const ProfilePage = ({ useLoader }) => {
   const { authContext } = useLoader();
   const { isAuth, user } = authContext.session();
 
-  const handleLogout = async () => {
-    const res = await authContext.logout();
-    if (!res.data.isAuthenticated) {
-      router.navigate('/');
-    }
-  };
-
   useEffect(() => {
     if (!isAuth) {
       router.navigate('/');
     }
-  }, [status]);
+  }, [isAuth]);
 
   return (
     <>
-      <div className="h-[calc(100vh-4rem)] bg-base-100">
+      <div className="h-[calc(100vh-4rem)] bg-base-100 flex flex-col items-center p-2">
         <br />
-        <h1>Protected</h1>
-        <p>{JSON.stringify(user)}</p>
-        <br />
-        <button type="submit" onClick={() => handleLogout()} className="btn btn-primary">
-          Sign out
-        </button>
+        <PageTitle title={'Profile Page'} />
+        <div>
+          <p className="">{user?.name}</p>
+          <p className="">{user?.email}</p>
+        </div>
       </div>
     </>
   );
