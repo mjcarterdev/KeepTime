@@ -5,7 +5,6 @@ import PageTitle from '../components/PageTitle';
 const ProfilePage = ({ useLoader }) => {
   const { authContext } = useLoader();
   const { isAuth, user } = authContext.session();
-
   useEffect(() => {
     if (!isAuth) {
       router.navigate('/');

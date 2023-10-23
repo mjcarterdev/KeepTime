@@ -33,7 +33,7 @@ export const register = async (req, res, next) => {
     const jtid = v4();
     const { accessToken, refreshToken } = generateTokens(user, jtid);
     await addRefreshTokenToWhitelist({ jtid, refreshToken, userId: user.id });
-
+    delete user.password;
     res
       .cookie(
         'keeptime',
@@ -78,6 +78,7 @@ export const login = async (req, res, next) => {
     const { accessToken, refreshToken } = generateTokens(existingUser, jtid);
     await addRefreshTokenToWhitelist({ jtid, refreshToken, userId: existingUser.id });
 
+    delete existingUser.password;
     res
       .cookie(
         'keeptime',
@@ -128,6 +129,8 @@ export const refreshToken = async (req, res, next) => {
     const jtid = v4();
     const { accessToken, refreshToken: newRefreshToken } = generateTokens(user, jtid);
     await addRefreshTokenToWhitelist({ jtid, refreshToken: newRefreshToken, userId: user.id });
+
+    delete user.password;
 
     res
       .cookie(
