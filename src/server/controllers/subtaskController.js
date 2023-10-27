@@ -1,4 +1,5 @@
 import * as subtaskModel from '../models/subtaskModel.js';
+import { totalDurationString } from '../utils/timeUtil.js';
 
 export const create = async (req, res, next) => {
   /* 
@@ -55,7 +56,10 @@ export const getProjectSubtasks = async (req, res, next) => {
     const projectId = req.params.projectId;
 
     let subtasks = await subtaskModel.getAllByProjectId(projectId);
-    res.json(subtasks);
+    let subtasksWithDuration = subtasks.map((subtask) =>
+      Object.assign(subtask, { totalDuration: totalDurationString(subtask.timeRecords) }),
+    );
+    res.json(subtasksWithDuration);
   } catch (err) {
     next(err);
   }
@@ -71,6 +75,7 @@ export const getById = async (req, res, next) => {
     const subtaskId = req.params.id;
 
     let subtask = await subtaskModel.getById(subtaskId);
+    subtask.totalDuration = totalDurationString(subtask.timeRecords);
     res.json(subtask);
   } catch (err) {
     next(err);

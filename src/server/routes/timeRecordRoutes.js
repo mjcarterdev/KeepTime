@@ -6,6 +6,7 @@ import * as timeRecordController from '../controllers/timeRecordController.js';
 const projectRouter = new express.Router();
 
 projectRouter.use(isAuthenticated);
+projectRouter.post('/create', validate(timeRecordSchema.required()), timeRecordController.create);
 projectRouter.post('/start', validate(timeRecordSchema.required()), timeRecordController.start);
 projectRouter.put('/stop/:id', timeRecordController.stop);
 projectRouter.get('/allByProjectId/:projectId', timeRecordController.getAllByProjectId);

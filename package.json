@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "dev": "nodemon src/server/server.js -w src/server",
-    "prod": "NODE_ENV=production node dist/server/server.js",
+    "prod": "NODE_ENV=production node --experimental-json-modules dist/server/server.js",
     "client:dev": "vite",
     "server:build": "cd ./src/server/ && npx prisma generate && cd ../.. && babel --verbose --out-dir dist --only 'src/server/server.js,src/server/' src",
     "client:build": "vite build",

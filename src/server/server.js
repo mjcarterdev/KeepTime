@@ -9,7 +9,7 @@ import userRouter from './routes/userRoutes.js';
 import projectRouter from './routes/projectRoutes.js';
 import subtaskRouter from './routes/subtaskRoutes.js';
 import timeRecordRouter from './routes/timeRecordRoutes.js';
-// import swaggerRouter from './routes/swaggerRoutes.js';
+import swaggerRouter from './routes/swaggerRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -44,9 +44,9 @@ app.use('/api/user', userRouter);
 app.use('/api/subtask', subtaskRouter);
 app.use('/api/timeRecord', timeRecordRouter);
 
-// if (process.env.NODE_ENV != 'production') {
-//   app.use('/api/swagger', swaggerRouter);
-// }
+if (process.env.NODE_ENV != 'production') {
+   app.use('/api/swagger', swaggerRouter);
+}
 
 ViteExpress.listen(app, PORT, () =>
   console.log(`Server is listening on port ${PORT} in ${process.env.NODE_ENV ? 'production' : 'dev'} mode`),

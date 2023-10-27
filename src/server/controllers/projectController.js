@@ -1,4 +1,5 @@
 import * as projectModel from '../models/projectModel.js';
+import { totalDurationString } from '../utils/timeUtil.js';
 
 export const create = async (req, res, next) => {
   /* 
@@ -58,7 +59,10 @@ export const getAllUserProjects = async (req, res, next) => {
     const { userId } = req.payload;
 
     let projects = await projectModel.getAllByUserId(userId);
-    res.json(projects);
+    let projectsWithDuration = projects.map((project) =>
+      Object.assign(project, { totalDuration: totalDurationString(project.timeRecords) }),
+    );
+    res.json(projectsWithDuration);
   } catch (err) {
     next(err);
   }
@@ -74,6 +78,7 @@ export const getProjectById = async (req, res, next) => {
     const projectId = req.params.id;
 
     let project = await projectModel.findProjectById(projectId);
+    project.totalDuration = totalDurationString(project.timeRecords);
     res.json(project);
   } catch (err) {
     next(err);
