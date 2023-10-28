@@ -66,6 +66,7 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "framer-motion": "^10.16.4",
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
     "npm": "^10.2.0",

@@ -26,8 +26,8 @@ const NavBar = ({ authContext }) => {
   const { isAuth } = authContext.session();
   let menuItems = getMenuItems(isAuth);
 
-  const style = 'whitespace-nowrap hover:text-secondary cursor-pointer';
-  const selectedStyle = 'whitespace-nowrap text-secondary';
+  const style = 'whitespace-nowrap hover:text-accent cursor-pointer';
+  const selectedStyle = 'whitespace-nowrap text-accent';
 
   const handleLogout = async () => {
     const res = await authContext.logout();
@@ -37,7 +37,7 @@ const NavBar = ({ authContext }) => {
   };
 
   return (
-    <div className="navbar bg-neutral text-neutral-content .min-h-16 .p-0">
+    <nav className="navbar shadow-[#f43f5e] shadow-lg bg-secondary text-secondary-content .min-h-16 px-1 py-0">
       <div className="navbar-start">
         <span className="text-xl normal-case btn btn-ghost">
           <Link to={`/`} activeOptions={{ exact: true }}>
@@ -92,7 +92,7 @@ const NavBar = ({ authContext }) => {
           </label>
           <ul
             tabIndex={0}
-            className=".flex-col menu-sm dropdown-content  mt-3 z-[1] p-2 shadow bg-neutral text-neutral-content w-52"
+            className=".flex-col menu-sm dropdown-content  mt-3 z-[1] p-2 shadow bg-secondary text-secondary-content w-52"
           >
             {menuItems.map((item) => {
               if (item.name === 'Logout') {
@@ -127,7 +127,7 @@ const NavBar = ({ authContext }) => {
           </ul>
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 
