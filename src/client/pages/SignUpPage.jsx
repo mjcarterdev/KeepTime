@@ -27,15 +27,16 @@ const SignUpPage = ({ useLoader }) => {
 
   return (
     <>
-      <div className="h-[calc(100vh-4rem)] hero bg-base-100">
-        <div className="text-center hero-content">
-          <div className="max-w-md">
+      <div className="flex items-center justify-center h-[calc(100vh-4rem)] bg-base-100">
+        <div className="flex p-2 text-center sm:max-w-screen-sm md:max-w-md ">
+          <div className="max-w-screen-md max-h-screen ">
             <Logo className={'text-7xl lg:text-8xl font-bold'} />
             <p className="py-6 text-1xl lg:text-2xl">Create an account to unlock your productivity potential.</p>
 
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <label className="label">
+            <form className="px-4" onSubmit={handleSubmit(onSubmit)}>
+              <label className="p-1 leading-3 label">
                 <span className="label-text">Name</span>
+                <span className={errors.name ? visible : hidden}>Min. of 8 characters</span>
               </label>
               <input
                 type="text"
@@ -43,12 +44,10 @@ const SignUpPage = ({ useLoader }) => {
                 className="w-full input input-bordered input-primary"
                 {...register('name', { required: true, minLength: 2 })}
               />
-              <label className="label">
-                <span className={errors.name ? visible : hidden}>Min. of 8 characters</span>
-              </label>
 
               <label className="label">
                 <span className="label-text">Email</span>
+                <span className={errors.email ? visible : hidden}>This is required</span>
               </label>
               <input
                 id="email"
@@ -57,12 +56,10 @@ const SignUpPage = ({ useLoader }) => {
                 className="w-full input input-bordered input-primary"
                 {...register('email')}
               />
-              <label className="label">
-                <span className={errors.email ? visible : hidden}>This is required</span>
-              </label>
 
               <label className=" label">
                 <span className="label-text">Password</span>
+                <span className={errors.password ? visible : hidden}>Min. of 8 characters</span>
               </label>
               <input
                 placeholder="Type here"
@@ -72,12 +69,10 @@ const SignUpPage = ({ useLoader }) => {
                 autoComplete="on"
                 {...register('password')}
               />
-              <label className="label">
-                <span className={errors.password ? visible : hidden}>Min. of 8 characters</span>
-              </label>
 
               <label className=" label">
                 <span className="label-text">Confirm Password</span>
+                <span className={errors.confirm ? visible : hidden}>Min. of 8 characters</span>
               </label>
               <input
                 type="password"
@@ -86,10 +81,7 @@ const SignUpPage = ({ useLoader }) => {
                 className="w-full input input-bordered input-primary"
                 {...register('confirm', { required: true, minLength: 8 })}
               />
-              <label className="label">
-                <span className={errors.confirm ? visible : hidden}>Min. of 8 characters</span>
-              </label>
-              <div className="flex pt-4 justify-evenly">
+              <div className="flex p-4 justify-evenly">
                 <button type="submit" className="w-24 btn btn-primary">
                   SignUp
                 </button>

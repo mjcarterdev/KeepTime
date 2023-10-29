@@ -1,6 +1,8 @@
 import axios from 'axios';
+import { getLogout } from './services';
 
 const REFRESH_TOKEN_URL = '/auth/refreshToken';
+const localStorageKey = 'keeptime-session';
 const baseURLDev = `${window.location.protocol}//${window.location.hostname}:3001/api`;
 const baseURLProd = `${window.location.protocol}//${window.location.hostname}/api`;
 let failedQueue = [];
@@ -34,7 +36,9 @@ const createAxiosClient = () => {
     },
     async (error) => {
       const originalRequest = error.config;
-      originalRequest.headers = JSON.parse(JSON.stringify(originalRequest.headers || {}));
+      originalRequest.headers = JSON.parse(
+        JSON.stringify(originalRequest.headers || {}),
+      );
       // If error, process all the requests in the queue and logout the user.
       const handleError = (error) => {
         processQueue(error);
@@ -47,7 +51,6 @@ const createAxiosClient = () => {
         originalRequest?.url !== REFRESH_TOKEN_URL &&
         originalRequest?._retry !== true
       ) {
-        console.log('token refresh');
         if (isRefreshing) {
           try {
             await new Promise(function (resolve, reject) {
@@ -73,7 +76,18 @@ const createAxiosClient = () => {
       }
 
       // Refresh token missing or expired => logout user...
-      if (error.response?.status === 401 && error.response?.data?.message === 'TokenExpiredError') {
+      if (
+        error.response?.status === 401 &&
+        error.response?.data?.error === 'Unauthorized'
+      ) {
+        console.log('Refresh token expired - hopefully will be logged out');
+        const res = await client(getLogout());
+        if (res.status == '200') {
+          localStorage.setItem(
+            localStorageKey,
+            JSON.stringify({ isAuth: false, user: {} }),
+          );
+        }
         return handleError(error);
       }
 

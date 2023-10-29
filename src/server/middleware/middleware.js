@@ -10,14 +10,12 @@ export const isAuthenticated = (req, res, next) => {
   try {
     const payload = jwt.verify(keeptimeCookie.accessToken, process.env.JWT_ACCESS_SECRET);
     req.payload = payload;
-    console.log(payload);
   } catch (err) {
     if (err.name === 'TokenExpiredError') {
       res.status(401).json({ error: err, message: 'Token has expired please refresh' });
     }
     res.status(401).json({ error: err, message: 'Something went wrong with authentication' });
   }
-
   return next();
 };
 

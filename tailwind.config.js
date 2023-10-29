@@ -61,7 +61,12 @@ export default {
       },
     },
   },
-  plugins: [require('@tailwindcss/container-queries'), require('@tailwindcss/typography'), require('daisyui')],
+  plugins: [
+    require('@tailwindcss/container-queries'),
+    require('@tailwindcss/typography'),
+    require('daisyui'),
+    require('tailwind-scrollbar-hide'),
+  ],
   daisyui: {
     themes: [
       {

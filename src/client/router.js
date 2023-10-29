@@ -7,8 +7,17 @@ import { signUpRoute } from './routes/signUpRoute';
 import { aboutRoute } from './routes/aboutRoute';
 import { projectRoute } from './routes/projectsRoute';
 import { profileRoute } from './routes/profileRoute';
+import { subtaskRoute } from './routes/subtaskRoute';
 
-const routeTree = rootRoute.addChildren([homeRoute, loginRoute, signUpRoute, aboutRoute, projectRoute, profileRoute]);
+const routeTree = rootRoute.addChildren([
+  homeRoute,
+  loginRoute,
+  signUpRoute,
+  aboutRoute,
+  projectRoute,
+  subtaskRoute,
+  profileRoute,
+]);
 
 const router = new Router({
   routeTree,

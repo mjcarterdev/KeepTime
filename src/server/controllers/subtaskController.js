@@ -69,9 +69,10 @@ export const getById = async (req, res, next) => {
   */
   try {
     const subtaskId = req.params.id;
-
+    console.log(subtaskId);
     let subtask = await subtaskModel.getById(subtaskId);
-    res.json(subtask);
+    console.log(subtask);
+    res.status(200).json(subtask);
   } catch (err) {
     next(err);
   }

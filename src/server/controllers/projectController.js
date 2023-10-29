@@ -14,11 +14,18 @@ export const create = async (req, res, next) => {
 
     const { userId } = req.payload;
 
-    let project = await projectModel.create({ title, description, userId: userId });
+    let project = await projectModel.create({
+      title,
+      description,
+      userId: userId,
+    });
     res.status(201).json(project);
   } catch (err) {
     console.log(err);
-    next(err);
+    res.status(403).json({
+      error: 'Unexpected error',
+      message: 'Unexpected error in project creation',
+    });
   }
 };
 
@@ -38,13 +45,18 @@ export const deleteProject = async (req, res, next) => {
     // Validate project belongs to token user
     const project = await projectModel.findProjectById(projectId);
     if (project.creatorId != userId) {
-      res.status(403).json({ error: 'You do not have permission to delete this project.' });
+      res
+        .status(403)
+        .json({ error: 'You do not have permission to delete this project.' });
     }
 
     await projectModel.deleteById(projectId);
     res.json({ message: 'Project deleted' });
   } catch (err) {
-    next(err);
+    res.status(403).json({
+      error: 'Unexpected error',
+      message: 'Unexpected error in project deletion',
+    });
   }
 };
 
@@ -60,7 +72,10 @@ export const getAllUserProjects = async (req, res, next) => {
     let projects = await projectModel.getAllByUserId(userId);
     res.json(projects);
   } catch (err) {
-    next(err);
+    res.status(403).json({
+      error: 'Unexpected error',
+      message: 'Unexpected error in project getAllProjects',
+    });
   }
 };
 
@@ -74,9 +89,12 @@ export const getProjectById = async (req, res, next) => {
     const projectId = req.params.id;
 
     let project = await projectModel.findProjectById(projectId);
-    res.json(project);
+    res.status(200).json(project);
   } catch (err) {
-    next(err);
+    res.status(403).json({
+      error: 'Unexpected error',
+      message: 'Unexpected error in project getProjectById',
+    });
   }
 };
 
@@ -98,12 +116,17 @@ export const update = async (req, res, next) => {
     // Validate project belongs to user
     const projectToUpdate = await projectModel.findProjectById(projectId);
     if (projectToUpdate.creatorId != userId) {
-      res.status(403).json({ error: 'You do not have permission to update this project.' });
+      res
+        .status(403)
+        .json({ error: 'You do not have permission to update this project.' });
     }
 
     let project = await projectModel.update({ title, description, projectId });
-    res.json(project);
+    res.status(200).json(project);
   } catch (err) {
-    next(err);
+    res.status(403).json({
+      error: 'Unexpected error',
+      message: 'Unexpected error in project update',
+    });
   }
 };
