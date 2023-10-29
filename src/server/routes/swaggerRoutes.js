@@ -1,7 +1,7 @@
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 // //import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerDocument from '../swagger.json' assert { type: 'json' };
+import swaggerDocument from '../swagger.json' assert { type: "json" };
 // // let swaggerDocument = require('../swagger.json') Cannot be used as "type": "module" in package.json
 
 const swaggerRouter = new express.Router();

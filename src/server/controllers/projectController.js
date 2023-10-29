@@ -59,9 +59,11 @@ export const getAllUserProjects = async (req, res, next) => {
     const { userId } = req.payload;
 
     let projects = await projectModel.getAllByUserId(userId);
-    let projectsWithDuration = projects.map((project) =>
-      Object.assign(project, { totalDuration: totalDurationString(project.timeRecords) }),
-    );
+    let projectsWithDuration = projects.map((project) => {
+      Object.assign(project, { totalDuration: totalDurationString(project.timeRecords) });
+      delete project.timeRecords;
+      return project;
+    });
     res.json(projectsWithDuration);
   } catch (err) {
     next(err);
@@ -79,6 +81,7 @@ export const getProjectById = async (req, res, next) => {
 
     let project = await projectModel.findProjectById(projectId);
     project.totalDuration = totalDurationString(project.timeRecords);
+    delete project.timeRecords;
     res.json(project);
   } catch (err) {
     next(err);
