@@ -8,6 +8,20 @@
   @apply shadow-black-50;
 }
 
+.add-border {
+  border: 1px red solid;
+}
+
+.list-fade {
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 0, 0, 1) 10%,
+    rgba(0, 0, 0, 1) 90%,
+    transparent 100%
+  );
+}
+
 .sun {
   position: relative;
   top: -40px;

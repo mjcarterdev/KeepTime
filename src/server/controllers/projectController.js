@@ -71,7 +71,7 @@ export const getAllUserProjects = async (req, res, next) => {
 
     let projects = await projectModel.getAllByUserId(userId);
     res.json(projects);
-  } catch (err) {
+  } catch (error) {
     res.status(403).json({
       error: 'Unexpected error',
       message: 'Unexpected error in project getAllProjects',

@@ -6,7 +6,6 @@ const transition = { duration: 4, yoyo: Infinity, ease: 'easeInOut' };
 
 export default function AnimatedSun() {
   const { active } = useBreakpoints();
-  console.log(active);
   let currentView;
 
   switch (active) {
@@ -29,7 +28,11 @@ export default function AnimatedSun() {
 
   return (
     <div className="absolute w-full -top-16">
-      <motion.svg xmlns="http://www.w3.org/2000/svg" overflow="hidden" viewBox="0 0 0 0">
+      <motion.svg
+        xmlns="http://www.w3.org/2000/svg"
+        overflow="hidden"
+        viewBox="0 0 0 0"
+      >
         <motion.path
           d="M 330 60 C 250 -90 0 -70 0 -70 "
           fill="transparent"

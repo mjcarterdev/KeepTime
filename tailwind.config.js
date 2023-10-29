@@ -2,6 +2,9 @@
 export default {
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
+    maxWidth: {
+      '9/10': '90%',
+    },
     fontFamily: {
       sans: ['roboto'],
     },
