@@ -17,3 +17,7 @@ export const postLogin = (data) => {
 export const getLogout = () => {
   return axiosClient.get('/auth/logout');
 };
+
+export const createProject = (data) => {
+  return axiosClient.post('project/createNew', data);
+};
