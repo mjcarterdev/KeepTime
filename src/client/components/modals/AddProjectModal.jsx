@@ -1,7 +1,7 @@
-import { createProject } from '../../api/services.js';
+import { postProject } from '../../api/services.js';
 import { useForm } from 'react-hook-form';
 
-const CreateProject = () => {
+const AddProjectModal = () => {
   const {
     register,
     handleSubmit,
@@ -9,7 +9,8 @@ const CreateProject = () => {
   } = useForm();
 
   const handleAddProject = async (data) => {
-    await createProject(data);
+    await postProject(data);
+    document.getElementById('add_new_project').close();
   };
 
   const hidden = 'invisible label-text-alt';
@@ -17,7 +18,7 @@ const CreateProject = () => {
 
   return (
     <>
-      <dialog id="add_new_project" className="modal modal-bottom sm:modal-middle">
+      <dialog id="add_new_project" className="modal modal-middle">
         <div className="modal-box">
           <h3 className="font-bold text-lg text-center">Add New Project</h3>
           <div className="divider"></div>
@@ -25,7 +26,7 @@ const CreateProject = () => {
             <span className="label-text">Name</span>
           </label>
           <input
-            id="projectName"
+            id="project-name"
             type="text"
             placeholder="Text goes here"
             className="w-full input input-bordered input-primary"
@@ -38,7 +39,7 @@ const CreateProject = () => {
             <span className="label-text">Description</span>
           </label>
           <textarea
-            id="projectDescription"
+            id="project-description"
             placeholder="Text goes here"
             className="w-full textarea textarea-bordered textarea-primary"
             {...register('description')}
@@ -59,4 +60,4 @@ const CreateProject = () => {
   );
 };
 
-export default CreateProject;
+export default AddProjectModal;

@@ -1,0 +1,16 @@
+  <button className="w-24 btn btn-primary" onClick={() => document.getElementById('add_new_project').showModal()}>
+    Add Project
+  </button>
+  <AddProjectModal />
+  <button className="w-24 btn btn-primary" onClick={() => document.getElementById('update_project').showModal()}>
+    Update Project
+  </button>
+  <UpdateProjectModal project={selectedProject} />
+  <button className="w-24 btn btn-primary" onClick={() => document.getElementById('add_new_subtask').showModal()}>
+    Add Subtask
+  </button>
+  <AddSubtaskModal projectId={selectedProject.id} />
+  <button className="w-24 btn btn-primary" onClick={() => document.getElementById('update_subtask').showModal()}>
+    Update Subtask
+  </button>
+  <UpdateSubtaskModal subtask={selectedSubtask} />

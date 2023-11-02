@@ -18,6 +18,23 @@ export const getLogout = () => {
   return axiosClient.get('/auth/logout');
 };
 
-export const createProject = (data) => {
+export const postProject = (data) => {
   return axiosClient.post('project/createNew', data);
+};
+
+export const updateProjectById = ({ title, description, projectId }) => {
+  return axiosClient.put(`project/update/${projectId}`, { title, description });
+};
+
+// Subtask API functions
+export const getAllSubtaskByProjectId = (id) => {
+  return axiosClient.get(`subtask/getProjectSubtasks/${id}`);
+};
+
+export const postSubtask = (data) => {
+  return axiosClient.post(`subtask/createNew`, data);
+};
+
+export const updateSubtaskById = ({ title, description, subtaskId }) => {
+  return axiosClient.put(`subtask/update/${subtaskId}`, { title, description });
 };
