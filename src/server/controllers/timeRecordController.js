@@ -10,15 +10,15 @@ export const create = async (req, res, next) => {
     const { startTime, endTime, projectId, subtaskId } = req.body;
 
     if (!projectId) {
-      res.status(400).json({ error: 'You must provide a project id for timer.' });
+      return res.status(400).json({ error: 'You must provide a project id for timer.' });
     }
 
     if (!startTime || !endTime) {
-      res.status(400).json({ error: 'You must provide start and end time.' });
+      return res.status(400).json({ error: 'You must provide start and end time.' });
     }
 
     if (new Date(startTime) > new Date(endTime)) {
-      res.status(400).json({ error: 'You must provide valid start and end time. The end date cannot be earlier than the start date.' });
+      return res.status(400).json({ error: 'You must provide valid start and end time. The end date cannot be earlier than the start date.' });
     }
 
     const { userId } = req.payload;
@@ -41,7 +41,7 @@ export const start = async (req, res, next) => {
     const { projectId, subtaskId } = req.body;
 
     if (!projectId) {
-      res.status(400).json({ error: 'You must provide a project id for timer.' });
+      return res.status(400).json({ error: 'You must provide a project id for timer.' });
     }
 
     let timeRecord = await timeRecordModel.start({ projectId: projectId, subtaskId: subtaskId });
@@ -61,7 +61,7 @@ export const stop = async (req, res, next) => {
     const timeRecordId = req.params.id;
 
     if (!timeRecordId) {
-      res.status(400).json({ error: 'You must provide a time record id.' });
+      return res.status(400).json({ error: 'You must provide a time record id.' });
     }
 
     const { userId } = req.payload;
@@ -83,7 +83,7 @@ export const deleteTimeRecord = async (req, res, next) => {
   try {
     const timeRecordId = req.params.id;
     if (!timeRecordId) {
-      res.status(400).json({ error: 'You must provide a time record id.' });
+      return res.status(400).json({ error: 'You must provide a time record id.' });
     }
 
     // TODO: Add validation
@@ -139,11 +139,11 @@ export const update = async (req, res, next) => {
     const timeRecordId = req.params.id;
 
     if (!timeRecordId) {
-      res.status(400).json({ error: 'You must provide a time record id.' });
+      return res.status(400).json({ error: 'You must provide a time record id.' });
     }
 
     if (new Date(startTime) > new Date(endTime)) {
-      res.status(400).json({ error: 'You must provide valid start and end time. The end date cannot be earlier than the start date.' });
+      return res.status(400).json({ error: 'You must provide valid start and end time. The end date cannot be earlier than the start date.' });
     }
 
     const { userId } = req.payload;

@@ -10,7 +10,7 @@ export const create = async (req, res, next) => {
   try {
     const { title, description } = req.body;
     if (!title) {
-      res.status(400).json({ error: 'You must provide a project title.' });
+      return res.status(400).json({ error: 'You must provide a project title.' });
     }
 
     const { userId } = req.payload;
@@ -32,14 +32,14 @@ export const deleteProject = async (req, res, next) => {
   try {
     const projectId = req.params.id;
     if (!projectId) {
-      res.status(400).json({ error: 'You must provide a project id.' });
+      return res.status(400).json({ error: 'You must provide a project id.' });
     }
 
     const { userId } = req.payload;
     // Validate project belongs to token user
     const project = await projectModel.findProjectById(projectId);
     if (project.creatorId != userId) {
-      res.status(403).json({ error: 'You do not have permission to delete this project.' });
+      return res.status(403).json({ error: 'You do not have permission to delete this project.' });
     }
 
     await projectModel.deleteById(projectId);

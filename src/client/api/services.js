@@ -38,3 +38,8 @@ export const postSubtask = (data) => {
 export const updateSubtaskById = ({ title, description, subtaskId }) => {
   return axiosClient.put(`subtask/update/${subtaskId}`, { title, description });
 };
+
+// Time Record API functions
+export const postTimeRecord = (data) => {
+  return axiosClient.post(`timeRecord/create`, data);
+};

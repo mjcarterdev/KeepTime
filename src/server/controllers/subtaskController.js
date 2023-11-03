@@ -10,11 +10,11 @@ export const create = async (req, res, next) => {
   try {
     const { title, description, projectId } = req.body;
     if (!title) {
-      res.status(400).json({ error: 'You must provide a subtask title.' });
+      return res.status(400).json({ error: 'You must provide a subtask title.' });
     }
 
     if (!projectId) {
-      res.status(400).json({ error: 'You must provide a project id for subtask.' });
+      return res.status(400).json({ error: 'You must provide a project id for subtask.' });
     }
 
     let subtask = await subtaskModel.create({ title, description, projectId: projectId });
@@ -33,7 +33,7 @@ export const deleteSubtask = async (req, res, next) => {
   try {
     const subtaskId = req.params.id;
     if (!subtaskId) {
-      res.status(400).json({ error: 'You must provide a subtask id.' });
+      return res.status(400).json({ error: 'You must provide a subtask id.' });
     }
 
     const { userId } = req.payload;
@@ -76,7 +76,7 @@ export const getById = async (req, res, next) => {
 
     let subtask = await subtaskModel.getById(subtaskId);
     subtask.totalDuration = totalDurationString(subtask.timeRecords);
-    res.json(subtask);
+    return res.json(subtask);
   } catch (err) {
     next(err);
   }
@@ -93,7 +93,7 @@ export const update = async (req, res, next) => {
     const subtaskId = req.params.id;
 
     if (!subtaskId) {
-      res.status(400).json({ error: 'You must provide a subtask id.' });
+      return res.status(400).json({ error: 'You must provide a subtask id.' });
     }
 
     const { userId } = req.payload;

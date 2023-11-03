@@ -14,3 +14,7 @@
     Update Subtask
   </button>
   <UpdateSubtaskModal subtask={selectedSubtask} />
+  <button className="w-24 btn btn-primary" onClick={() => document.getElementById('add_time').showModal()}>
+    Add Time
+  </button>
+  <AddTimeModal projectId={selectedSubtask.projectId} subtaskId={selectedProject.id}/>
