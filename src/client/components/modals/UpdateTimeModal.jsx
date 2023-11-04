@@ -1,20 +1,34 @@
-import { postTimeRecord } from '../../api/services.js';
+import { updateTimeRecordById } from '../../api/services.js';
 import { useForm } from 'react-hook-form';
 
-const AddTimeModal = ({ projectId, subtaskId }) => {
+const UpdateTimeModal = ({ timeRecord }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      startDate: new Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(
+        new Date(timeRecord.startTime),
+      ),
+      startTime: new Intl.DateTimeFormat('en-GB', {
+        timeStyle: 'short',
+      }).format(new Date(timeRecord.startTime)),
+      endDate: new Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(
+        new Date(timeRecord.endTime),
+      ),
+      endTime: new Intl.DateTimeFormat('en-GB', {
+        timeStyle: 'short',
+      }).format(new Date(timeRecord.endTime)),
+    },
+  });
 
-  const handleAddTime = async (data) => {
-    data.projectId = projectId;
-    data.subtaskId = subtaskId;
+  const handleUpdateTime = async (data) => {
+    data.timeRecordId = timeRecord.id;
     data.startTime = new Date(data.startDate + ' ' + data.startTime).toISOString();
     data.endTime = new Date(data.endDate + ' ' + data.endTime).toISOString();
-    await postTimeRecord(data);
-    document.getElementById('add_time').close();
+    await updateTimeRecordById(data);
+    document.getElementById('update_time_record').close();
   };
 
   const hidden = 'invisible label-text-alt';
@@ -22,9 +36,9 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
 
   return (
     <>
-      <dialog id="add_time" className="modal modal-middle">
+      <dialog id="update_time_record" className="modal modal-middle">
         <div className="modal-box">
-          <h3 className="font-bold text-lg text-center">Add Time</h3>
+          <h3 className="font-bold text-lg text-center">Update Time</h3>
           <div className="divider"></div>
           <div className="join">
             <div className="join-vertical">
@@ -32,7 +46,7 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
                 <span className="label-text">Start Date</span>
               </label>
               <input
-                id="start-date"
+                id="update-start-date"
                 type="date"
                 className="join-item input input-primary"
                 {...register('startDate', { required: true })}
@@ -46,7 +60,7 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
                 <span className="label-text">Time</span>
               </label>
               <input
-                id="start-time"
+                id="update-start-time"
                 type="time"
                 className="join-item input input-primary"
                 {...register('startTime', { required: true })}
@@ -62,7 +76,7 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
                 <span className="label-text">End Date</span>
               </label>
               <input
-                id="end-date"
+                id="update-end-date"
                 type="date"
                 className="join-item input input-primary"
                 {...register('endDate', { required: true })}
@@ -76,7 +90,7 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
                 <span className="label-text">Time</span>
               </label>
               <input
-                id="end-time"
+                id="update-end-time"
                 type="time"
                 className="join-item input input-primary"
                 {...register('endTime', { required: true })}
@@ -87,10 +101,10 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
             </div>
           </div>
           <div className="modal-action">
-            <button className="btn" onClick={() => document.getElementById('add_time').close()}>
+            <button className="btn" onClick={() => document.getElementById('update_time_record').close()}>
               Cancel
             </button>
-            <form method="dialog" onSubmit={handleSubmit(handleAddTime)}>
+            <form method="dialog" onSubmit={handleSubmit(handleUpdateTime)}>
               <button type="submit" className="w-24 btn btn-primary">
                 OK
               </button>
@@ -102,4 +116,4 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
   );
 };
 
-export default AddTimeModal;
+export default UpdateTimeModal;
