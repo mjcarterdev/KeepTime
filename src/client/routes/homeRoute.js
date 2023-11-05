@@ -1,6 +1,6 @@
 import { Route, redirect } from '@tanstack/react-router';
 import { rootRoute } from './rootRoute.js';
-import HomePage from '../pages/HomePage.jsx';
+import LoginPage from '../pages/LoginPage.jsx';
 
 export const homeRoute = new Route({
   getParentRoute: () => rootRoute,
@@ -13,5 +13,6 @@ export const homeRoute = new Route({
       });
     }
   },
-  component: HomePage,
+  component: LoginPage,
+  loader: ({ context }) => context,
 });

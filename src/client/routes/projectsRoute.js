@@ -9,9 +9,10 @@ export const projectRoute = new Route({
   component: ProjectPage,
   beforeLoad: ({ context }) => {
     const { isAuth } = context.authContext.session();
+
     if (!isAuth) {
       throw redirect({
-        to: '/login',
+        to: '/',
       });
     }
     const queryGetAllProjectsOptions = {

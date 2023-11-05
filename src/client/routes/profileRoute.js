@@ -5,13 +5,13 @@ import ProfilePage from '../pages/ProfilePage.jsx';
 export const profileRoute = new Route({
   getParentRoute: () => rootRoute,
   path: 'profile',
-  loader: async ({ context }) => context,
+  loader: ({ context }) => context,
   component: ProfilePage,
   beforeLoad: ({ context }) => {
     const { isAuth } = context.authContext.session();
     if (!isAuth) {
       throw redirect({
-        to: '/login',
+        to: '/',
       });
     }
   },

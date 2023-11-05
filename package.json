@@ -47,6 +47,7 @@
     "swagger-autogen": "^2.23.6",
     "swagger-ui-express": "^5.0.0",
     "tailwindcss": "^3.3.3",
+    "tailwindcss-animate": "^1.0.7",
     "vite": "^2.5.10",
     "vitest": "^0.34.6",
     "webdriverio": "^8.17.0"
@@ -67,6 +68,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "framer-motion": "^10.16.4",
+    "geist": "^1.0.0",
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
     "npm": "^10.2.0",

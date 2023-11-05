@@ -23,7 +23,7 @@ export const isAuthenticated = (req, res, next) => {
       }
     }
   } else {
-    res.status(401).json({ error: err, message: 'no cookie found' });
+    res.status(401).json({ error: 'Unauthorized' });
   }
 };
 

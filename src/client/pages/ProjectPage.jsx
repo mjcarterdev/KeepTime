@@ -1,33 +1,54 @@
-import PageTitle from '../components/PageTitle';
+import Button from '../components/Button';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
-
-import ProjectList from '../components/ProjectList';
+import { useState, useEffect } from 'react';
 import Toolbar from '../components/Toolbar';
+import ProjectItem from '../components/ProjectItem';
+import { AnimatePresence } from 'framer-motion';
+import PageTitle from '../components/PageTitle';
+import NavBar from '../components/Navbar';
 
 const ProjectPage = ({ useRouteContext }) => {
-  const { queryGetAllProjectsOptions } = useRouteContext();
+  const { queryGetAllProjectsOptions, authContext } = useRouteContext();
   const { data } = useQuery(queryGetAllProjectsOptions);
   const [showSubtaskBtns, setShowSubtaskBtns] = useState(false);
+  const [expanded, setExpanded] = useState(0);
+
+  useEffect(() => {
+    if (!expanded) {
+      setShowSubtaskBtns(false);
+    } else {
+      setShowSubtaskBtns(true);
+    }
+  }, [expanded]);
 
   return (
     <>
-      <div
-        className="h-[calc(100vh-4rem)] bg-base-100 flex flex-col items-center 
-    gap-2 justify-start scrollbar-hide"
-      >
-        <PageTitle title={'Project Page'} />
-        <ProjectList data={data.data} setShowSubtaskBtns={setShowSubtaskBtns} />
+      <NavBar authContext={authContext} />
+      <div className="flex flex-col items-center justify-between md:justify-start bg-gradient-to-tl from-base-200 to-base-100 h-[calc(100vh-4rem)]">
+        <PageTitle title={'Projects'} className={'md:pb-8'} />
+        <div className="flex flex-col w-full gap-2 p-4 pb-32 overflow-y-scroll md:overflow-visible md:flex-wrap md:max-w-max70 add-border scrollbar-hide md:scrollbar-default md:flex-row">
+          <AnimatePresence initial={false}>
+            {[...data.data].map((item) => {
+              return (
+                <ProjectItem
+                  key={item.id}
+                  item={item}
+                  expanded={expanded}
+                  setExpanded={setExpanded}
+                />
+              );
+            })}
+          </AnimatePresence>
+        </div>
         <Toolbar>
-          {showSubtaskBtns ? (
-            <button className="w-40 btn badge-outline text-primary-content">
-              Add Subtask
-            </button>
-          ) : (
-            <button className="w-40 btn badge-outline text-primary-content">
-              Add Project
-            </button>
-          )}
+          <Button
+            className={'w-44 rounded-full'}
+            onClick={() => {
+              console.log('button clicked');
+            }}
+          >
+            Add Project
+          </Button>
         </Toolbar>
       </div>
     </>

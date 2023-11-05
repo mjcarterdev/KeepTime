@@ -121,7 +121,7 @@ export const login = async (req, res, next) => {
       });
   } catch (err) {
     res.status(400).json({
-      error: 'Unexpected error',
+      error: err || 'Unexpected error',
       message: 'unexpected error in login',
     });
   }
@@ -196,7 +196,9 @@ export const refreshToken = async (req, res, next) => {
         user,
       });
   } catch (err) {
-    res.status(401).json({ error: err, message: 'Unexpected Error' });
+    res
+      .status(401)
+      .json({ error: err || 'Unexpected error', message: 'Unexpected Error' });
   }
 };
 
@@ -206,6 +208,7 @@ export const revokeRefreshTokens = async (req, res, next) => {
   */
   try {
     const { userId } = req.payload;
+
     await revokeTokens(userId);
     res
       .status(200)
@@ -217,7 +220,7 @@ export const revokeRefreshTokens = async (req, res, next) => {
       });
   } catch (err) {
     res.status(401).json({
-      error: err,
+      error: err || 'Unexpected error',
       message: 'Unexpected error in revoking revoking refresh token',
     });
   }

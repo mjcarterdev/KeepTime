@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router';
-import Logo from './Logo';
 import router from '../router';
 
 const getMenuItems = (authenticated) => {
@@ -15,36 +14,36 @@ const getMenuItems = (authenticated) => {
   } else {
     menuItems = [
       { name: 'About Us', path: '/about' },
-      { name: 'Login', path: '/login' },
+      { name: 'Login', path: '/' },
       { name: 'Sign Up', path: '/signup' },
     ];
   }
   return menuItems;
 };
 
-const NavBar = ({ authContext }) => {
+const NavBar = ({ authContext, location = '' }) => {
   const { isAuth } = authContext.session();
   let menuItems = getMenuItems(isAuth);
 
-  const style = 'whitespace-nowrap hover:text-accent cursor-pointer';
+  const style = 'whitespace-nowrap hover:text-accent cursor-pointer ';
   const selectedStyle = 'whitespace-nowrap text-accent';
 
   const handleLogout = async () => {
     const res = await authContext.logout();
+    console.log(res);
     if (!res.data.isAuthenticated) {
       router.navigate('/');
     }
   };
 
   return (
-    <nav className="navbar shadow-[#f43f5e] shadow-lg bg-secondary text-secondary-content .min-h-16 px-1 py-0">
+    <nav className="sticky top-0 z-50 w-full h-20 p-2 px-1 bg-purple-100 border border-gray-100 rounded-md shadow-lg py-0w-full bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 navbar text-primary max-h-16">
       <div className="navbar-start">
-        <span className="text-xl normal-case btn btn-ghost">
-          <Link to={`/`} activeOptions={{ exact: true }}>
-            <Logo />
-          </Link>
+        <span className="px-4 text-xl font-medium normal-case ">
+          <h2>{location} </h2>
         </span>
       </div>
+      <span className="whitespace-nowrap"></span>
       <div className="hidden navbar-end lg:flex">
         <ul className="px-4 space-x-4 menu-lg menu-horizontal">
           {menuItems.map((item) => {
@@ -68,7 +67,9 @@ const NavBar = ({ authContext }) => {
                 key={item.name}
                 to={item.path}
                 className={style}
-                activeProps={{ className: selectedStyle }}
+                activeProps={{
+                  className: selectedStyle,
+                }}
                 activeOptions={{ exact: true }}
               >
                 {item.name}
@@ -87,12 +88,17 @@ const NavBar = ({ authContext }) => {
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h8m-8 6h16"
+              />
             </svg>
           </label>
           <ul
             tabIndex={0}
-            className=".flex-col menu-sm dropdown-content  mt-3 z-[1] p-2 shadow bg-secondary text-secondary-content w-52"
+            className="flex-col w-32 p-2 font-medium bg-purple-100 border border-gray-100 rounded-md text-2rem menu-sm dropdown-content bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-80"
           >
             {menuItems.map((item) => {
               if (item.name === 'Logout') {

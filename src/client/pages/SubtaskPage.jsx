@@ -1,17 +1,21 @@
 import PageTitle from '../components/PageTitle';
 import { useQuery } from '@tanstack/react-query';
+import NavBar from '../components/Navbar';
 
 const SubtaskPage = ({ useRouteContext }) => {
-  const { queryOptions } = useRouteContext();
+  const { queryOptions, authContext } = useRouteContext();
   const { data, isLoading, isError } = useQuery(queryOptions);
-  console.log(data);
+  console.log(authContext);
   return (
-    <div className="h-[calc(100vh-4rem)] bg-base-100 flex flex-col items-center justify-between p-2">
-      <PageTitle title={'Subtask Page'} />
-      <div className="max-w-xs ">
-        <p>text</p>
+    <>
+      <NavBar authContext={authContext} />
+      <div className="h-[calc(100vh-4rem)] bg-base-100 flex flex-col items-center justify-between p-2">
+        <PageTitle title={'Subtask Page'} />
+        <div className="max-w-xs ">
+          <p>text</p>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

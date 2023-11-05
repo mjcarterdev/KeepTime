@@ -1,10 +1,16 @@
-const AboutUsPage = () => {
+import NavBar from '../components/Navbar';
+
+const AboutUsPage = ({ useLoader }) => {
+  const { authContext } = useLoader();
   return (
-    <div className="h-[calc(100vh-4rem)] bg-base-100">
-      <div>
-        <p>About Us Page</p>
+    <>
+      <NavBar authContext={authContext} />
+      <div className="bg-transparent">
+        <div>
+          <p>About Us Page</p>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

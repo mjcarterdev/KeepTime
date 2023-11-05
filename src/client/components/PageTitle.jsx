@@ -1,6 +1,8 @@
-const PageTitle = ({ title }) => {
+const PageTitle = ({ title, className }) => {
   return (
-    <h1 className="pt-2 text-3xl font-bold underline md:text-4xl lg:text-5xl decoration-primary decoration-3">
+    <h1
+      className={`w-full pt-5 pb-2 text-3xl font-bold text-center underline md:text-4xl lg:text-5xl decoration-primary decoration-3 ${className}`}
+    >
       {title}
     </h1>
   );
