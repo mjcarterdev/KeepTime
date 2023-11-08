@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Toolbar from '../components/Toolbar';
 import ProjectItem from '../components/ProjectItem';
 import { AnimatePresence } from 'framer-motion';
-import PageTitle from '../components/PageTitle';
+
 import NavBar from '../components/Navbar';
 
 const ProjectPage = ({ useRouteContext }) => {
@@ -24,33 +24,31 @@ const ProjectPage = ({ useRouteContext }) => {
   return (
     <>
       <NavBar authContext={authContext} />
-      <div className="flex flex-col items-center justify-between md:justify-start bg-gradient-to-tl from-base-200 to-base-100 h-[calc(100vh-4rem)]">
-        <PageTitle title={'Projects'} className={'md:pb-8'} />
-        <div className="flex flex-col w-full gap-2 p-4 pb-32 overflow-y-scroll md:overflow-visible md:flex-wrap md:max-w-max70 add-border scrollbar-hide md:scrollbar-default md:flex-row">
-          <AnimatePresence initial={false}>
-            {[...data.data].map((item) => {
-              return (
-                <ProjectItem
-                  key={item.id}
-                  item={item}
-                  expanded={expanded}
-                  setExpanded={setExpanded}
-                />
-              );
-            })}
-          </AnimatePresence>
-        </div>
-        <Toolbar>
-          <Button
-            className={'w-44 rounded-full'}
-            onClick={() => {
-              console.log('button clicked');
-            }}
-          >
-            Add Project
-          </Button>
-        </Toolbar>
+
+      <div className="flex flex-col flex-1 w-full gap-2 p-4 overflow-y-scroll md:overflow-visible md:flex-wrap md:max-w-max70 scrollbar-hide md:scrollbar-default md:flex-row">
+        <AnimatePresence initial={false}>
+          {[...data.data].map((item) => {
+            return (
+              <ProjectItem
+                key={item.id}
+                item={item}
+                expanded={expanded}
+                setExpanded={setExpanded}
+              />
+            );
+          })}
+        </AnimatePresence>
       </div>
+      <Toolbar>
+        <Button
+          className={'w-20 rounded-full'}
+          onClick={() => {
+            console.log('button clicked');
+          }}
+        >
+          Add Project
+        </Button>
+      </Toolbar>
     </>
   );
 };

@@ -27,14 +27,12 @@ const createAxiosClient = () => {
         JSON.stringify(originalRequest.headers || {}),
       );
 
-      console.log(error);
       // Refresh token conditions
       if (
         error.response.data.error.name === 'TokenExpiredError' &&
         originalRequest?.url !== REFRESH_TOKEN_URL &&
         originalRequest?._retry !== true
       ) {
-        console.log('refresh token ');
         if (isRefreshing) {
           try {
             return await client(originalRequest);
@@ -58,17 +56,18 @@ const createAxiosClient = () => {
       // Refresh token missing or expired => logout user...
       if (
         error.response?.status === 401 &&
-        error.response?.data?.error === 'Unauthorized'
+        error.response?.data?.message === 'REFRESH_TOKEN_EXPIRED'
       ) {
         console.log('Refresh token expired - hopefully will be logged out');
         const res = await client(getLogout());
+        if (res.status == 200) {
+          localStorage.setItem(
+            localStorageKey,
+            JSON.stringify({ isAuth: false, user: {} }),
+          );
+        }
 
-        localStorage.setItem(
-          localStorageKey,
-          JSON.stringify({ isAuth: false, user: {} }),
-        );
-
-        return Promise.reject(error);
+        return Promise.resolve(error);
       }
 
       // Any status codes that falls outside the range of 2xx cause this function to trigger

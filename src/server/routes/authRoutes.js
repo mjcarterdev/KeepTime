@@ -1,21 +1,27 @@
 import express from 'express';
 import {
   login,
+  logout,
   refreshToken,
   register,
-  revokeRefreshTokens,
 } from '../controllers/authController.js';
-import { isAuthenticated, validate } from '../middleware/middleware.js';
+import { validate } from '../middleware/validation.js';
 import {
   loginSchema,
   registerSchema,
 } from '../validationSchemas/authSchema.js';
+import loginMiddleware from '../middleware/login-middleware.js';
 
 const authRouter = new express.Router();
 
 authRouter.post('/register', validate(registerSchema.required()), register);
-authRouter.post('/login', validate(loginSchema.required()), login);
+authRouter.post(
+  '/login',
+  loginMiddleware,
+  validate(loginSchema.required()),
+  login,
+);
 authRouter.get('/refreshToken', refreshToken);
-authRouter.get('/logout', isAuthenticated, revokeRefreshTokens);
+authRouter.get('/logout', logout);
 
 export default authRouter;

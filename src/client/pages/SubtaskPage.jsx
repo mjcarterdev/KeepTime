@@ -1,4 +1,3 @@
-import PageTitle from '../components/PageTitle';
 import { useQuery } from '@tanstack/react-query';
 import NavBar from '../components/Navbar';
 
@@ -10,7 +9,6 @@ const SubtaskPage = ({ useRouteContext }) => {
     <>
       <NavBar authContext={authContext} />
       <div className="h-[calc(100vh-4rem)] bg-base-100 flex flex-col items-center justify-between p-2">
-        <PageTitle title={'Subtask Page'} />
         <div className="max-w-xs ">
           <p>text</p>
         </div>

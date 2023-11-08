@@ -40,7 +40,7 @@ const LoginPage = ({ useLoader }) => {
               'absolute top-0 md:-top-5 text-6xl  md:text-8xl p-5 font-bold z-10 max-w-max90'
             }
           />
-          <img src={Skyline} className="px-4 pt-20 md:max-w-max90" />
+          <img src={Skyline} className="w-full pt-20 md:max-w-max50" />
         </div>
         <div className="card">
           <p className="py-5 text-2xl leading-loose text-center text-neutral-content sm:text-2xl">
@@ -90,13 +90,13 @@ const LoginPage = ({ useLoader }) => {
             </div>
             <p className="w-full pt-4 text-center">
               Or click{' '}
-              <spam>
+              <span>
                 {
                   <Link to={'/signup'} from={'/'} className="text-accent">
                     here
                   </Link>
                 }
-              </spam>{' '}
+              </span>{' '}
               to sign up
             </p>
           </form>

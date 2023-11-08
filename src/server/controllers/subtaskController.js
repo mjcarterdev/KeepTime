@@ -13,10 +13,16 @@ export const create = async (req, res, next) => {
     }
 
     if (!projectId) {
-      res.status(400).json({ error: 'You must provide a project id for subtask.' });
+      res
+        .status(400)
+        .json({ error: 'You must provide a project id for subtask.' });
     }
 
-    let subtask = await subtaskModel.create({ title, description, projectId: projectId });
+    let subtask = await subtaskModel.create({
+      title,
+      description,
+      projectId: projectId,
+    });
     res.status(201).json(subtask);
   } catch (err) {
     next(err);
@@ -35,7 +41,7 @@ export const deleteSubtask = async (req, res, next) => {
       res.status(400).json({ error: 'You must provide a subtask id.' });
     }
 
-    const { userId } = req.payload;
+    const { user } = req.cookies['jwt'];
     // TODO: Add validation
 
     await subtaskModel.deleteById(subtaskId);
@@ -71,7 +77,6 @@ export const getById = async (req, res, next) => {
     const subtaskId = req.params.id;
     console.log(subtaskId);
     let subtask = await subtaskModel.getById(subtaskId);
-    console.log(subtask);
     res.status(200).json(subtask);
   } catch (err) {
     next(err);
@@ -92,7 +97,7 @@ export const update = async (req, res, next) => {
       res.status(400).json({ error: 'You must provide a subtask id.' });
     }
 
-    const { userId } = req.payload;
+    const { user } = req.cookies['jwt'];
     // TODO: Add validation
 
     let subtask = await subtaskModel.update({ title, description, subtaskId });

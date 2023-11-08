@@ -12,12 +12,12 @@ export const create = async (req, res, next) => {
       res.status(400).json({ error: 'You must provide a project title.' });
     }
 
-    const { userId } = req.payload;
+    const { user } = req.cookies['jwt'];
 
     let project = await projectModel.create({
       title,
       description,
-      userId: userId,
+      userId: user.id,
     });
     res.status(201).json(project);
   } catch (err) {
@@ -41,10 +41,10 @@ export const deleteProject = async (req, res, next) => {
       res.status(400).json({ error: 'You must provide a project id.' });
     }
 
-    const { userId } = req.payload;
+    const { user } = req.cookies['jwt'];
     // Validate project belongs to token user
     const project = await projectModel.findProjectById(projectId);
-    if (project.creatorId != userId) {
+    if (project.creatorId != user.id) {
       res
         .status(403)
         .json({ error: 'You do not have permission to delete this project.' });
@@ -61,15 +61,10 @@ export const deleteProject = async (req, res, next) => {
 };
 
 export const getAllUserProjects = async (req, res, next) => {
-  /* 
-    #swagger.tags = ['Project']
-    #swagger.summary = 'Get all project for authorized user'
-    #swagger.security = [{"cookieAuth:": [] }]
-  */
   try {
-    const { userId } = req.payload;
+    const { user } = req.cookies['jwt'];
 
-    let projects = await projectModel.getAllByUserId(userId);
+    let projects = await projectModel.getAllByUserId(user.id);
     res.json(projects);
   } catch (error) {
     res.status(403).json({
@@ -80,11 +75,6 @@ export const getAllUserProjects = async (req, res, next) => {
 };
 
 export const getProjectById = async (req, res, next) => {
-  /* 
-    #swagger.tags = ['Project']
-    #swagger.summary = 'Get project by Id'
-    #swagger.security = [{"cookieAuth:": [] }]
-  */
   try {
     const projectId = req.params.id;
 
@@ -99,11 +89,6 @@ export const getProjectById = async (req, res, next) => {
 };
 
 export const update = async (req, res, next) => {
-  /* 
-    #swagger.tags = ['Project']
-    #swagger.summary = 'Update a project data'
-    #swagger.security = [{"cookieAuth:": [] }]
-  */
   try {
     const { title, description } = req.body;
     const projectId = req.params.id;
@@ -112,10 +97,10 @@ export const update = async (req, res, next) => {
       res.status(400).json({ error: 'You must provide a project id.' });
     }
 
-    const { userId } = req.payload;
+    const { user } = req.cookies['jwt'];
     // Validate project belongs to user
     const projectToUpdate = await projectModel.findProjectById(projectId);
-    if (projectToUpdate.creatorId != userId) {
+    if (projectToUpdate.creatorId != user.id) {
       res
         .status(403)
         .json({ error: 'You do not have permission to update this project.' });

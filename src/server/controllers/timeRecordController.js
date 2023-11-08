@@ -10,10 +10,15 @@ export const start = async (req, res, next) => {
     const { projectId, subtaskId } = req.body;
 
     if (!projectId) {
-      res.status(400).json({ error: 'You must provide a project id for timer.' });
+      res
+        .status(400)
+        .json({ error: 'You must provide a project id for timer.' });
     }
 
-    let timeRecord = await timeRecordModel.start({ projectId: projectId, subtaskId: subtaskId });
+    let timeRecord = await timeRecordModel.start({
+      projectId: projectId,
+      subtaskId: subtaskId,
+    });
     res.json(timeRecord);
   } catch (err) {
     next(err);
@@ -33,7 +38,7 @@ export const stop = async (req, res, next) => {
       res.status(400).json({ error: 'You must provide a time record id.' });
     }
 
-    const { userId } = req.payload;
+    const { user } = req.cookies['jwt'];
     // TODO: Add validation
 
     let timeRecord = await timeRecordModel.stop(timeRecordId);
@@ -56,7 +61,7 @@ export const deleteTimeRecord = async (req, res, next) => {
     }
 
     // TODO: Add validation
-    const { userId } = req.payload;
+    const { user } = req.cookies['jwt'];
 
     await timeRecordModel.deleteById(timeRecordId);
     res.json({ message: 'Time record deleted' });
@@ -111,10 +116,14 @@ export const update = async (req, res, next) => {
       res.status(400).json({ error: 'You must provide a time record id.' });
     }
 
-    const { userId } = req.payload;
+    const { user } = req.cookies['jwt'];
     // TODO: Add validation
 
-    let timeRecord = await timeRecordModel.update({ startTime, endTime, timeRecordId });
+    let timeRecord = await timeRecordModel.update({
+      startTime,
+      endTime,
+      timeRecordId,
+    });
     res.json(timeRecord);
   } catch (err) {
     next(err);
