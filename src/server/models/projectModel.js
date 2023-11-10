@@ -16,7 +16,6 @@ export const getAllByUserId = (userId) => {
       creatorId: userId,
     },
     include: {
-      subTasks: true,
       timeRecords: true,
     },
   });

@@ -463,6 +463,52 @@
         ]
       }
     },
+    "/api/timeRecord/create": {
+      "post": {
+        "tags": ["TimeRecord"],
+        "summary": "Create a new time record.",
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "startTime": {
+                  "example": "any"
+                },
+                "endTime": {
+                  "example": "any"
+                },
+                "projectId": {
+                  "example": "any"
+                },
+                "subtaskId": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "cookieAuth:": []
+          }
+        ]
+      }
+    },
     "/api/timeRecord/start": {
       "post": {
         "tags": ["TimeRecord"],

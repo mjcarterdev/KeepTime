@@ -1,4 +1,5 @@
 import * as projectModel from '../models/projectModel.js';
+import { totalDurationString } from '../utils/timeUtil.js';
 
 export const create = async (req, res, next) => {
   /* 
@@ -9,7 +10,9 @@ export const create = async (req, res, next) => {
   try {
     const { title, description } = req.body;
     if (!title) {
-      res.status(400).json({ error: 'You must provide a project title.' });
+      return res
+        .status(400)
+        .json({ error: 'You must provide a project title.' });
     }
 
     const { user } = req.cookies['jwt'];
@@ -38,14 +41,14 @@ export const deleteProject = async (req, res, next) => {
   try {
     const projectId = req.params.id;
     if (!projectId) {
-      res.status(400).json({ error: 'You must provide a project id.' });
+      return res.status(400).json({ error: 'You must provide a project id.' });
     }
 
     const { user } = req.cookies['jwt'];
     // Validate project belongs to token user
     const project = await projectModel.findProjectById(projectId);
     if (project.creatorId != user.id) {
-      res
+      return res
         .status(403)
         .json({ error: 'You do not have permission to delete this project.' });
     }
@@ -64,13 +67,17 @@ export const getAllUserProjects = async (req, res, next) => {
   try {
     const { user } = req.cookies['jwt'];
 
-    let projects = await projectModel.getAllByUserId(user.id);
-    res.json(projects);
-  } catch (error) {
-    res.status(403).json({
-      error: 'Unexpected error',
-      message: 'Unexpected error in project getAllProjects',
+    let projects = await projectModel.getAllByUserId(userId);
+    let projectsWithDuration = projects.map((project) => {
+      Object.assign(project, {
+        totalDuration: totalDurationString(project.timeRecords),
+      });
+      delete project.timeRecords;
+      return project;
     });
+    res.json(projectsWithDuration);
+  } catch (err) {
+    next(err);
   }
 };
 
@@ -79,7 +86,9 @@ export const getProjectById = async (req, res, next) => {
     const projectId = req.params.id;
 
     let project = await projectModel.findProjectById(projectId);
-    res.status(200).json(project);
+    project.totalDuration = totalDurationString(project.timeRecords);
+    delete project.timeRecords;
+    res.json(project);
   } catch (err) {
     res.status(403).json({
       error: 'Unexpected error',

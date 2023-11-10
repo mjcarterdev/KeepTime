@@ -1,4 +1,5 @@
 import * as subtaskModel from '../models/subtaskModel.js';
+import { totalDurationString } from '../utils/timeUtil.js';
 
 export const create = async (req, res, next) => {
   /* 
@@ -9,11 +10,13 @@ export const create = async (req, res, next) => {
   try {
     const { title, description, projectId } = req.body;
     if (!title) {
-      res.status(400).json({ error: 'You must provide a subtask title.' });
+      return res
+        .status(400)
+        .json({ error: 'You must provide a subtask title.' });
     }
 
     if (!projectId) {
-      res
+      return res
         .status(400)
         .json({ error: 'You must provide a project id for subtask.' });
     }
@@ -38,7 +41,7 @@ export const deleteSubtask = async (req, res, next) => {
   try {
     const subtaskId = req.params.id;
     if (!subtaskId) {
-      res.status(400).json({ error: 'You must provide a subtask id.' });
+      return res.status(400).json({ error: 'You must provide a subtask id.' });
     }
 
     const { user } = req.cookies['jwt'];
@@ -61,7 +64,12 @@ export const getProjectSubtasks = async (req, res, next) => {
     const projectId = req.params.projectId;
 
     let subtasks = await subtaskModel.getAllByProjectId(projectId);
-    res.json(subtasks);
+    let subtasksWithDuration = subtasks.map((subtask) =>
+      Object.assign(subtask, {
+        totalDuration: totalDurationString(subtask.timeRecords),
+      }),
+    );
+    res.json(subtasksWithDuration);
   } catch (err) {
     next(err);
   }
@@ -77,7 +85,8 @@ export const getById = async (req, res, next) => {
     const subtaskId = req.params.id;
     console.log(subtaskId);
     let subtask = await subtaskModel.getById(subtaskId);
-    res.status(200).json(subtask);
+    subtask.totalDuration = totalDurationString(subtask.timeRecords);
+    return res.json(subtask);
   } catch (err) {
     next(err);
   }
@@ -94,7 +103,7 @@ export const update = async (req, res, next) => {
     const subtaskId = req.params.id;
 
     if (!subtaskId) {
-      res.status(400).json({ error: 'You must provide a subtask id.' });
+      return res.status(400).json({ error: 'You must provide a subtask id.' });
     }
 
     const { user } = req.cookies['jwt'];

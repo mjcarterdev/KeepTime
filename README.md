@@ -33,5 +33,5 @@ This template provides a minimal setup to get React working in Vite with HMR and
 ### Swagger API
 
 - List of APIs can be accessed via `http://localhost:3001/api/swagger/api-docs/`
-- You need an authorization token to test endpoints
+- You need to log in first to test the endpoints marked with a lock icon
 

@@ -1,5 +1,16 @@
 import db from '../utils/database.js';
 
+export const create = (timeRecordData) => {
+  return db.timeRecord.create({
+    data: {
+      startTime: timeRecordData.startTime,
+      endTime: timeRecordData.endTime,
+      projectId: timeRecordData.projectId,
+      subTaskId: timeRecordData.subtaskId || undefined,
+    },
+  });
+};
+
 export const start = (timeRecordData) => {
   return db.timeRecord.create({
     data: {

@@ -1,5 +1,50 @@
 import * as timeRecordModel from '../models/timeRecordModel.js';
 
+export const create = async (req, res, next) => {
+  /* 
+    #swagger.tags = ['TimeRecord']
+    #swagger.summary = 'Create a new time record.'
+    #swagger.security = [{"cookieAuth:": [] }]
+  */
+  try {
+    const { startTime, endTime, projectId, subtaskId } = req.body;
+
+    if (!projectId) {
+      return res
+        .status(400)
+        .json({ error: 'You must provide a project id for timer.' });
+    }
+
+    if (!startTime || !endTime) {
+      return res
+        .status(400)
+        .json({ error: 'You must provide start and end time.' });
+    }
+
+    if (new Date(startTime) > new Date(endTime)) {
+      return res
+        .status(400)
+        .json({
+          error:
+            'You must provide valid start and end time. The end date cannot be earlier than the start date.',
+        });
+    }
+
+    const { userId } = req.payload;
+    // TODO: Add validation
+
+    let timeRecord = await timeRecordModel.create({
+      startTime,
+      endTime,
+      projectId,
+      subtaskId,
+    });
+    res.json(timeRecord);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const start = async (req, res, next) => {
   /* 
     #swagger.tags = ['TimeRecord']
@@ -10,7 +55,7 @@ export const start = async (req, res, next) => {
     const { projectId, subtaskId } = req.body;
 
     if (!projectId) {
-      res
+      return res
         .status(400)
         .json({ error: 'You must provide a project id for timer.' });
     }
@@ -35,7 +80,9 @@ export const stop = async (req, res, next) => {
     const timeRecordId = req.params.id;
 
     if (!timeRecordId) {
-      res.status(400).json({ error: 'You must provide a time record id.' });
+      return res
+        .status(400)
+        .json({ error: 'You must provide a time record id.' });
     }
 
     const { user } = req.cookies['jwt'];
@@ -57,7 +104,9 @@ export const deleteTimeRecord = async (req, res, next) => {
   try {
     const timeRecordId = req.params.id;
     if (!timeRecordId) {
-      res.status(400).json({ error: 'You must provide a time record id.' });
+      return res
+        .status(400)
+        .json({ error: 'You must provide a time record id.' });
     }
 
     // TODO: Add validation
@@ -113,7 +162,18 @@ export const update = async (req, res, next) => {
     const timeRecordId = req.params.id;
 
     if (!timeRecordId) {
-      res.status(400).json({ error: 'You must provide a time record id.' });
+      return res
+        .status(400)
+        .json({ error: 'You must provide a time record id.' });
+    }
+
+    if (new Date(startTime) > new Date(endTime)) {
+      return res
+        .status(400)
+        .json({
+          error:
+            'You must provide valid start and end time. The end date cannot be earlier than the start date.',
+        });
     }
 
     const { user } = req.cookies['jwt'];

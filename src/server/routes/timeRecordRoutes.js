@@ -5,6 +5,12 @@ import * as timeRecordController from '../controllers/timeRecordController.js';
 
 const projectRouter = new express.Router();
 
+projectRouter.use(isAuthenticated);
+projectRouter.post(
+  '/create',
+  validate(timeRecordSchema.required()),
+  timeRecordController.create,
+);
 projectRouter.post(
   '/start',
   validate(timeRecordSchema.required()),
