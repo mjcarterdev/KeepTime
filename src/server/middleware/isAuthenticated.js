@@ -10,7 +10,9 @@ const isAuthenticated = async (req, res, next) => {
         next();
       }
     });
-  } catch (error) {}
+  } catch (error) {
+    res.status(401).json({ error });
+  }
 };
 
 export default isAuthenticated;
