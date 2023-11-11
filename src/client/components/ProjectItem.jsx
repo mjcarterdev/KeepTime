@@ -72,9 +72,9 @@ export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
                     />
                     <Link
                       key={item.id}
-                      to={'/project/subtask'}
+                      to={'/projects/subtask/$subtaskId'}
                       params={{
-                        subTaskId: item.id,
+                        subtaskId: item.id,
                       }}
                     >
                       <div className={'p-2'}>

@@ -113,6 +113,7 @@ export const update = async (req, res, next) => {
       projectId,
       completed,
     });
+
     res.status(200).json(project);
   } catch (err) {
     res.status(403).json({

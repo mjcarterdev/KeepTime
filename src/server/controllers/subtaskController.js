@@ -81,9 +81,10 @@ export const getById = async (req, res, next) => {
     #swagger.security = [{"cookieAuth:": [] }]
   */
   try {
-    const subtaskId = req.params.id;
-    console.log(subtaskId);
+    const subtaskId = req.params.subtaskId;
+
     let subtask = await subtaskModel.getById(subtaskId);
+
     subtask.totalDuration = totalDurationString(subtask.timeRecords);
     return res.json(subtask);
   } catch (err) {

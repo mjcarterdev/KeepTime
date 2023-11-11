@@ -33,8 +33,8 @@ export const postProject = (data) => {
   return axiosClient.post('project/createNew', data);
 };
 
-export const updateProjectById = ({ title, projectId }) => {
-  return axiosClient.put(`project/update/${projectId}`, { title });
+export const updateProjectById = ({ title, projectId, completed }) => {
+  return axiosClient.put(`project/update/${projectId}`, { title, completed });
 };
 
 export const deleteProject = (projectId) => {
@@ -44,6 +44,10 @@ export const deleteProject = (projectId) => {
 // Subtask API functions
 export const getAllSubtaskByProjectId = (id) => {
   return axiosClient.get(`subtask/getProjectSubtasks/${id}`);
+};
+
+export const getSubtaskById = (id) => {
+  return axiosClient.get(`subtask/${id}`);
 };
 
 export const postSubtask = (data) => {
