@@ -6,6 +6,7 @@ export const create = (subtaskData) => {
       title: subtaskData.title,
       description: subtaskData.description,
       projectId: subtaskData.projectId,
+      completed: false,
     },
   });
 };
@@ -35,6 +36,7 @@ export const update = (subtaskData) => {
     data: {
       title: subtaskData.title || undefined,
       description: subtaskData.description || undefined,
+      completed: subtaskData.completed,
       updatedAt: new Date(),
     },
   });

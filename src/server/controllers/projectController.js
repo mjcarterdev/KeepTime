@@ -2,13 +2,8 @@ import * as projectModel from '../models/projectModel.js';
 import { totalDurationString } from '../utils/timeUtil.js';
 
 export const create = async (req, res, next) => {
-  /* 
-    #swagger.tags = ['Project']
-    #swagger.summary = 'Create a new project'
-    #swagger.security = [{"cookieAuth:": [] }]
-  */
   try {
-    const { title, description } = req.body;
+    const { title } = req.body;
     if (!title) {
       return res
         .status(400)
@@ -19,7 +14,6 @@ export const create = async (req, res, next) => {
 
     let project = await projectModel.create({
       title,
-      description,
       userId: user.id,
     });
     res.status(201).json(project);
@@ -33,11 +27,6 @@ export const create = async (req, res, next) => {
 };
 
 export const deleteProject = async (req, res, next) => {
-  /* 
-    #swagger.tags = ['Project']
-    #swagger.summary = 'Delete a project by Id'
-    #swagger.security = [{"cookieAuth:": [] }]
-  */
   try {
     const projectId = req.params.id;
     if (!projectId) {
@@ -67,7 +56,7 @@ export const getAllUserProjects = async (req, res, next) => {
   try {
     const { user } = req.cookies['jwt'];
 
-    let projects = await projectModel.getAllByUserId(userId);
+    let projects = await projectModel.getAllByUserId(user.id);
     let projectsWithDuration = projects.map((project) => {
       Object.assign(project, {
         totalDuration: totalDurationString(project.timeRecords),
@@ -77,7 +66,10 @@ export const getAllUserProjects = async (req, res, next) => {
     });
     res.json(projectsWithDuration);
   } catch (err) {
-    next(err);
+    res.status(403).json({
+      error: err,
+      message: 'Unexpected error in project getProjectById',
+    });
   }
 };
 
@@ -99,7 +91,7 @@ export const getProjectById = async (req, res, next) => {
 
 export const update = async (req, res, next) => {
   try {
-    const { title, description } = req.body;
+    const { title, description, completed } = req.body;
     const projectId = req.params.id;
 
     if (!projectId) {
@@ -115,7 +107,12 @@ export const update = async (req, res, next) => {
         .json({ error: 'You do not have permission to update this project.' });
     }
 
-    let project = await projectModel.update({ title, description, projectId });
+    let project = await projectModel.update({
+      title,
+      description,
+      projectId,
+      completed,
+    });
     res.status(200).json(project);
   } catch (err) {
     res.status(403).json({

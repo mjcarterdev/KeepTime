@@ -8,7 +8,7 @@ export const create = async (req, res, next) => {
     #swagger.security = [{"cookieAuth:": [] }]
   */
   try {
-    const { title, description, projectId } = req.body;
+    const { title, projectId } = req.body;
     if (!title) {
       return res
         .status(400)
@@ -23,7 +23,6 @@ export const create = async (req, res, next) => {
 
     let subtask = await subtaskModel.create({
       title,
-      description,
       projectId: projectId,
     });
     res.status(201).json(subtask);
@@ -99,8 +98,9 @@ export const update = async (req, res, next) => {
     #swagger.security = [{"cookieAuth:": [] }]
   */
   try {
-    const { title, description } = req.body;
-    const subtaskId = req.params.id;
+    const { title, description, completed } = req.body;
+    console.log(req.params);
+    const subtaskId = req.params.subtaskId;
 
     if (!subtaskId) {
       return res.status(400).json({ error: 'You must provide a subtask id.' });
@@ -109,7 +109,12 @@ export const update = async (req, res, next) => {
     const { user } = req.cookies['jwt'];
     // TODO: Add validation
 
-    let subtask = await subtaskModel.update({ title, description, subtaskId });
+    let subtask = await subtaskModel.update({
+      title,
+      description,
+      subtaskId,
+      completed,
+    });
     res.json(subtask);
   } catch (err) {
     next(err);

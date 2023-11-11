@@ -4,8 +4,8 @@ export const create = (projectData) => {
   return db.project.create({
     data: {
       title: projectData.title,
-      description: projectData.description,
       creatorId: projectData.userId,
+      completed: false,
     },
   });
 };
@@ -17,6 +17,7 @@ export const getAllByUserId = (userId) => {
     },
     include: {
       timeRecords: true,
+      subTasks: true,
     },
   });
 };
@@ -35,6 +36,7 @@ export const update = (projectData) => {
     data: {
       title: projectData.title || undefined,
       description: projectData.description || undefined,
+      completed: projectData.completed,
       updatedAt: new Date(),
     },
   });

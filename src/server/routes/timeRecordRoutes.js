@@ -2,6 +2,7 @@ import express from 'express';
 import { validate } from '../middleware/validation.js';
 import { timeRecordSchema } from '../validationSchemas/timeRecordSchema.js';
 import * as timeRecordController from '../controllers/timeRecordController.js';
+import isAuthenticated from '../middleware/isAuthenticated.js';
 
 const projectRouter = new express.Router();
 

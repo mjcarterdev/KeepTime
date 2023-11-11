@@ -22,6 +22,7 @@ export default {
       sans: ['Poppins', ...defaultTheme.fontFamily.sans],
     },
     borderRadius: {
+      none: '0px',
       '5px': '5px',
       '10px': '10px',
     },
@@ -52,7 +53,7 @@ export default {
           secondary: '#142440',
           'secondary-focus': '#070C15',
           'secondary-content': '#FFFFFF',
-          accent: '#CA5CC5',
+          accent: '#7e22ce',
           'accent-focus': 'AD00A5',
           'accent-content': '#FFFFFF',
           'base-100': '#F5E8F5',
