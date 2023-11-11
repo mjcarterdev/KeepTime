@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import EditableText from './EditableTextBox';
 import Icon from './Icon';
 import useProjectStore from '../context/projectStore.jsx';
+import { Link } from '@tanstack/react-router';
 
 export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
   const expanded = useProjectStore((state) => state.expanded);
@@ -16,17 +17,18 @@ export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
         value={item}
         className={`text-secondary flex items-center justify-between px-4 h-20 pl-4 md:w-[40rem] shadow-[2px_4px_5px_2px_#00000024] md:min-w-min50 md:h-24 text-l md:text-2xl rounded-[25px] bg-neutral border border-gray-100 bg-opacity-20 hover:bg-accent hover:bg-opacity-30 ${
           isOpen ? 'rounded-bl-none rounded-br-none bg-purple-700' : 'rounded'
-        } `}
+        } ${item.completed ? 'line-through' : ''} `}
       >
         {/* <span className="z-6">{item.title}</span> */}
         <EditableText
           initialText={item.title}
           updateProjectFn={updateProject}
-          className={' p-4 min-w-min70 text-secondary'}
+          className={' p-2 min-w-min70 text-secondary font-medium'}
           showEdit={item.title === 'new project'}
           item={item}
           isProject={true}
         />
+        <div>{item.totalDuration}</div>
         <div
           onClick={() => setExpanded(isOpen ? false : item)}
           className={'cursor-pointer'}
@@ -68,7 +70,17 @@ export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
                       item={item}
                       isProject={false}
                     />
-                    <div>{item.totalDuratrion}</div>
+                    <Link
+                      key={item.id}
+                      to={'/project/subtask'}
+                      params={{
+                        subTaskId: item.id,
+                      }}
+                    >
+                      <div className={'p-2'}>
+                        <Icon iconName={'arrow-right'} />
+                      </div>
+                    </Link>
                   </div>
                 );
               })

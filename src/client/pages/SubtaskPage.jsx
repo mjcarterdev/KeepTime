@@ -4,15 +4,13 @@ import NavBar from '../components/Navbar';
 const SubtaskPage = ({ useRouteContext }) => {
   const { queryOptions, authContext } = useRouteContext();
   const { data, isLoading, isError } = useQuery(queryOptions);
-  console.log(authContext);
+  console.log(data);
   return (
     <>
-      <NavBar authContext={authContext} />
-      <div className="h-[calc(100vh-4rem)] bg-base-100 flex flex-col items-center justify-between p-2">
-        <div className="max-w-xs ">
-          <p>text</p>
-        </div>
-      </div>
+      <NavBar authContext={authContext} location="Subtask" />
+      <div
+        className={`flex pb-32 pt-24 flex-col flex-1 h-[100vh] w-full gap-2 p-4 overflow-y-scroll md:items-center scrollbar-hide md:scrollbar-default `}
+      ></div>
     </>
   );
 };

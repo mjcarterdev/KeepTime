@@ -25,6 +25,7 @@ const ProjectPage = ({ useRouteContext }) => {
   const expanded = useProjectStore((state) => state.expanded);
   const setExpanded = useProjectStore((state) => state.setExpanded);
   const [workingData, setWorkingData] = useState([]);
+  const isProjectsEmpty = workingData.length > 0;
 
   useEffect(() => {
     setWorkingData(data.data.sort(compareTitle));
@@ -53,12 +54,13 @@ const ProjectPage = ({ useRouteContext }) => {
     },
   });
 
-  const updateProjectNameMutation = useMutation({
+  const updateProjectMutation = useMutation({
     mutationFn: updateProjectById,
     onError: (error) => {
       console.log(error);
     },
     onSuccess: (data) => {
+      setExpanded(data.data);
       queryClient.invalidateQueries({ queryKey: ['projects'] });
     },
   });
@@ -93,6 +95,14 @@ const ProjectPage = ({ useRouteContext }) => {
     addSubtaskMutation.mutate({ title: 'new subtask', projectId: expanded.id });
   };
 
+  const handleCompleteProject = () => {
+    updateProjectMutation.mutate({
+      projectId: expanded.id,
+      title: expanded.title,
+      completed: !expanded.completed,
+    });
+  };
+
   return (
     <>
       <NavBar authContext={authContext} location="Projects" />
@@ -101,32 +111,39 @@ const ProjectPage = ({ useRouteContext }) => {
         className={`flex pb-32 pt-24 flex-col flex-1 h-[100vh] w-full gap-2 p-4 overflow-y-scroll md:items-center scrollbar-hide md:scrollbar-default `}
       >
         <AnimatePresence initial={true}>
-          {[...workingData].map((item) => {
-            return (
-              <ProjectItem
-                key={item.id}
-                item={item}
-                expanded={expanded}
-                setExpanded={setExpanded}
-                addProject={addProjectMutation}
-                updateProject={updateProjectNameMutation}
-                addSubtask={addSubtaskMutation}
-                updateSubtask={updateSubtaskNameMutation}
-              />
-            );
-          })}
+          {isProjectsEmpty ? (
+            [...workingData].map((item) => {
+              return (
+                <ProjectItem
+                  key={item.id}
+                  item={item}
+                  expanded={expanded}
+                  setExpanded={setExpanded}
+                  addProject={addProjectMutation}
+                  updateProject={updateProjectMutation}
+                  addSubtask={addSubtaskMutation}
+                  updateSubtask={updateSubtaskNameMutation}
+                />
+              );
+            })
+          ) : (
+            <div className="h-8 p-2">No Projects...click below to add</div>
+          )}
         </AnimatePresence>
       </div>
       <Toolbar>
         {expanded ? (
           <>
             <RoundButtonWithLabel
-              label={'Complete'}
+              label={expanded.completed ? 'Restore' : 'Complete'}
               onClick={() => {
-                console.log('project completed');
+                handleCompleteProject();
               }}
             >
-              <Icon iconName={'check'} className={'text-accent-content'} />
+              <Icon
+                iconName={expanded.completed ? 'restart' : 'check'}
+                className={'text-accent-content'}
+              />
             </RoundButtonWithLabel>
             <RoundButtonWithLabel
               label={'Delete'}
