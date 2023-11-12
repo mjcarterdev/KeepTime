@@ -1,16 +1,15 @@
-import { useEffect } from 'react';
 import Logo from '../components/Logo';
-import router from '../router';
 import { useForm } from 'react-hook-form';
 import Skyline from '../images/skyline.svg';
 import Button from '../components/Button';
 import NavBar from '../components/Navbar';
 import Card from '../components/Card';
-import { Link } from '@tanstack/react-router';
+import { Link, useLoaderData, useNavigate, useSubmit } from 'react-router-dom';
 
-const LoginPage = ({ useLoader }) => {
-  const { authContext } = useLoader();
-  const { isAuth } = authContext.session();
+const LoginPage = () => {
+  // return <div>Login Page</div>;
+  const loader = useLoaderData();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -18,22 +17,18 @@ const LoginPage = ({ useLoader }) => {
     formState: { errors },
   } = useForm();
   const onSubmit = async (data) => {
-    await authContext.login(data);
+    console.log(data);
+    await loader.authProvider.login(data);
+    navigate('/projects', { replace: true });
   };
-
-  useEffect(() => {
-    if (isAuth) {
-      router.navigate('/projects');
-    }
-  }, [isAuth]);
 
   const hidden = 'invisible label-text-alt';
   const visible = 'label-text-alt text-error';
 
   return (
     <>
-      <div className="flex flex-col items-center gap-6 h-[100vh] overflow-hidden bg-transparent">
-        <NavBar authContext={authContext} />
+      <div className="flex flex-col items-center gap-6 h-[100vh] pt-20 overflow-hidden bg-transparent">
+        <NavBar authContext={loader.authProvider} />
         <div className="relative flex flex-col items-center justify-center">
           <Logo
             className={

@@ -36,7 +36,7 @@ const EditableText = ({
   };
 
   return (
-    <div {...bind} className={className}>
+    <div {...bind} className={`cursor-pointer ${className}`}>
       {isEditing ? (
         <input
           type="text"

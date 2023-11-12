@@ -2,17 +2,18 @@ import { getLogout, postLogin, postRegistration } from '../api/services';
 
 const localStorageKey = 'keeptime-session';
 
-const getSession = () => {
-  const res = localStorage.getItem(localStorageKey);
-  if (!res) {
-    return false;
-  }
-  const session = JSON.parse(res);
-  return session;
-};
-
-const authContext = {
-  session: () => getSession(),
+const authProvider = {
+  isAuth: false,
+  user: null,
+  getSession: () => {
+    const res = localStorage.getItem(localStorageKey);
+    if (!res) {
+      return false;
+    }
+    const session = JSON.parse(res);
+    authProvider.isAuth = session.isAuth;
+    authProvider.user = session.user;
+  },
   login: async (data) => {
     const res = await postLogin(data);
     if (res.status == 200) {
@@ -23,6 +24,7 @@ const authContext = {
           user: res.data.user,
         }),
       );
+      authProvider.getSession();
     }
     return res;
   },
@@ -33,6 +35,7 @@ const authContext = {
         localStorageKey,
         JSON.stringify({ isAuth: false, user: {} }),
       );
+      authProvider.getSession();
     }
     return res;
   },
@@ -46,9 +49,10 @@ const authContext = {
           user: res.data.user,
         }),
       );
+      authProvider.getSession();
     }
     return res;
   },
 };
 
-export default authContext;
+export default authProvider;

@@ -1,35 +1,44 @@
 import Button from '../components/Button';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect } from 'react';
 import Toolbar from '../components/Toolbar';
 import ProjectItem from '../components/ProjectItem';
 import { AnimatePresence } from 'framer-motion';
 import {
+  getAllProjects,
   postProject,
   updateProjectById,
   postSubtask,
   updateSubtaskById,
   deleteProject,
 } from '../api/services';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import NavBar from '../components/Navbar';
 import Icon from '../components/Icon';
 import RoundButtonWithLabel from '../components/IconButton';
 import { compareTitle } from '../utils/sort-alphabetically';
 import useProjectStore from '../context/projectStore.jsx';
+import { Link, useLoaderData } from 'react-router-dom';
+import Spinner from '../components/Spinner.jsx';
 
-const ProjectPage = ({ useRouteContext }) => {
+const ProjectPage = () => {
+  const loader = useLoaderData();
   const queryClient = useQueryClient();
-  const { queryGetAllProjectsOptions, authContext } = useRouteContext();
-  const { data } = useQuery(queryGetAllProjectsOptions);
+
+  // return <div>Projects</div>;
+  const { data, isLoading } = useQuery({
+    queryKey: ['projects'],
+    queryFn: getAllProjects,
+  });
+
   const expanded = useProjectStore((state) => state.expanded);
   const setExpanded = useProjectStore((state) => state.setExpanded);
   const [workingData, setWorkingData] = useState([]);
-  const isProjectsEmpty = workingData.length > 0;
+  const isProjectsEmpty = workingData?.length > 0;
 
   useEffect(() => {
-    setWorkingData(data.data.sort(compareTitle));
-  }, [data.data]);
+    setWorkingData(data?.data.sort(compareTitle));
+  }, [data?.data]);
 
   // Query Functions
 
@@ -105,31 +114,35 @@ const ProjectPage = ({ useRouteContext }) => {
 
   return (
     <>
-      <NavBar authContext={authContext} location="Projects" />
+      <NavBar authContext={loader.authProvider} location="Projects" />
 
       <div
         className={`flex pb-32 pt-24 flex-col flex-1 h-[100vh] w-full gap-2 p-4 overflow-y-scroll md:items-center scrollbar-hide md:scrollbar-default `}
       >
-        <AnimatePresence initial={true}>
-          {isProjectsEmpty ? (
-            [...workingData].map((item) => {
-              return (
-                <ProjectItem
-                  key={item.id}
-                  item={item}
-                  expanded={expanded}
-                  setExpanded={setExpanded}
-                  addProject={addProjectMutation}
-                  updateProject={updateProjectMutation}
-                  addSubtask={addSubtaskMutation}
-                  updateSubtask={updateSubtaskNameMutation}
-                />
-              );
-            })
-          ) : (
-            <div className="h-8 p-2">No Projects...click below to add</div>
-          )}
-        </AnimatePresence>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <AnimatePresence initial={true}>
+            {isProjectsEmpty ? (
+              [...workingData].map((item) => {
+                return (
+                  <ProjectItem
+                    key={item.id}
+                    item={item}
+                    expanded={expanded}
+                    setExpanded={setExpanded}
+                    addProject={addProjectMutation}
+                    updateProject={updateProjectMutation}
+                    addSubtask={addSubtaskMutation}
+                    updateSubtask={updateSubtaskNameMutation}
+                  />
+                );
+              })
+            ) : (
+              <div className="h-8 p-2">No Projects...click below to add</div>
+            )}
+          </AnimatePresence>
+        )}
       </div>
       <Toolbar>
         {expanded ? (

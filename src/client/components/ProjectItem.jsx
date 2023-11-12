@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import EditableText from './EditableTextBox';
 import Icon from './Icon';
 import useProjectStore from '../context/projectStore.jsx';
-import { Link } from '@tanstack/react-router';
+import { Link } from 'react-router-dom';
 
 export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
   const expanded = useProjectStore((state) => state.expanded);
@@ -51,7 +51,7 @@ export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
               collapsed: { opacity: 0, height: 0 },
             }}
             transition={{ duration: 1, type: 'spring' }}
-            className="text-secondary flex flex-col items-center justify-center max-w-full gap-1 bg-neutral bg-opacity-50 border border-gray-100 divide-y-2 divide-accent divide-opacity-20 shadow-[2px_4px_5px_2px_#00000024] cursor-pointer divide-solid bg-clip-padding backdrop-filter backdrop-blur-lg "
+            className="text-secondary flex flex-col items-center justify-center max-w-full gap-1 bg-neutral bg-opacity-50 border border-gray-100 divide-y-2 divide-accent divide-opacity-20 shadow-[2px_4px_5px_2px_#00000024] cursor-default divide-solid bg-clip-padding backdrop-filter backdrop-blur-lg "
           >
             {isSubTasksEmpty ? (
               [...item.subTasks].map((item) => {
@@ -72,9 +72,10 @@ export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
                     />
                     <Link
                       key={item.id}
-                      to={'/projects/subtask/$subtaskId'}
-                      params={{
-                        subtaskId: item.id,
+                      to={`/subtask/${item.id}`}
+                      from={'/projects'}
+                      onClick={() => {
+                        console.log(item.id);
                       }}
                     >
                       <div className={'p-2'}>

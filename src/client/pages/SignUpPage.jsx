@@ -1,12 +1,15 @@
 import Logo from '../components/Logo';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import router from '../router';
+import Skyline from '../images/skyline.svg';
+import Button from '../components/Button';
 import NavBar from '../components/Navbar';
+import Card from '../components/Card';
+import { Link, useLoaderData, useNavigate } from 'react-router-dom';
 
-const SignUpPage = ({ useLoader }) => {
-  const { authContext } = useLoader();
-  const { isAuth } = authContext.session();
+const SignUpPage = () => {
+  const loader = useLoaderData();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -14,93 +17,118 @@ const SignUpPage = ({ useLoader }) => {
     formState: { errors },
   } = useForm();
   const onSubmit = async (data) => {
-    await authContext.register(data);
+    loader.authProvider.register(data);
   };
 
   useEffect(() => {
-    if (isAuth) {
-      router.navigate('/projects');
+    if (loader.authProvider.isAuth) {
+      navigate('/projects');
     }
-  }, [isAuth]);
+  }, [loader.authProvider.isAuth]);
 
   const hidden = 'invisible label-text-alt';
   const visible = 'label-text-alt';
 
   return (
     <>
-      <NavBar authContext={authContext} />
-      <div className="flex items-center justify-center h-[calc(100vh-4rem)] bg-base-100">
-        <div className="flex p-2 text-center sm:max-w-screen-sm md:max-w-md ">
-          <div className="max-w-screen-md max-h-screen ">
-            <Logo className={'text-7xl lg:text-8xl font-bold'} />
-            <p className="py-6 text-1xl lg:text-2xl">
-              Create an account to unlock your productivity potential.
-            </p>
-
-            <form className="px-4" onSubmit={handleSubmit(onSubmit)}>
-              <label className="p-1 leading-3 label">
-                <span className="label-text">Name</span>
-                <span className={errors.name ? visible : hidden}>
-                  Min. of 8 characters
-                </span>
-              </label>
-              <input
-                type="text"
-                placeholder="Type here"
-                className="w-full input input-bordered input-primary"
-                {...register('name', { required: true, minLength: 2 })}
-              />
-
-              <label className="label">
-                <span className="label-text">Email</span>
-                <span className={errors.email ? visible : hidden}>
-                  This is required
-                </span>
-              </label>
-              <input
-                id="email"
-                type="text"
-                placeholder="Type here"
-                className="w-full input input-bordered input-primary"
-                {...register('email')}
-              />
-
-              <label className=" label">
-                <span className="label-text">Password</span>
-                <span className={errors.password ? visible : hidden}>
-                  Min. of 8 characters
-                </span>
-              </label>
-              <input
-                placeholder="Type here"
-                className="w-full input input-bordered input-primary"
-                type="password"
-                name="password"
-                autoComplete="on"
-                {...register('password')}
-              />
-
-              <label className=" label">
-                <span className="label-text">Confirm Password</span>
-                <span className={errors.confirm ? visible : hidden}>
-                  Min. of 8 characters
-                </span>
-              </label>
-              <input
-                type="password"
-                placeholder="Type here"
-                autoComplete="on"
-                className="w-full input input-bordered input-primary"
-                {...register('confirm', { required: true, minLength: 8 })}
-              />
-              <div className="flex p-4 justify-evenly">
-                <button type="submit" className="w-24 btn btn-primary">
-                  SignUp
-                </button>
-              </div>
-            </form>
-          </div>
+      <div className="flex flex-col items-center gap-2 h-[100vh] pt-20 overflow-hidden bg-transparent">
+        <NavBar authContext={loader.authProvider} />
+        <div className="relative flex flex-col items-center justify-center">
+          <Logo
+            className={
+              'absolute top-0 md:-top-5 text-6xl  md:text-8xl p-5 font-bold z-10 max-w-max90'
+            }
+          />
+          <img src={Skyline} className="w-full pt-20 md:max-w-max50" />
         </div>
+
+        <Card>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <label className="pb-1 pl-4 label">
+              <span className="text-neutral-content label-text">Name</span>
+            </label>
+            <input
+              id="name"
+              type="text"
+              placeholder="Type here"
+              className="w-full p-2 pl-4 bg-white border border-gray-100 rounded-md shadow-md input-ghost bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 rounded-10px focus:outline-accent autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)] "
+              {...register('name')}
+            />
+            <label className="pl-4 label">
+              <span className={errors.name ? visible : hidden}>
+                This is required
+              </span>
+            </label>
+
+            <label className="pb-1 pl-4 label">
+              <span className="text-neutral-content label-text">Email</span>
+            </label>
+            <input
+              id="email"
+              type="text"
+              placeholder="Type here"
+              className="w-full p-2 pl-4 bg-white border border-gray-100 rounded-md shadow-md input-ghost bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 rounded-10px focus:outline-accent autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)] "
+              {...register('email')}
+            />
+            <label className="pl-4 label">
+              <span className={errors.email ? visible : hidden}>
+                This is required
+              </span>
+            </label>
+
+            <label className="pt-2 pb-0 pl-4 label">
+              <span className="label-text text-neutral-content">Password</span>
+            </label>
+            <input
+              placeholder="Type here"
+              className="w-full p-2 pl-4 bg-white border border-gray-100 rounded-md shadow-md input-ghost bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 rounded-10px focus:outline-accent"
+              type="password"
+              name="password"
+              autoComplete="on"
+              {...register('password')}
+            />
+            <label className="label">
+              <span className={errors.password ? visible : hidden}>
+                Min. of 8 characters
+              </span>
+            </label>
+
+            <label className="pt-2 pb-0 pl-4 label">
+              <span className="label-text text-neutral-content">
+                Confirm Password
+              </span>
+            </label>
+            <input
+              placeholder="Type here"
+              className="w-full p-2 pl-4 bg-white border border-gray-100 rounded-md shadow-md input-ghost bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 rounded-10px focus:outline-accent"
+              type="password"
+              name="confirm"
+              autoComplete="on"
+              {...register('confirm')}
+            />
+            <label className="label">
+              <span className={errors.confirm ? visible : hidden}>
+                Min. of 8 characters
+              </span>
+            </label>
+            <div className="flex pt-4 justify-evenly">
+              <Button type="submit" className="w-full">
+                Register
+              </Button>
+            </div>
+            <p className="w-full pt-4 text-center">
+              Or click{' '}
+              <span>
+                {
+                  <Link to={'/'} from={'/signup'} className="text-accent">
+                    here
+                  </Link>
+                }
+              </span>{' '}
+              to login up
+            </p>
+          </form>
+        </Card>
       </div>
     </>
   );

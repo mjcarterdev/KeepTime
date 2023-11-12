@@ -1,5 +1,5 @@
-import { Link } from '@tanstack/react-router';
-import router from '../router';
+import { NavLink, useNavigate } from 'react-router-dom';
+// import router from '../router';
 
 const getMenuItems = (authenticated) => {
   let menuItems;
@@ -22,8 +22,9 @@ const getMenuItems = (authenticated) => {
 };
 
 const NavBar = ({ authContext, location = '' }) => {
-  const { isAuth } = authContext.session();
+  const { isAuth } = authContext;
   let menuItems = getMenuItems(isAuth);
+  const navigate = useNavigate();
 
   const style = 'whitespace-nowrap hover:text-accent cursor-pointer ';
   const selectedStyle = 'whitespace-nowrap text-accent';
@@ -32,7 +33,7 @@ const NavBar = ({ authContext, location = '' }) => {
     const res = await authContext.logout();
     console.log(res);
     if (!res.data.isAuthenticated) {
-      router.navigate('/');
+      navigate('/');
     }
   };
 
@@ -49,31 +50,27 @@ const NavBar = ({ authContext, location = '' }) => {
           {menuItems.map((item) => {
             if (item.name === 'Logout') {
               return (
-                <Link
+                <NavLink
                   key={item.name}
                   to={item.path}
-                  className={style}
-                  activeProps={{ className: selectedStyle }}
-                  activeOptions={{ exact: true }}
+                  className={({ isActive }) =>
+                    isActive ? selectedStyle : style
+                  }
                   onClick={() => handleLogout()}
                   disabled
                 >
                   {item.name}
-                </Link>
+                </NavLink>
               );
             }
             return (
-              <Link
+              <NavLink
                 key={item.name}
                 to={item.path}
-                className={style}
-                activeProps={{
-                  className: selectedStyle,
-                }}
-                activeOptions={{ exact: true }}
+                className={({ isActive }) => (isActive ? selectedStyle : style)}
               >
                 {item.name}
-              </Link>
+              </NavLink>
             );
           })}
         </ul>
@@ -98,35 +95,35 @@ const NavBar = ({ authContext, location = '' }) => {
           </label>
           <ul
             tabIndex={0}
-            className="flex-col w-32 p-2 font-medium border bg-neutral border-gray-100 rounded-md shadow-[2px_4px_5px_2px_#00000024] text-2rem menu-sm dropdown-content bg-clip-padding backdrop-filter backdrop-blur-3xl bg-opacity-60"
+            className="flex-col w-32 p-2 font-medium border bg-neutral border-gray-100 rounded-md shadow-[2px_4px_5px_2px_#00000024] text-2rem menu-sm dropdown-content bg-clip-padding backdrop-filter backdrop-blur-3xl "
           >
             {menuItems.map((item) => {
               if (item.name === 'Logout') {
                 return (
                   <li key={item.name}>
-                    <Link
+                    <NavLink
                       to={item.path}
-                      className={style}
-                      activeProps={{ className: selectedStyle }}
-                      activeOptions={{ exact: true }}
+                      className={({ isActive }) =>
+                        isActive ? selectedStyle : style
+                      }
                       onClick={() => handleLogout()}
                       disabled
                     >
                       {item.name}
-                    </Link>
+                    </NavLink>
                   </li>
                 );
               }
               return (
                 <li key={item.name}>
-                  <Link
+                  <NavLink
                     to={item.path}
-                    className={style}
-                    activeProps={{ className: selectedStyle }}
-                    activeOptions={{ exact: true }}
+                    className={({ isActive }) =>
+                      isActive ? selectedStyle : style
+                    }
                   >
                     {item.name}
-                  </Link>
+                  </NavLink>
                 </li>
               );
             })}
