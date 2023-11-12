@@ -33,6 +33,10 @@ export default {
         'glass-card': '0px 4px 4px 0px rgba(0, 0, 0, 0.25);',
         'glass-button': '',
       },
+      backgroundImage: {
+        'background-sm': "url('/img/background-sm.jpg')",
+        'background-lg': "url('/img/background-lg.jpg')",
+      },
     },
   },
   plugins: [
