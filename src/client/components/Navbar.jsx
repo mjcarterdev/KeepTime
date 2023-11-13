@@ -1,6 +1,5 @@
-import { Link } from '@tanstack/react-router';
-import Logo from './Logo';
-import router from '../router';
+import { NavLink, useNavigate } from 'react-router-dom';
+// import router from '../router';
 
 const getMenuItems = (authenticated) => {
   let menuItems;
@@ -15,64 +14,63 @@ const getMenuItems = (authenticated) => {
   } else {
     menuItems = [
       { name: 'About Us', path: '/about' },
-      { name: 'Login', path: '/login' },
+      { name: 'Login', path: '/' },
       { name: 'Sign Up', path: '/signup' },
     ];
   }
   return menuItems;
 };
 
-const NavBar = ({ authContext }) => {
-  const { isAuth } = authContext.session();
+const NavBar = ({ authContext, location = '' }) => {
+  const { isAuth } = authContext;
   let menuItems = getMenuItems(isAuth);
+  const navigate = useNavigate();
 
-  const style = 'whitespace-nowrap hover:text-secondary cursor-pointer';
-  const selectedStyle = 'whitespace-nowrap text-secondary';
+  const style = 'whitespace-nowrap hover:text-accent cursor-pointer ';
+  const selectedStyle = 'whitespace-nowrap text-accent';
 
   const handleLogout = async () => {
     const res = await authContext.logout();
+    console.log(res);
     if (!res.data.isAuthenticated) {
-      router.navigate('/');
+      navigate('/');
     }
   };
 
   return (
-    <div className="navbar bg-neutral text-neutral-content .min-h-16 .p-0">
+    <nav className="absolute top-0 z-50 w-full h-20 p-2 px-1 rounded-md py-0w-full border bg-neutral border-gray-100 rounded-md shadow-[2px_4px_5px_2px_#00000024] min-h-[5rem] py-0w-full bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 text-primary navbar max-h-16">
       <div className="navbar-start">
-        <span className="text-xl normal-case btn btn-ghost">
-          <Link to={`/`} activeOptions={{ exact: true }}>
-            <Logo />
-          </Link>
+        <span className="px-4 text-3xl font-medium underline normal-case underline-offset-6 decoration-accent">
+          <h2>{location} </h2>
         </span>
       </div>
+      <span className="whitespace-nowrap"></span>
       <div className="hidden navbar-end lg:flex">
-        <ul className="px-4 space-x-4 menu-lg menu-horizontal">
+        <ul className="px-4 space-x-4 font-medium menu-lg menu-horizontal">
           {menuItems.map((item) => {
             if (item.name === 'Logout') {
               return (
-                <Link
+                <NavLink
                   key={item.name}
                   to={item.path}
-                  className={style}
-                  activeProps={{ className: selectedStyle }}
-                  activeOptions={{ exact: true }}
+                  className={({ isActive }) =>
+                    isActive ? selectedStyle : style
+                  }
                   onClick={() => handleLogout()}
                   disabled
                 >
                   {item.name}
-                </Link>
+                </NavLink>
               );
             }
             return (
-              <Link
+              <NavLink
                 key={item.name}
                 to={item.path}
-                className={style}
-                activeProps={{ className: selectedStyle }}
-                activeOptions={{ exact: true }}
+                className={({ isActive }) => (isActive ? selectedStyle : style)}
               >
                 {item.name}
-              </Link>
+              </NavLink>
             );
           })}
         </ul>
@@ -82,52 +80,57 @@ const NavBar = ({ authContext }) => {
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="w-8 h-8"
+              className="w-8 h-8 text-accent"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h8m-8 6h16"
+              />
             </svg>
           </label>
           <ul
             tabIndex={0}
-            className=".flex-col menu-sm dropdown-content  mt-3 z-[1] p-2 shadow bg-neutral text-neutral-content w-52"
+            className="flex-col w-32 p-2 font-medium border bg-neutral border-gray-100 rounded-md shadow-[2px_4px_5px_2px_#00000024] text-2rem menu-sm dropdown-content bg-clip-padding backdrop-filter backdrop-blur-3xl "
           >
             {menuItems.map((item) => {
               if (item.name === 'Logout') {
                 return (
                   <li key={item.name}>
-                    <Link
+                    <NavLink
                       to={item.path}
-                      className={style}
-                      activeProps={{ className: selectedStyle }}
-                      activeOptions={{ exact: true }}
+                      className={({ isActive }) =>
+                        isActive ? selectedStyle : style
+                      }
                       onClick={() => handleLogout()}
                       disabled
                     >
                       {item.name}
-                    </Link>
+                    </NavLink>
                   </li>
                 );
               }
               return (
                 <li key={item.name}>
-                  <Link
+                  <NavLink
                     to={item.path}
-                    className={style}
-                    activeProps={{ className: selectedStyle }}
-                    activeOptions={{ exact: true }}
+                    className={({ isActive }) =>
+                      isActive ? selectedStyle : style
+                    }
                   >
                     {item.name}
-                  </Link>
+                  </NavLink>
                 </li>
               );
             })}
           </ul>
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 

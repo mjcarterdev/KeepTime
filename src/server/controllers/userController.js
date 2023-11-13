@@ -1,15 +1,11 @@
-import { addRefreshTokenToWhitelist, deleteRefreshToken, findRefreshTokenById } from '../models/authModel.js';
 import { findUserById } from '../models/userModel.js';
 
 export const getUserById = async (req, res, next) => {
-  /* 
-    #swagger.tags = ['User']
-  */
   try {
-    const { userId } = req.payload;
-    const user = await findUserById(userId);
-    delete user.password;
-    res.json(user);
+    const { user } = req.cookies['jwt'];
+    const resp = await findUserById(user.id);
+    delete resp.password;
+    res.json(resp);
   } catch (err) {
     next(err);
   }

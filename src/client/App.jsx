@@ -1,13 +1,10 @@
-import { Outlet } from '@tanstack/react-router';
-import Navbar from './components/Navbar';
+import { Outlet } from 'react-router-dom';
 
-function App({ useLoader }) {
-  const { authContext } = useLoader();
+function App() {
   return (
-    <>
-      <Navbar authContext={authContext} />
+    <div className="flex flex-col h-[100vh] space-between scrollbar-hide background-image overflow-hidden">
       <Outlet />
-    </>
+    </div>
   );
 }
 

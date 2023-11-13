@@ -1,0 +1,39 @@
+  <button className="w-24 btn btn-primary" onClick={() => document.getElementById('add_new_project').showModal()}>
+    Add Project
+  </button>
+  <AddProjectModal />
+
+  <button className="w-24 btn btn-primary" onClick={() => document.getElementById('update_project').showModal()}>
+    Update Project
+  </button>
+  <UpdateProjectModal project={selectedProject} />
+
+  <button className="w-24 btn btn-primary" onClick={() => document.getElementById('delete_project').showModal()}>
+    Delete Project
+  </button>
+  <DeleteProjectModal projectId={selectedProject.id}/>
+
+  <button className="w-24 btn btn-primary" onClick={() => document.getElementById('add_new_subtask').showModal()}>
+    Add Subtask
+  </button>
+  <AddSubtaskModal projectId={selectedProject.id} />
+
+  <button className="w-24 btn btn-primary" onClick={() => document.getElementById('update_subtask').showModal()}>
+    Update Subtask
+  </button>
+  <UpdateSubtaskModal subtask={selectedSubtask} />
+
+  <button className="w-24 btn btn-primary" onClick={() => document.getElementById('delete_subtask').showModal()}>
+    Delete Subtask
+  </button>
+  <DeleteSubtaskModal subtaskId={selectedSubtask.id}/>
+
+  <button className="w-24 btn btn-primary" onClick={() => document.getElementById('add_time').showModal()}>
+    Add Time
+  </button>
+  <AddTimeModal projectId={selectedSubtask.projectId} subtaskId={selectedSubtask.id}/>
+
+  <button className="w-24 btn btn-primary" onClick={() => document.getElementById('update_time_record').showModal()}>
+    Update Time
+  </button>
+  <UpdateTimeModal timeRecord={selectedTimeRecord}/>

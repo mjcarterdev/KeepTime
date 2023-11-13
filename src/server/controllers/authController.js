@@ -1,163 +1,141 @@
 import {
-  addRefreshTokenToWhitelist,
-  deleteRefreshToken,
-  findRefreshTokenById,
-  revokeTokens,
-} from '../models/authModel.js';
-import { findUserByEmail, createUserByEmailAndPassword, findUserById } from '../models/userModel.js';
+  findUserByEmail,
+  createUserByEmailAndPassword,
+} from '../models/userModel.js';
 import { v4 } from 'uuid';
-import { generateTokens } from '../utils/jwt.js';
-import bcrypt from 'bcrypt';
+import { generateTokens } from '../auth/jwt.js';
 import jwt from 'jsonwebtoken';
-import hashToken from '../utils/hashToken.js';
 
 export const register = async (req, res, next) => {
-  /* 
-    #swagger.tags = ['Auth']
-  */
   try {
     const { email, password, name } = req.body;
-    if (!email || !password || !name) {
-      res.status(400);
-      throw new Error('You must provide an email and a password and name.');
-    }
 
     const existingUser = await findUserByEmail(email);
 
     if (existingUser) {
-      res.status(400);
-      throw new Error('Email already in use.');
+      res.status(400).json({
+        error: 'bad credentials',
+        message: 'Email already in use',
+      });
     }
 
     const user = await createUserByEmailAndPassword({ email, password, name });
-    const jtid = v4();
-    const { accessToken, refreshToken } = generateTokens(user, jtid);
-    await addRefreshTokenToWhitelist({ jtid, refreshToken, userId: user.id });
+    const tokenId = v4();
+    const { accessToken, refreshToken } = generateTokens(user, tokenId);
 
+    delete user.password;
     res
       .cookie(
         'keeptime',
-        { accessToken, refreshToken },
+        { accessToken, refreshToken, tokenId },
         {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
         },
       )
       .status(200)
-      .json({ message: 'Registered successfully 😊 👌', isAuthenticated: true, user });
+      .json({
+        message: 'Registered successfully 😊 👌',
+        isAuthenticated: true,
+        user,
+      });
   } catch (err) {
-    next(err);
+    res.status(400).json({
+      error: err,
+      message: 'Unexpected Error in registeration',
+    });
   }
 };
 
-export const login = async (req, res, next) => {
-  /* 
-    #swagger.tags = ['Auth']
-  */
+export const login = async (req, res) => {
+  let user;
+
+  if (res.locals.user) {
+    user = res.locals.user;
+  } else {
+    res.status(400).json({
+      error: 'user not found',
+    });
+  }
+
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      res.status(400);
-      throw new Error('You must provide an email and a password.');
-    }
-
-    const existingUser = await findUserByEmail(email);
-
-    if (!existingUser) {
-      res.status(403);
-      throw new Error('Invalid login credentials.');
-    }
-
-    const validPassword = await bcrypt.compare(password, existingUser.password);
-    if (!validPassword) {
-      res.status(403);
-      throw new Error('Invalid login credentials.');
-    }
-
-    const jtid = v4();
-    const { accessToken, refreshToken } = generateTokens(existingUser, jtid);
-    await addRefreshTokenToWhitelist({ jtid, refreshToken, userId: existingUser.id });
-
+    const tokenId = v4();
+    const { accessToken, refreshToken } = generateTokens(user, tokenId);
     res
       .cookie(
-        'keeptime',
-        { accessToken, refreshToken },
+        'jwt',
+        { tokenId, accessToken, refreshToken, user },
         {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
         },
       )
       .status(200)
-      .json({ message: 'Logged in successfully 😊 👌', isAuthenticated: true, user: existingUser });
+      .json({
+        message: 'Logged in successfully 😊 👌',
+        isAuthenticated: true,
+        user,
+      });
   } catch (err) {
-    next(err);
+    res.status(400).json({
+      error: err || 'Unexpected error',
+      message: 'unexpected error in login',
+    });
   }
 };
 
-export const refreshToken = async (req, res, next) => {
-  /* 
-    #swagger.tags = ['Auth']
-  */
+export const refreshToken = async (req, res) => {
   try {
-    const keeptimeCookie = req.cookies.keeptime;
-    if (!keeptimeCookie) {
-      res.status(400);
-      throw new Error('Missing refresh token.');
-    }
-    const payload = jwt.verify(keeptimeCookie.refreshToken, process.env.JWT_REFRESH_SECRET);
-    const savedRefreshToken = await findRefreshTokenById(payload.jtid);
+    if (req.cookies['jwt']) {
+      const { refreshToken, user } = req.cookies['jwt'];
 
-    if (!savedRefreshToken || savedRefreshToken.revoked === true) {
-      res.status(401);
-      throw new Error('Unauthorized');
-    }
-
-    const hashedToken = hashToken(keeptimeCookie.refreshToken);
-    if (hashedToken !== savedRefreshToken.hashedToken) {
-      res.status(401);
-      throw new Error('Unauthorized');
-    }
-
-    const user = await findUserById(payload.userId);
-    if (!user) {
-      res.status(401);
-      throw new Error('Unauthorized');
-    }
-
-    await deleteRefreshToken(savedRefreshToken.id);
-    const jtid = v4();
-    const { accessToken, refreshToken: newRefreshToken } = generateTokens(user, jtid);
-    await addRefreshTokenToWhitelist({ jtid, refreshToken: newRefreshToken, userId: user.id });
-
-    res
-      .cookie(
-        'keeptime',
-        { accessToken, refreshToken: newRefreshToken },
-        {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
+      jwt.verify(
+        refreshToken,
+        process.env.JWT_REFRESH_SECRET,
+        (err, decode) => {
+          console.log(decode);
+          if (err) {
+            return res
+              .status(401)
+              .json({ error: err, message: 'REFRESH_TOKEN_EXPIRED' });
+          } else {
+            const tokenId = v4();
+            const { accessToken, refreshToken } = generateTokens(user, tokenId);
+            res
+              .cookie(
+                'jwt',
+                { tokenId, accessToken, refreshToken, user },
+                {
+                  httpOnly: true,
+                  secure: process.env.NODE_ENV === 'production',
+                },
+              )
+              .status(200)
+              .json({
+                message: 'refreshed successful',
+                isAuthenticated: true,
+                user,
+              });
+          }
         },
-      )
-      .status(200)
-      .json({ message: 'Token refreshed in successfully 😊 👌', isAuthenticated: true, user });
+      );
+    }
   } catch (err) {
-    next(err);
+    res.status(401).json({
+      error: err || 'Unexpected error',
+      message: 'Refresh token error',
+    });
   }
 };
 
-export const revokeRefreshTokens = async (req, res, next) => {
-  /* 
-    #swagger.tags = ['Auth']
-  */
-  try {
-    console.log(req.payload);
-    const { userId } = req.payload;
-    await revokeTokens(userId);
-    res
-      .status(200)
-      .clearCookie('keeptime', { path: '/' })
-      .json({ message: `User with id #${userId} logged out successfully`, isAuthenticated: false, user: {} });
-  } catch (err) {
-    next(err);
+export const logout = async (req, res) => {
+  if (req.cookies['jwt']) {
+    res.clearCookie('jwt').status(200).json({
+      message: 'You have logged out',
+    });
+  } else {
+    res.status(401).json({
+      error: 'Invalid jwt',
+    });
   }
 };

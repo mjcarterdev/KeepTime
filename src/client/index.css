@@ -2,6 +2,108 @@
 @tailwind components;
 @tailwind utilities;
 
-.navbar {
-  padding: 0;
+.background-image {
+  background-image: url('./images/background-lg.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.raised-card {
+  border-radius: 0.5em;
+  background: #e8e8e8;
+  border: 1px solid #e8e8e8;
+  transition: all 0.3s;
+  box-shadow:
+    6px 6px 12px #c5c5c5,
+    -6px -6px 12px #ffffff;
+}
+
+button,
+.button-extended {
+  color: #090f18;
+  padding: 0.7em 1.7em;
+  font-size: 18px;
+  border-radius: 0.5em;
+  background: #e8e8e8;
+  border: 1px solid #e8e8e8;
+  transition: all 0.3s;
+  box-shadow:
+    6px 6px 12px #c5c5c5,
+    -6px -6px 12px #ffffff;
+}
+
+button:active,
+.button-extended:active {
+  color: #84a3d8;
+  /* box-shadow: */
+  /* inset 4px 4px 12px #c5c5c5,
+    inset -4px -4px 12px #ffffff; */
+}
+
+.add-border {
+  border: 1px red solid;
+}
+
+.sun {
+  position: relative;
+  top: -40px;
+  left: 40px;
+  background-color: #84a3d8;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 5px #84a3d880,
+    0 0 0 10px #84a3d840,
+    0 0 0 15px #84a3d820,
+    0 0 0 20px #84a3d810,
+    0 0 0 25px #84a3d800,
+    0 0 10px 25px #84a3d810;
+  offset-distance: 0;
+  offset-path: path('M 260 10 C 250 -60 20 -70 -10 -15');
+  animation:
+    sunrise 2s infinite linear forwards,
+    rays 1500ms 1500ms infinite linear alternate;
+}
+
+.xssun {
+  offset-path: path('M 300 20 C 270 -50 20 -70 -5 5');
+}
+
+.smsun {
+  offset-path: path('M 350 20 C 250 -60 20 -70 0 5');
+}
+
+.mdsun {
+  offset-path: path('M 380 40 C 350 -60 40 -70 0 10');
+}
+
+.lgsun {
+  offset-path: path('M 430 40 C 400 -60 40 -70 5 15');
+}
+
+@keyframes sunrise {
+  0% {
+    box-shadow: none;
+  }
+}
+
+@keyframes rays {
+  0% {
+    box-shadow:
+      0 0 0 5px #84a3d850,
+      0 0 0 10px #84a3d850,
+      0 0 0 15px #84a3d830,
+      0 0 0 20px #84a3d815,
+      0 0 0 25px #84a3d805,
+      0 0 10px 25px #84a3d805;
+  }
+  100% {
+    box-shadow:
+      0 0 0 5px #84a3d850,
+      0 0 0 10px #84a3d825,
+      0 0 0 15px #84a3d812,
+      0 0 0 20px #84a3d806,
+      0 0 0 25px #84a3d800,
+      0 0 10px 25px #84a3d805;
+  }
 }

@@ -1,33 +1,27 @@
 import { useEffect } from 'react';
-import router from '../router';
+import NavBar from '../components/Navbar';
+import { useLoaderData, useNavigate } from 'react-router-dom';
 
-const ProfilePage = ({ useLoader }) => {
-  const { authContext } = useLoader();
-  const { isAuth, user } = authContext.session();
-
-  const handleLogout = async () => {
-    const res = await authContext.logout();
-    if (!res.data.isAuthenticated) {
-      router.navigate('/');
-    }
-  };
+const ProfilePage = () => {
+  const loader = useLoaderData();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuth) {
-      router.navigate('/');
+    if (!loader.authProvider.isAuth) {
+      navigate('/');
     }
-  }, [status]);
+  }, [loader.authProvider.isAuth]);
 
   return (
     <>
-      <div className="h-[calc(100vh-4rem)] bg-base-100">
-        <br />
-        <h1>Protected</h1>
-        <p>{JSON.stringify(user)}</p>
-        <br />
-        <button type="submit" onClick={() => handleLogout()} className="btn btn-primary">
-          Sign out
-        </button>
+      <NavBar authContext={loader.authProvider} location="Profile" />
+      <div
+        className={`flex pb-32 pt-24 flex-col flex-1 h-[100vh] w-full gap-2 p-4 overflow-y-scroll md:items-center scrollbar-hide md:scrollbar-default `}
+      >
+        <div>
+          <p className="">{loader.authProvider.user?.name}</p>
+          <p className="">{loader.authProvider.user?.email}</p>
+        </div>
       </div>
     </>
   );

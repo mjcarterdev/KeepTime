@@ -1,4 +1,5 @@
 import * as subtaskModel from '../models/subtaskModel.js';
+import { totalDurationString } from '../utils/timeUtil.js';
 
 export const create = async (req, res, next) => {
   /* 
@@ -7,16 +8,23 @@ export const create = async (req, res, next) => {
     #swagger.security = [{"cookieAuth:": [] }]
   */
   try {
-    const { title, description, projectId } = req.body;
+    const { title, projectId } = req.body;
     if (!title) {
-      res.status(400).json({ error: 'You must provide a subtask title.' });
+      return res
+        .status(400)
+        .json({ error: 'You must provide a subtask title.' });
     }
 
     if (!projectId) {
-      res.status(400).json({ error: 'You must provide a project id for subtask.' });
+      return res
+        .status(400)
+        .json({ error: 'You must provide a project id for subtask.' });
     }
 
-    let subtask = await subtaskModel.create({ title, description, projectId: projectId });
+    let subtask = await subtaskModel.create({
+      title,
+      projectId: projectId,
+    });
     res.status(201).json(subtask);
   } catch (err) {
     next(err);
@@ -32,10 +40,10 @@ export const deleteSubtask = async (req, res, next) => {
   try {
     const subtaskId = req.params.id;
     if (!subtaskId) {
-      res.status(400).json({ error: 'You must provide a subtask id.' });
+      return res.status(400).json({ error: 'You must provide a subtask id.' });
     }
 
-    const { userId } = req.payload;
+    const { user } = req.cookies['jwt'];
     // TODO: Add validation
 
     await subtaskModel.deleteById(subtaskId);
@@ -55,7 +63,12 @@ export const getProjectSubtasks = async (req, res, next) => {
     const projectId = req.params.projectId;
 
     let subtasks = await subtaskModel.getAllByProjectId(projectId);
-    res.json(subtasks);
+    let subtasksWithDuration = subtasks.map((subtask) =>
+      Object.assign(subtask, {
+        totalDuration: totalDurationString(subtask.timeRecords),
+      }),
+    );
+    res.json(subtasksWithDuration);
   } catch (err) {
     next(err);
   }
@@ -68,10 +81,12 @@ export const getById = async (req, res, next) => {
     #swagger.security = [{"cookieAuth:": [] }]
   */
   try {
-    const subtaskId = req.params.id;
+    const subtaskId = req.params.subtaskId;
 
     let subtask = await subtaskModel.getById(subtaskId);
-    res.json(subtask);
+
+    subtask.totalDuration = totalDurationString(subtask.timeRecords);
+    return res.json(subtask);
   } catch (err) {
     next(err);
   }
@@ -84,17 +99,23 @@ export const update = async (req, res, next) => {
     #swagger.security = [{"cookieAuth:": [] }]
   */
   try {
-    const { title, description } = req.body;
-    const subtaskId = req.params.id;
+    const { title, description, completed } = req.body;
+    console.log(req.params);
+    const subtaskId = req.params.subtaskId;
 
     if (!subtaskId) {
-      res.status(400).json({ error: 'You must provide a subtask id.' });
+      return res.status(400).json({ error: 'You must provide a subtask id.' });
     }
 
-    const { userId } = req.payload;
+    const { user } = req.cookies['jwt'];
     // TODO: Add validation
 
-    let subtask = await subtaskModel.update({ title, description, subtaskId });
+    let subtask = await subtaskModel.update({
+      title,
+      description,
+      subtaskId,
+      completed,
+    });
     res.json(subtask);
   } catch (err) {
     next(err);

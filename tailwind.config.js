@@ -1,57 +1,101 @@
 /** @type {import('tailwindcss').Config} */
+import animate from 'tailwindcss-animate';
+import typography from '@tailwindcss/typography';
+import defaultTheme from 'tailwindcss/defaultTheme';
+
 export default {
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
-    extend: {},
+    maxWidth: {
+      max90: '90%',
+      max80: '80%',
+      max70: '70%',
+      max50: '50%',
+    },
+    minWidth: {
+      min90: '90%',
+      min80: '80%',
+      min70: '70%',
+      min50: '50%',
+    },
+    fontFamily: {
+      sans: ['Poppins', ...defaultTheme.fontFamily.sans],
+    },
+    borderRadius: {
+      none: '0px',
+      '5px': '5px',
+      '10px': '10px',
+    },
+    extend: {
+      boxShadow: {
+        'glass-navbar': '',
+        'glass-toolbar': '',
+        'glass-card': '0px 4px 4px 0px rgba(0, 0, 0, 0.25);',
+        'glass-button': '',
+      },
+      backgroundImage: {
+        'background-sm': "url('/img/background-sm.jpg')",
+        'background-lg': "url('/img/background-lg.jpg')",
+      },
+    },
   },
   plugins: [
     require('@tailwindcss/container-queries'),
-    require('@tailwindcss/typography'),
+    typography,
+    animate,
     require('daisyui'),
+    require('tailwind-scrollbar-hide'),
+    require('autoprefixer'),
   ],
   daisyui: {
     themes: [
       {
         light: {
-          primary: '#238fc2',
-
-          secondary: '#a3e635',
-
-          accent: '#f43f5e',
-
-          neutral: '#142440',
-          'neutral-focus': '#238fc2',
-
-          'base-100': '#e5e7eb',
+          primary: '#3175E3',
+          'primary-focus': '#1150B7',
+          'primary-content': '#FFFFFF',
+          secondary: '#142440',
+          'secondary-focus': '#070C15',
+          'secondary-content': '#FFFFFF',
+          accent: '#7e22ce',
+          'accent-focus': 'AD00A5',
+          'accent-content': '#FFFFFF',
+          'base-100': '#F5E8F5',
+          'base-200': '#CFFAFF',
+          neutral: '#FFFFFF',
+          'neutral-focus': '#F3F7FF',
+          'neutral-content': '#000000',
 
           info: '#3670ce',
-
+          'info-content': '#FFFFFF',
           success: '#86efac',
-
+          'success-content': '#FFFFFF',
           warning: '#fbbf24',
-
+          'warning-content': '#FFFFFF',
           error: '#ef4444',
+          'error-content': '#FFFFFF',
         },
-      },
-      {
-        dark: {
-          primary: '#443dc6',
-
-          secondary: '#29f4aa',
-
-          accent: '#919cff',
-
-          neutral: '#232a34',
-
-          'base-100': '#3b3f54',
-
-          info: '#3956db',
-
-          success: '#289f81',
-
-          warning: '#edc61d',
-
-          error: '#fb467c',
+        'dark-wip': {
+          primary: '#3175E3',
+          'primary-focus': '#1150B7',
+          'primary-content': '#FFFFFF',
+          secondary: '#142440',
+          'secondary-focus': '#070C15',
+          'secondary-content': '#FFFFFF',
+          accent: '#CA5CC5',
+          'accent-focus': 'AD00A5',
+          'accent-content': '#FFFFFF',
+          neutral: '#FFFFFF',
+          'neutral-focus': '#F3F7FF',
+          'neutral-content': '#000000',
+          info: '#3670ce',
+          'info-content': '#FFFFFF',
+          success: '#86efac',
+          'success-content': '#FFFFFF',
+          warning: '#fbbf24',
+          'warning-content': '#FFFFFF',
+          error: '#ef4444',
+          'error-content': '#FFFFFF',
         },
       },
     ],
