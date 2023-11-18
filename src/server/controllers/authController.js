@@ -26,8 +26,8 @@ export const register = async (req, res, next) => {
     delete user.password;
     res
       .cookie(
-        'keeptime',
-        { accessToken, refreshToken, tokenId },
+        'jwt',
+        { accessToken, refreshToken, tokenId, user },
         {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
@@ -36,7 +36,6 @@ export const register = async (req, res, next) => {
       .status(200)
       .json({
         message: 'Registered successfully 😊 👌',
-        isAuthenticated: true,
         user,
       });
   } catch (err) {
@@ -73,7 +72,6 @@ export const login = async (req, res) => {
       .status(200)
       .json({
         message: 'Logged in successfully 😊 👌',
-        isAuthenticated: true,
         user,
       });
   } catch (err) {
@@ -89,36 +87,30 @@ export const refreshToken = async (req, res) => {
     if (req.cookies['jwt']) {
       const { refreshToken, user } = req.cookies['jwt'];
 
-      jwt.verify(
-        refreshToken,
-        process.env.JWT_REFRESH_SECRET,
-        (err, decode) => {
-          console.log(decode);
-          if (err) {
-            return res
-              .status(401)
-              .json({ error: err, message: 'REFRESH_TOKEN_EXPIRED' });
-          } else {
-            const tokenId = v4();
-            const { accessToken, refreshToken } = generateTokens(user, tokenId);
-            res
-              .cookie(
-                'jwt',
-                { tokenId, accessToken, refreshToken, user },
-                {
-                  httpOnly: true,
-                  secure: process.env.NODE_ENV === 'production',
-                },
-              )
-              .status(200)
-              .json({
-                message: 'refreshed successful',
-                isAuthenticated: true,
-                user,
-              });
-          }
-        },
-      );
+      jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err) => {
+        if (err) {
+          return res
+            .status(401)
+            .json({ error: err, message: 'REFRESH_TOKEN_EXPIRED' });
+        } else {
+          const tokenId = v4();
+          const { accessToken, refreshToken } = generateTokens(user, tokenId);
+          res
+            .cookie(
+              'jwt',
+              { tokenId, accessToken, refreshToken, user },
+              {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+              },
+            )
+            .status(200)
+            .json({
+              message: 'refreshed successful',
+              user,
+            });
+        }
+      });
     }
   } catch (err) {
     res.status(401).json({

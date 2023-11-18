@@ -1,6 +1,6 @@
 import Button from '../components/Button';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Toolbar from '../components/Toolbar';
 import ProjectItem from '../components/ProjectItem';
 import { AnimatePresence } from 'framer-motion';
@@ -15,17 +15,17 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import NavBar from '../components/Navbar';
 import Icon from '../components/Icon';
-import RoundButtonWithLabel from '../components/IconButton';
+import RoundButtonWithLabel from '../components/RoundButtonWithLabel.jsx';
 import { compareTitle } from '../utils/sort-alphabetically';
 import useProjectStore from '../context/projectStore.jsx';
-import { Link, useLoaderData } from 'react-router-dom';
 import Spinner from '../components/Spinner.jsx';
+import { AuthContext } from '../context/AuthContext.jsx';
 
 const ProjectPage = () => {
-  const loader = useLoaderData();
+  const { user } = useContext(AuthContext);
+
   const queryClient = useQueryClient();
 
-  // return <div>Projects</div>;
   const { data, isLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: getAllProjects,
@@ -114,10 +114,10 @@ const ProjectPage = () => {
 
   return (
     <>
-      <NavBar authContext={loader.authProvider} location="Projects" />
+      <NavBar location="Projects" />
 
       <div
-        className={`flex pb-32 pt-24 flex-col flex-1 h-[100vh] w-full gap-2 p-4 overflow-y-scroll md:items-center scrollbar-hide md:scrollbar-default `}
+        className={`flex pb-32 pt-24 flex-col flex-1 h-[100svh] w-full gap-2 p-4 overflow-y-scroll md:items-center scrollbar-hide md:scrollbar-default `}
       >
         {isLoading ? (
           <Spinner />
@@ -148,7 +148,9 @@ const ProjectPage = () => {
         {expanded ? (
           <>
             <RoundButtonWithLabel
-              label={expanded.completed ? 'Restore' : 'Complete'}
+              label={
+                expanded.completed ? 'Restore Project' : 'Complete Project'
+              }
               onClick={() => {
                 handleCompleteProject();
               }}
@@ -159,7 +161,7 @@ const ProjectPage = () => {
               />
             </RoundButtonWithLabel>
             <RoundButtonWithLabel
-              label={'Delete'}
+              label={'Delete Project'}
               onClick={() => {
                 console.log(expanded.id);
                 deleteProjectMutation.mutate(expanded.id);
@@ -169,7 +171,7 @@ const ProjectPage = () => {
             </RoundButtonWithLabel>
 
             <RoundButtonWithLabel
-              label={'Add'}
+              label={'Add Subtask'}
               onClick={() => {
                 handleAddSubtask();
               }}

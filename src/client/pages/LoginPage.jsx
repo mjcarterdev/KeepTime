@@ -4,11 +4,16 @@ import Skyline from '../images/skyline.svg';
 import Button from '../components/Button';
 import NavBar from '../components/Navbar';
 import Card from '../components/Card';
-import { Link, useLoaderData, useNavigate, useSubmit } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import useLogin from '../hooks/useLogin';
+import { useContext, useEffect } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import Spinner from '../components/Spinner';
 
 const LoginPage = () => {
-  // return <div>Login Page</div>;
-  const loader = useLoaderData();
+  const { loginOnSubmit, loginError, loginIsLoading } = useLogin();
+  const { user } = useContext(AuthContext);
+
   const navigate = useNavigate();
   const {
     register,
@@ -16,29 +21,42 @@ const LoginPage = () => {
     watch,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/projects');
+    }
+  }, [user]);
+
   const onSubmit = async (data) => {
-    console.log(data);
-    await loader.authProvider.login(data);
-    navigate('/projects', { replace: true });
+    loginOnSubmit(data);
   };
 
   const hidden = 'invisible label-text-alt';
   const visible = 'label-text-alt text-error';
 
+  if (loginError) {
+    return <p>error</p>;
+  }
+
+  if (loginIsLoading) {
+    return <Spinner />;
+  }
+
   return (
     <>
-      <div className="flex flex-col items-center gap-6 h-[100vh] pt-20 overflow-hidden bg-transparent">
-        <NavBar authContext={loader.authProvider} />
-        <div className="relative flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center min-h-screen gap-6 pt-20 pb-8 overflow-y-scroll bg-transparent background-image scrollbar-hide md:scrollbar-default">
+        <NavBar />
+        <div className="relative flex flex-col items-center justify-center pt-4">
           <Logo
             className={
-              'absolute top-0 md:-top-5 text-6xl  md:text-8xl p-5 font-bold z-10 max-w-max90'
+              'absolute top-2  text-6xl  md:text-8xl p-5 font-bold z-10 max-w-max90'
             }
           />
-          <img src={Skyline} className="w-full pt-20 md:max-w-max50" />
+          <img src={Skyline} className="w-full pt-20 md:max-w-[40rem]" />
         </div>
-        <div className="card">
-          <p className="py-5 text-2xl leading-loose text-center text-neutral-content sm:text-2xl">
+        <div className="card ">
+          <p className="py-1 text-xl leading-loose text-center text-neutral-content md:text-2xl">
             Unlock your productivity potential.
             <br />
             Your Time. Your Way.

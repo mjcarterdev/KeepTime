@@ -7,7 +7,6 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
-  redirect,
   Route,
 } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
@@ -18,44 +17,30 @@ import ProjectPage from './pages/ProjectPage';
 import ProfilePage from './pages/ProfilePage';
 import AboutUsPage from './pages/AboutUsPage';
 import SubtaskPage from './pages/SubtaskPage';
-import authProvider from './context/auth';
+import AuthContextProvider from './context/AuthContext';
 
 // Create a client
 const queryClient = new QueryClient();
 
-const projectLoader = async ({ request }) => {
-  if (!authProvider.isAuth) {
-    let params = new URLSearchParams();
-    params.set('from', new URL(request.url).pathname);
-    return redirect('/' + params.toString());
-  }
-  return { authProvider };
+const projectLoader = async () => {
+  return null;
 };
 
 const authLoader = () => {
-  if (authProvider.isAuth) {
-    return redirect('/projects');
-  }
-  return { authProvider };
+  return null;
 };
 
 const loader = async () => {
-  authProvider.getSession();
-  return { authProvider };
+  return null;
 };
 
-const profileLoader = async ({ request }) => {
-  if (!authProvider.isAuth) {
-    let params = new URLSearchParams();
-    params.set('from', new URL(request.url).pathname);
-    return redirect('/' + params.toString());
-  }
-  return { authProvider };
+const profileLoader = async () => {
+  return null;
 };
 
 const subtaskLoader = async ({ params }) => {
   const { subtaskId } = params;
-  return { authProvider, subtaskId };
+  return { subtaskId };
 };
 
 const router = createBrowserRouter(
@@ -88,8 +73,10 @@ const router = createBrowserRouter(
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-      <ReactQueryDevtools initialIsClosed />
+      <AuthContextProvider>
+        <RouterProvider router={router} />
+        <ReactQueryDevtools initialIsClosed />
+      </AuthContextProvider>
     </QueryClientProvider>
   </React.StrictMode>,
 );

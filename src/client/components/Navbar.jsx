@@ -1,4 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
+import useLogout from '../hooks/useLogout';
+import { useContext, useEffect } from 'react';
+import { AuthContext } from '../context/AuthContext';
 // import router from '../router';
 
 const getMenuItems = (authenticated) => {
@@ -21,20 +24,22 @@ const getMenuItems = (authenticated) => {
   return menuItems;
 };
 
-const NavBar = ({ authContext, location = '' }) => {
-  const { isAuth } = authContext;
-  let menuItems = getMenuItems(isAuth);
-  const navigate = useNavigate();
+const NavBar = ({ location = '' }) => {
+  const { user, setUser } = useContext(AuthContext);
+  const { logoutOnSubmit, logoutData, logoutError, logoutIsLoading } =
+    useLogout();
+  let menuItems = getMenuItems(user);
+
+  useEffect(() => {
+    menuItems = getMenuItems(user);
+  }, [user]);
 
   const style = 'whitespace-nowrap hover:text-accent cursor-pointer ';
   const selectedStyle = 'whitespace-nowrap text-accent';
 
   const handleLogout = async () => {
-    const res = await authContext.logout();
-    console.log(res);
-    if (!res.data.isAuthenticated) {
-      navigate('/');
-    }
+    logoutOnSubmit();
+    setUser('');
   };
 
   return (
