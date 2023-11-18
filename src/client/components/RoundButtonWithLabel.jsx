@@ -15,7 +15,9 @@ const RoundButtonWithLabel = ({
       >
         {children}
       </Button>
-      {showText && <label className=" text-neutral-content">{label}</label>}
+      {showText && (
+        <label className="text-[0.75rem] text-neutral-content">{label}</label>
+      )}
     </div>
   );
 };

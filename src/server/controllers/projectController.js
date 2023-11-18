@@ -18,7 +18,6 @@ export const create = async (req, res, next) => {
     });
     res.status(201).json(project);
   } catch (err) {
-    console.log(err);
     res.status(403).json({
       error: 'Unexpected error',
       message: 'Unexpected error in project creation',

@@ -1,14 +1,19 @@
 import Logo from '../components/Logo';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Skyline from '../images/skyline.svg';
 import Button from '../components/Button';
 import NavBar from '../components/Navbar';
 import Card from '../components/Card';
-import { Link, useLoaderData, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import useRegistration from '../hooks/useRegistration';
+import { useContext, useEffect } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import Spinner from '../components/Spinner';
 
 const SignUpPage = () => {
-  const loader = useLoaderData();
+  const { user, setUser } = useContext(AuthContext);
+  const { registerData, registerError, registerIsLoading, registerOnSubmit } =
+    useRegistration();
   const navigate = useNavigate();
   const {
     register,
@@ -16,23 +21,29 @@ const SignUpPage = () => {
     watch,
     formState: { errors },
   } = useForm();
-  const onSubmit = async (data) => {
-    loader.authProvider.register(data);
-  };
 
   useEffect(() => {
-    if (loader.authProvider.isAuth) {
+    if (user) {
+      console.log('user project: ', user.user);
       navigate('/projects');
     }
-  }, [loader.authProvider.isAuth]);
+  }, [user]);
+
+  const onSubmit = async (data) => {
+    registerOnSubmit(data);
+  };
 
   const hidden = 'invisible label-text-alt';
   const visible = 'label-text-alt';
 
+  if (registerIsLoading) {
+    return <Spinner />;
+  }
+
   return (
     <>
-      <div className="flex flex-col items-center gap-2 h-[100vh] pt-20 overflow-hidden bg-transparent">
-        <NavBar authContext={loader.authProvider} />
+      <div className="flex flex-col items-center min-h-screen gap-6 pt-20 pb-8 overflow-y-scroll bg-transparent background-image scrollbar-hide md:scrollbar-default">
+        <NavBar />
         <div className="relative flex flex-col items-center justify-center">
           <Logo
             className={

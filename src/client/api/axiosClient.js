@@ -62,10 +62,7 @@ const createAxiosClient = () => {
         console.log('Refresh token expired - hopefully will be logged out');
         const res = await client(getLogout());
         if (res.status == 200) {
-          localStorage.setItem(
-            localStorageKey,
-            JSON.stringify({ isAuth: false, user: {} }),
-          );
+          localStorage.setItem(localStorageKey, JSON.stringify({ user: {} }));
         }
 
         return Promise.resolve(error);
@@ -74,10 +71,6 @@ const createAxiosClient = () => {
       // Any status codes that falls outside the range of 2xx cause this function to trigger
       // Do something with response error
 
-      localStorage.setItem(
-        localStorageKey,
-        JSON.stringify({ isAuth: false, user: {} }),
-      );
       return Promise.reject(error);
     },
   );

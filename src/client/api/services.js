@@ -1,7 +1,7 @@
 import { axiosClient } from './axiosClient';
 
 // User API functions
-export const getUserProfile = async () => {
+export const getUser = async () => {
   const res = await axiosClient.get('/user/profile');
   return res.data;
 };
