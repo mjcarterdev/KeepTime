@@ -11,33 +11,37 @@ export const register = async (req, res, next) => {
     const { email, password, name } = req.body;
 
     const existingUser = await findUserByEmail(email);
-
     if (existingUser) {
       res.status(400).json({
         error: 'bad credentials',
         message: 'Email already in use',
       });
-    }
-
-    const user = await createUserByEmailAndPassword({ email, password, name });
-    const tokenId = v4();
-    const { accessToken, refreshToken } = generateTokens(user, tokenId);
-
-    delete user.password;
-    res
-      .cookie(
-        'jwt',
-        { accessToken, refreshToken, tokenId, user },
-        {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-        },
-      )
-      .status(200)
-      .json({
-        message: 'Registered successfully 😊 👌',
-        user,
+    } else {
+      const user = await createUserByEmailAndPassword({
+        email,
+        password,
+        name,
       });
+      console.log('register user 2: ', user);
+      const tokenId = v4();
+      const { accessToken, refreshToken } = generateTokens(user, tokenId);
+
+      delete user.password;
+      res
+        .cookie(
+          'jwt',
+          { accessToken, refreshToken, tokenId, user },
+          {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+          },
+        )
+        .status(200)
+        .json({
+          message: 'Registered successfully 😊 👌',
+          user,
+        });
+    }
   } catch (err) {
     res.status(400).json({
       error: err,

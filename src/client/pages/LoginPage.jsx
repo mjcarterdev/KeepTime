@@ -36,7 +36,7 @@ const LoginPage = () => {
   const visible = 'label-text-alt text-error';
 
   if (loginError) {
-    return <p>error</p>;
+    console.log(loginError);
   }
 
   if (loginIsLoading) {
