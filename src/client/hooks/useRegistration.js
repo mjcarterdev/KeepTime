@@ -1,10 +1,11 @@
 import { postRegistration } from '../api/services';
-import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 
 const useRegistration = () => {
-  const { setUser } = useContext(AuthContext);
+  const { setUser, setErrorMessage } = useContext(AuthContext);
+  const queryClient = useQueryClient();
 
   const {
     mutate: registerOnSubmit,
@@ -14,10 +15,10 @@ const useRegistration = () => {
   } = useMutation({
     mutationFn: postRegistration,
     onError: (error) => {
-      console.log(error);
+      setErrorMessage(error.response.data.error);
     },
     onSuccess: (data) => {
-      console.log(data.data);
+      queryClient.invalidateQueries(['projects']);
       setUser(data.data.user);
     },
   });

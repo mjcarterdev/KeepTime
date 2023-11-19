@@ -16,11 +16,10 @@ const useLogout = () => {
     isLoading: logoutIsLoading,
   } = useMutation({
     mutationFn: getLogout,
-    onError: (data) => {
-      console.log(data);
+    onError: () => {
+      setUser('');
     },
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       queryClient.clear();
       setUser('');
     },

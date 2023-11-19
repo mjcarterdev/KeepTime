@@ -11,7 +11,7 @@ import { AuthContext } from '../context/AuthContext';
 import Spinner from '../components/Spinner';
 
 const SignUpPage = () => {
-  const { user, setUser } = useContext(AuthContext);
+  const { user, errorMessage, setErrorMessage } = useContext(AuthContext);
   const { registerData, registerError, registerIsLoading, registerOnSubmit } =
     useRegistration();
   const navigate = useNavigate();
@@ -35,10 +35,6 @@ const SignUpPage = () => {
 
   const hidden = 'invisible label-text-alt';
   const visible = 'label-text-alt';
-
-  if (registerIsLoading) {
-    return <Spinner />;
-  }
 
   return (
     <>
@@ -123,7 +119,11 @@ const SignUpPage = () => {
               </span>
             </label>
             <div className="flex pt-4 justify-evenly">
-              <Button type="submit" className="w-full">
+              <Button
+                type="submit"
+                className="w-full"
+                isLoading={registerIsLoading}
+              >
                 Register
               </Button>
             </div>
@@ -140,6 +140,16 @@ const SignUpPage = () => {
             </p>
           </form>
         </Card>
+        {errorMessage && (
+          <div
+            className="cursor-pointer toast-top toast-end"
+            onClick={() => setErrorMessage(null)}
+          >
+            <div className="alert alert-error">
+              <span>{errorMessage}</span>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

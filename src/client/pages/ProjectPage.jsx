@@ -117,7 +117,7 @@ const ProjectPage = () => {
       <NavBar location="Projects" />
 
       <div
-        className={`flex pb-32 pt-24 flex-col flex-1 h-[100svh] w-full gap-2 p-4 overflow-y-scroll md:items-center scrollbar-hide md:scrollbar-default `}
+        className={`flex pb-32 pt-24 flex-col flex-1 h-[100dvh] w-full gap-2 p-4 overflow-y-scroll md:items-center scrollbar-hide md:scrollbar-default `}
       >
         {isLoading ? (
           <Spinner />
