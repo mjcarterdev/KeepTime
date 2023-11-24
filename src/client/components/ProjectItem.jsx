@@ -17,8 +17,12 @@ export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
       <motion.header
         transition={{ duration: 1 }}
         value={item}
-        onClick={(e) => {
-          e.isEdit ? '' : setExpanded(isOpen ? false : item);
+        onClick={(event) => {
+          event.nativeEvent.stopImmediatePropagation();
+          if (isEdit && isOpen) {
+            return;
+          }
+          isEdit ? '' : setExpanded(isOpen ? false : item);
         }}
         className={`text-secondary flex items-center justify-between px-4 h-20 pl-4 md:w-[40rem] shadow-[2px_4px_5px_2px_#00000024] md:min-w-min50 md:h-24 text-l md:text-2xl rounded-[25px] bg-neutral border border-gray-100 bg-opacity-20 hover:bg-accent hover:bg-opacity-30 ${
           isOpen ? 'rounded-bl-none rounded-br-none bg-purple-700' : 'rounded'
@@ -36,7 +40,8 @@ export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
           />
 
           <div
-            onClick={() => {
+            onClick={(event) => {
+              event.stopPropagation();
               setIsEdit(!isEdit);
             }}
             className={'cursor-pointer'}
