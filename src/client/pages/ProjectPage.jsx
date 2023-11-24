@@ -20,10 +20,11 @@ import { compareTitle } from '../utils/sort-alphabetically';
 import useProjectStore from '../context/projectStore.jsx';
 import Spinner from '../components/Spinner.jsx';
 import { AuthContext } from '../context/AuthContext.jsx';
+import { useNavigate } from 'react-router-dom';
 
 const ProjectPage = () => {
   const { user } = useContext(AuthContext);
-
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
@@ -35,6 +36,12 @@ const ProjectPage = () => {
   const setExpanded = useProjectStore((state) => state.setExpanded);
   const [workingData, setWorkingData] = useState([]);
   const isProjectsEmpty = workingData?.length > 0;
+
+  useEffect(() => {
+    if (user === null) {
+      navigate('/');
+    }
+  }, [user]);
 
   useEffect(() => {
     setWorkingData(data?.data.sort(compareTitle));

@@ -17,31 +17,35 @@ export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
       <motion.header
         transition={{ duration: 1 }}
         value={item}
-        onClick={() => {
-          isEdit ? '' : setExpanded(isOpen ? false : item);
+        onClick={(e) => {
+          e.isEdit ? '' : setExpanded(isOpen ? false : item);
         }}
-        className={`text-secondary flex items-center justify-around px-4 h-20 pl-4 md:w-[40rem] shadow-[2px_4px_5px_2px_#00000024] md:min-w-min50 md:h-24 text-l md:text-2xl rounded-[25px] bg-neutral border border-gray-100 bg-opacity-20 hover:bg-accent hover:bg-opacity-30 ${
+        className={`text-secondary flex items-center justify-between px-4 h-20 pl-4 md:w-[40rem] shadow-[2px_4px_5px_2px_#00000024] md:min-w-min50 md:h-24 text-l md:text-2xl rounded-[25px] bg-neutral border border-gray-100 bg-opacity-20 hover:bg-accent hover:bg-opacity-30 ${
           isOpen ? 'rounded-bl-none rounded-br-none bg-purple-700' : 'rounded'
         } ${item.completed ? 'line-through' : ''} `}
       >
-        <EditableText
-          initialText={item.title}
-          updateProjectFn={updateProject}
-          className={' p-2 min-w-min70 text-secondary font-medium'}
-          showEdit={isEdit}
-          showEditFn={setIsEdit}
-          item={item}
-          isProject={true}
-        />
-        <div className="p-2">{item.totalDuration}</div>
-        <div
-          onClick={() => {
-            setIsEdit(!isEdit);
-          }}
-          className={'cursor-pointer'}
-        >
-          <Icon iconName={'edit'} />
+        <div className="flex items-center">
+          <EditableText
+            initialText={item.title}
+            updateProjectFn={updateProject}
+            className={' p-2 min-w-min70 text-secondary font-medium'}
+            showEdit={isEdit}
+            showEditFn={setIsEdit}
+            item={item}
+            isProject={true}
+          />
+
+          <div
+            onClick={() => {
+              setIsEdit(!isEdit);
+            }}
+            className={'cursor-pointer'}
+          >
+            <Icon iconName={'edit-sm'} className={'text-[0.5rem]'} />
+          </div>
         </div>
+
+        <div className="p-2">{item.totalDuration}</div>
       </motion.header>
       <AnimatePresence initial={true}>
         {isOpen && (

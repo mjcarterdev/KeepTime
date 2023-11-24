@@ -21,13 +21,13 @@ const EditableText = ({
     if (isProject) {
       if (item.title !== text) {
         updateProjectFn.mutate({ projectId: item.id, title: text });
-        showEditFn(false);
       }
     } else {
       if (item.title !== text) {
         updateSubtaskFn.mutate({ id: item.id, title: text });
       }
     }
+    showEditFn(false);
   };
 
   return (
