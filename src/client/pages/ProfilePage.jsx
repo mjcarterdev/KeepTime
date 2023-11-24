@@ -8,10 +8,10 @@ const ProfilePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
+    if (user === null) {
       navigate('/');
     }
-  }, [isAuth]);
+  }, [user]);
 
   return (
     <>

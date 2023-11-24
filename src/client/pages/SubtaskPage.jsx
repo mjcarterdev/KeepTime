@@ -1,19 +1,26 @@
 import { useQuery } from '@tanstack/react-query';
 import NavBar from '../components/Navbar';
-import { useLoaderData, useParams } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom';
 import Spinner from '../components/Spinner';
 import { getSubtaskById } from '../api/services';
-import useAuthentication from '../hooks/useLogin';
+import { useContext, useEffect } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 const SubtaskPage = () => {
-  const { isAuth, user } = useAuthentication();
+  const { user } = useContext(AuthContext);
   const loader = useLoaderData();
   const subtaskId = loader.subtaskId;
   const { data, isLoading } = useQuery({
     queryKey: [`subtask`, subtaskId],
     queryFn: ({ queryKey }) => getSubtaskById(queryKey[1]),
   });
-  console.log(data);
+
+  useEffect(() => {
+    if (user === null) {
+      navigate('/');
+    }
+  }, [user]);
+
   return (
     <>
       <NavBar location="Subtask" />

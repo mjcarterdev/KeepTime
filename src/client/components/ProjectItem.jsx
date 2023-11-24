@@ -26,7 +26,7 @@ export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
         }}
         className={`text-secondary flex items-center justify-between px-4 h-20 pl-4 md:w-[40rem] shadow-[2px_4px_5px_2px_#00000024] md:min-w-min50 md:h-24 text-l md:text-2xl rounded-[25px] bg-neutral border border-gray-100 bg-opacity-20 hover:bg-accent hover:bg-opacity-30 ${
           isOpen ? 'rounded-bl-none rounded-br-none bg-purple-700' : 'rounded'
-        } ${item.completed ? 'line-through' : ''} `}
+        }  `}
       >
         <div className="flex items-center">
           <EditableText
@@ -79,6 +79,7 @@ export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
                         'flex p-2 min-w-min70 text-secondary items-start'
                       }
                       showEdit={item.title === 'new subtask'}
+                      showEditFn={setIsEdit}
                       item={item}
                       isProject={false}
                     />
@@ -86,9 +87,6 @@ export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
                       key={item.id}
                       to={`/subtask/${item.id}`}
                       from={'/projects'}
-                      onClick={() => {
-                        console.log(item.id);
-                      }}
                     >
                       <div className={'p-2'}>
                         <Icon iconName={'arrow-right'} />

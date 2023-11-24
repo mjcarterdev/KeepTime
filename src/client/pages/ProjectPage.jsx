@@ -35,6 +35,7 @@ const ProjectPage = () => {
   const expanded = useProjectStore((state) => state.expanded);
   const setExpanded = useProjectStore((state) => state.setExpanded);
   const [workingData, setWorkingData] = useState([]);
+  const [filterProjects, setFilterProjects] = useState(false);
   const isProjectsEmpty = workingData?.length > 0;
 
   useEffect(() => {
@@ -44,8 +45,14 @@ const ProjectPage = () => {
   }, [user]);
 
   useEffect(() => {
-    setWorkingData(data?.data.sort(compareTitle));
-  }, [data?.data]);
+    let list;
+    if (filterProjects) {
+      list = data?.data.sort(compareTitle).filter((item) => item.completed);
+    } else {
+      list = data?.data.sort(compareTitle).filter((item) => !item.completed);
+    }
+    setWorkingData(list);
+  }, [data?.data, filterProjects]);
 
   // Query Functions
 
@@ -119,9 +126,16 @@ const ProjectPage = () => {
     });
   };
 
+  const handleToggleProjects = () => {
+    setFilterProjects(!filterProjects);
+    setExpanded(false);
+  };
+
   return (
     <>
-      <NavBar location="Projects" />
+      <NavBar
+        location={filterProjects ? 'Archived Projects' : 'Active Projects'}
+      />
 
       <div
         className={`flex pb-32 pt-24 flex-col flex-1 h-[100dvh] w-full gap-2 p-4 overflow-y-scroll md:items-center scrollbar-hide md:scrollbar-default `}
@@ -170,7 +184,6 @@ const ProjectPage = () => {
             <RoundButtonWithLabel
               label={'Delete Project'}
               onClick={() => {
-                console.log(expanded.id);
                 deleteProjectMutation.mutate(expanded.id);
               }}
             >
@@ -187,7 +200,24 @@ const ProjectPage = () => {
             </RoundButtonWithLabel>
           </>
         ) : (
-          <Button onClick={() => handleAddProject()}>Add Project</Button>
+          <>
+            <RoundButtonWithLabel
+              label={filterProjects ? 'Archived Projects' : 'Active Projects'}
+              onClick={() => {
+                handleToggleProjects();
+              }}
+            >
+              <Icon iconName={'list'} className={'text-accent-content'} />
+            </RoundButtonWithLabel>
+            <RoundButtonWithLabel
+              label={'Add Project'}
+              onClick={() => {
+                handleAddProject();
+              }}
+            >
+              <Icon iconName={'add'} className={'text-accent-content'} />
+            </RoundButtonWithLabel>
+          </>
         )}
       </Toolbar>
     </>
