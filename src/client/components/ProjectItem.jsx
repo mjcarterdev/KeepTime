@@ -3,41 +3,43 @@ import EditableText from './EditableTextBox';
 import Icon from './Icon';
 import useProjectStore from '../context/projectStore.jsx';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
   const expanded = useProjectStore((state) => state.expanded);
   const setExpanded = useProjectStore((state) => state.setExpanded);
   const isOpen = expanded.id === item.id;
   const isSubTasksEmpty = item.subTasks.length > 0 ? true : false;
+  const [isEdit, setIsEdit] = useState(false);
 
   return (
     <div className="h-auto">
       <motion.header
         transition={{ duration: 1 }}
         value={item}
+        onClick={() => setExpanded(isOpen ? false : item)}
         className={`text-secondary flex items-center justify-between px-4 h-20 pl-4 md:w-[40rem] shadow-[2px_4px_5px_2px_#00000024] md:min-w-min50 md:h-24 text-l md:text-2xl rounded-[25px] bg-neutral border border-gray-100 bg-opacity-20 hover:bg-accent hover:bg-opacity-30 ${
           isOpen ? 'rounded-bl-none rounded-br-none bg-purple-700' : 'rounded'
         } ${item.completed ? 'line-through' : ''} `}
       >
-        {/* <span className="z-6">{item.title}</span> */}
         <EditableText
           initialText={item.title}
           updateProjectFn={updateProject}
           className={' p-2 min-w-min70 text-secondary font-medium'}
-          showEdit={item.title === 'new project'}
+          showEdit={isEdit}
+          showEditFn={setIsEdit}
           item={item}
           isProject={true}
         />
         <div>{item.totalDuration}</div>
         <div
-          onClick={() => setExpanded(isOpen ? false : item)}
+          onClick={() => {
+            console.log('clicke');
+            setIsEdit(!isEdit);
+          }}
           className={'cursor-pointer'}
         >
-          {isOpen ? (
-            <Icon iconName={'dropup'} />
-          ) : (
-            <Icon iconName={'dropdown'} />
-          )}
+          <Icon iconName={'edit'} />
         </div>
       </motion.header>
       <AnimatePresence initial={true}>

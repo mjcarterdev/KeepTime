@@ -4,13 +4,13 @@ import { useDoubleTap } from 'use-double-tap';
 const EditableText = ({
   initialText,
   className,
-  showEdit = false,
+  showEdit,
+  showEditFn,
   updateProjectFn,
   updateSubtaskFn,
   isProject,
   item,
 }) => {
-  const [isEditing, setIsEditing] = useState(showEdit);
   const [text, setText] = useState(initialText);
   const bind = useDoubleTap((event) => {
     setIsEditing(true);
@@ -31,13 +31,13 @@ const EditableText = ({
       }
     }
 
-    setIsEditing(false);
+    showEditFn(false);
     // Save the changes or perform any required actions here
   };
 
   return (
     <div {...bind} className={`cursor-pointer ${className}`}>
-      {isEditing ? (
+      {showEdit ? (
         <input
           type="text"
           value={text}
