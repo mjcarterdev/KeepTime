@@ -9,6 +9,17 @@ import useLogin from '../hooks/useLogin';
 import { useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import Spinner from '../components/Spinner';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
+const loginSchema = z.object({
+  email: z.string().min(2, { message: 'Email is required' }).email({
+    message: 'Must be a valid email',
+  }),
+  password: z
+    .string()
+    .min(6, { message: 'Password must be atleast 6 characters' }),
+});
 
 const LoginPage = () => {
   const { loginOnSubmit, loginError, loginIsLoading } = useLogin();
@@ -18,9 +29,12 @@ const LoginPage = () => {
   const {
     register,
     handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+    formState: { errors, isDirty, isValid },
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+    mode: 'onChange',
+    delayError: 1000,
+  });
 
   useEffect(() => {
     if (user) {
@@ -76,7 +90,7 @@ const LoginPage = () => {
             />
             <label className="pl-4 label">
               <span className={errors.email ? visible : hidden}>
-                This is required
+                {errors.email?.message}
               </span>
             </label>
 
@@ -97,7 +111,12 @@ const LoginPage = () => {
               </span>
             </label>
             <div className="flex pt-4 justify-evenly">
-              <Button type="submit" className="w-full">
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={!isDirty || !isValid}
+                isLoading={loginIsLoading}
+              >
                 Login
               </Button>
             </div>
