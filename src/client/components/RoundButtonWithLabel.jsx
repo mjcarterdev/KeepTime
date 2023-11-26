@@ -12,6 +12,7 @@ const RoundButtonWithLabel = ({
       <Button
         className={`rounded-[50%] w-14 h-14 ${className}`}
         onClick={onClick}
+        btnType={'default'}
       >
         {children}
       </Button>

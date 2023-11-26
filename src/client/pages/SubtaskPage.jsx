@@ -16,7 +16,7 @@ const SubtaskPage = () => {
   });
 
   useEffect(() => {
-    if (user === null) {
+    if (user == '') {
       navigate('/');
     }
   }, [user]);

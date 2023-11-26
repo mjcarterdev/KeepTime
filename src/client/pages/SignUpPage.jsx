@@ -10,6 +10,8 @@ import { useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const registrationSchema = z
   .object({
@@ -29,7 +31,8 @@ const registrationSchema = z
 
 const SignUpPage = () => {
   const { user, errorMessage, setErrorMessage } = useContext(AuthContext);
-  const { registerIsLoading, registerOnSubmit } = useRegistration();
+  const { registerData, registerIsLoading, registerError, registerOnSubmit } =
+    useRegistration();
   const navigate = useNavigate();
   const {
     register,
@@ -42,10 +45,18 @@ const SignUpPage = () => {
   });
 
   useEffect(() => {
+    if (registerData) {
+      console.log(registerData);
+      toast.success('success register', {
+        position: toast.POSITION.TOP_RIGHT,
+        toastId: 'registerSuccess',
+        className: 'notification',
+      });
+    }
     if (user) {
       navigate('/projects');
     }
-  }, [user]);
+  }, [user, registerData]);
 
   const onSubmit = async (data) => {
     registerOnSubmit(data);
@@ -53,6 +64,14 @@ const SignUpPage = () => {
 
   const hidden = 'invisible label-text-alt';
   const visible = 'label-text-alt text-error';
+
+  if (registerError) {
+    toast.error(registerError.response.data.message, {
+      position: toast.POSITION.TOP_RIGHT,
+      toastId: 'registerError',
+      className: 'notification',
+    });
+  }
 
   return (
     <>
@@ -142,6 +161,7 @@ const SignUpPage = () => {
                 className="w-full"
                 isLoading={registerIsLoading}
                 disabled={!isDirty || !isValid}
+                btnType={'default'}
               >
                 Register
               </Button>
@@ -170,6 +190,7 @@ const SignUpPage = () => {
           </div>
         )}
       </div>
+      <ToastContainer />
     </>
   );
 };

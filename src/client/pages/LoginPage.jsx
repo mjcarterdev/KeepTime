@@ -6,11 +6,12 @@ import NavBar from '../components/Navbar';
 import Card from '../components/Card';
 import { Link, useNavigate } from 'react-router-dom';
 import useLogin from '../hooks/useLogin';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import Spinner from '../components/Spinner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const loginSchema = z.object({
   email: z.string().min(2, { message: 'Email is required' }).email({
@@ -24,7 +25,6 @@ const loginSchema = z.object({
 const LoginPage = () => {
   const { loginOnSubmit, loginError, loginIsLoading } = useLogin();
   const { user } = useContext(AuthContext);
-
   const navigate = useNavigate();
   const {
     register,
@@ -36,8 +36,11 @@ const LoginPage = () => {
     delayError: 1000,
   });
 
+  const hidden = 'invisible label-text-alt';
+  const visible = 'label-text-alt text-error';
+
   useEffect(() => {
-    if (user) {
+    if (user !== '') {
       navigate('/projects');
     }
   }, [user]);
@@ -46,15 +49,12 @@ const LoginPage = () => {
     loginOnSubmit(data);
   };
 
-  const hidden = 'invisible label-text-alt';
-  const visible = 'label-text-alt text-error';
-
   if (loginError) {
-    console.log(loginError);
-  }
-
-  if (loginIsLoading) {
-    return <Spinner />;
+    toast.error(loginError.response.data.error, {
+      position: toast.POSITION.TOP_RIGHT,
+      toastId: 'loginError',
+      className: 'notification',
+    });
   }
 
   return (
@@ -64,7 +64,7 @@ const LoginPage = () => {
         <div className="relative flex flex-col items-center justify-center pt-4">
           <Logo
             className={
-              'absolute top-2  text-6xl  md:text-8xl p-5 font-bold z-10 max-w-max90'
+              'absolute top-4  text-6xl  md:text-8xl p-5 font-bold z-10 max-w-max90'
             }
           />
           <img src={Skyline} className="w-full pt-20 md:max-w-[40rem]" />
@@ -116,6 +116,7 @@ const LoginPage = () => {
                 className="w-full"
                 disabled={!isDirty || !isValid}
                 isLoading={loginIsLoading}
+                btnType={'default'}
               >
                 Login
               </Button>
@@ -133,6 +134,7 @@ const LoginPage = () => {
             </p>
           </form>
         </Card>
+        <ToastContainer hideProgressBar limit={3} />
       </div>
     </>
   );
