@@ -3,42 +3,56 @@ import EditableText from './EditableTextBox';
 import Icon from './Icon';
 import useProjectStore from '../context/projectStore.jsx';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
   const expanded = useProjectStore((state) => state.expanded);
   const setExpanded = useProjectStore((state) => state.setExpanded);
   const isOpen = expanded.id === item.id;
   const isSubTasksEmpty = item.subTasks.length > 0 ? true : false;
+  const [isEdit, setIsEdit] = useState(false);
+  const nav = useNavigate();
 
   return (
     <div className="h-auto">
       <motion.header
         transition={{ duration: 1 }}
         value={item}
+        onClick={(event) => {
+          event.nativeEvent.stopImmediatePropagation();
+          if (isEdit && isOpen) {
+            return;
+          }
+          isEdit ? '' : setExpanded(isOpen ? false : item);
+        }}
         className={`text-secondary flex items-center justify-between px-4 h-20 pl-4 md:w-[40rem] shadow-[2px_4px_5px_2px_#00000024] md:min-w-min50 md:h-24 text-l md:text-2xl rounded-[25px] bg-neutral border border-gray-100 bg-opacity-20 hover:bg-accent hover:bg-opacity-30 ${
           isOpen ? 'rounded-bl-none rounded-br-none bg-purple-700' : 'rounded'
-        } ${item.completed ? 'line-through' : ''} `}
+        }  `}
       >
-        {/* <span className="z-6">{item.title}</span> */}
-        <EditableText
-          initialText={item.title}
-          updateProjectFn={updateProject}
-          className={' p-2 min-w-min70 text-secondary font-medium'}
-          showEdit={item.title === 'new project'}
-          item={item}
-          isProject={true}
-        />
-        <div>{item.totalDuration}</div>
-        <div
-          onClick={() => setExpanded(isOpen ? false : item)}
-          className={'cursor-pointer'}
-        >
-          {isOpen ? (
-            <Icon iconName={'dropup'} />
-          ) : (
-            <Icon iconName={'dropdown'} />
-          )}
+        <div className="flex items-center">
+          <EditableText
+            initialText={item.title}
+            updateProjectFn={updateProject}
+            className={' p-2 min-w-min70 text-secondary font-medium'}
+            showEdit={isEdit}
+            showEditFn={setIsEdit}
+            item={item}
+            isProject={true}
+          />
+
+          <div
+            onClick={(event) => {
+              event.stopPropagation();
+              setIsEdit(!isEdit);
+            }}
+            className={'cursor-pointer '}
+          >
+            <Icon iconName={'edit-sm'} className={'text-[0.5rem]'} />
+          </div>
         </div>
+
+        <div className="p-2">{item.totalDuration}</div>
       </motion.header>
       <AnimatePresence initial={true}>
         {isOpen && (
@@ -56,9 +70,11 @@ export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
             {isSubTasksEmpty ? (
               [...item.subTasks].map((item) => {
                 return (
-                  <div
-                    key={item.id}
+                  <Link
                     className="flex items-center justify-between w-full px-4 text-center bg-transparent text-secondary min-h-12 hover:bg-accent hover:bg-opacity-20"
+                    key={item.id}
+                    to={`/subtask/${item.id}`}
+                    from={'/projects'}
                   >
                     <EditableText
                       initialText={item.title}
@@ -66,23 +82,14 @@ export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
                       className={
                         'flex p-2 min-w-min70 text-secondary items-start'
                       }
-                      showEdit={item.title === 'new subtask'}
                       item={item}
                       isProject={false}
                     />
-                    <Link
-                      key={item.id}
-                      to={`/subtask/${item.id}`}
-                      from={'/projects'}
-                      onClick={() => {
-                        console.log(item.id);
-                      }}
-                    >
-                      <div className={'p-2'}>
-                        <Icon iconName={'arrow-right'} />
-                      </div>
-                    </Link>
-                  </div>
+
+                    <div className={'p-2'}>
+                      <Icon iconName={'arrow-right'} />
+                    </div>
+                  </Link>
                 );
               })
             ) : (

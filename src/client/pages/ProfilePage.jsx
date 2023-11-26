@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import NavBar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
@@ -6,12 +6,13 @@ import { AuthContext } from '../context/AuthContext';
 const ProfilePage = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [showDeleteModel, setShowDeleteModel] = useState(false);
 
   useEffect(() => {
-    if (!user) {
+    if (user == '') {
       navigate('/');
     }
-  }, [isAuth]);
+  }, [user]);
 
   return (
     <>

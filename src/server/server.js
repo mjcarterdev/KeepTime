@@ -11,6 +11,7 @@ import subtaskRouter from './routes/subtaskRoutes.js';
 import timeRecordRouter from './routes/timeRecordRoutes.js';
 
 dotenv.config();
+
 const app = express();
 
 const allowedOrigins = [
