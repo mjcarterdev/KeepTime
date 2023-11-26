@@ -63,8 +63,24 @@ export const deleteSubtask = (subtaskId) => {
 };
 
 // Time Record API functions
+export const getAllTimeRecordsBySubtaskId = async (subtaskId) => {
+  const timeRecords = await axiosClient.get(
+    `timeRecord/allBySubtaskId/${subtaskId}`,
+  );
+  return timeRecords;
+};
+
 export const postTimeRecord = (data) => {
   return axiosClient.post(`timeRecord/create`, data);
+};
+
+export const startTimer = async (data) => {
+  let response = await axiosClient.post(`timeRecord/start`, data);
+  return response.data;
+};
+
+export const stopTimer = async (timeRecordId) => {
+  await axiosClient.put(`timeRecord/stop/${timeRecordId}`);
 };
 
 export const updateTimeRecordById = ({ startTime, endTime, timeRecordId }) => {
@@ -72,4 +88,8 @@ export const updateTimeRecordById = ({ startTime, endTime, timeRecordId }) => {
     startTime,
     endTime,
   });
+};
+
+export const deleteTimeRecordById = (timeRecordId) => {
+  axiosClient.delete(`timeRecord/delete/${timeRecordId}`);
 };
