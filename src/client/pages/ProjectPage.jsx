@@ -177,7 +177,7 @@ const ProjectPage = () => {
         ) : (
           <>
             <RoundButtonWithLabel
-              label={filterProjects ? 'Archived Projects' : 'Active Projects'}
+              label={filterProjects ? 'Active Projects' : 'Archived Projects'}
               onClick={() => {
                 handleToggleProjects();
               }}
