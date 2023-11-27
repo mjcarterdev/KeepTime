@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { deleteSubtask } from '../../api/services.js';
 
+import Button from '../Button.jsx';
+
 const DeleteSubtaskModal = ({ subtaskId }) => {
   const navigate = useNavigate();
 
@@ -14,7 +16,7 @@ const DeleteSubtaskModal = ({ subtaskId }) => {
   return (
     <>
       <dialog id="delete_subtask" className="modal modal-middle">
-        <div className="modal-box">
+        <div className="modal-box max-w-[400px]">
           <h3 className="font-bold text-lg text-center">
             Are you sure you want to delete this subtask?
           </h3>
@@ -23,17 +25,16 @@ const DeleteSubtaskModal = ({ subtaskId }) => {
             This will permanently delete the subtask and its time entries. You
             cannot undo this action.
           </p>
-          <div className="modal-action">
-            <button
-              className="btn"
+          <div className="modal-action flex justify-end gap-2 pt-2">
+            <Button
               onClick={() => document.getElementById('delete_subtask').close()}
             >
               Cancel
-            </button>
+            </Button>
             <form method="dialog" onSubmit={() => handleDeleteSubtask()}>
-              <button type="submit" className="w-24 btn btn-primary">
+              <Button type="submit" btnType={'default'}>
                 Delete
-              </button>
+              </Button>
             </form>
           </div>
         </div>

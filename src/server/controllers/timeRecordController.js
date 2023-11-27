@@ -22,16 +22,11 @@ export const create = async (req, res, next) => {
     }
 
     if (new Date(startTime) > new Date(endTime)) {
-      return res
-        .status(400)
-        .json({
-          error:
-            'You must provide valid start and end time. The end date cannot be earlier than the start date.',
-        });
+      return res.status(400).json({
+        error:
+          'You must provide valid start and end time. The end date cannot be earlier than the start date.',
+      });
     }
-
-    const { userId } = req.payload;
-    // TODO: Add validation
 
     let timeRecord = await timeRecordModel.create({
       startTime,
@@ -168,16 +163,13 @@ export const update = async (req, res, next) => {
     }
 
     if (new Date(startTime) > new Date(endTime)) {
-      return res
-        .status(400)
-        .json({
-          error:
-            'You must provide valid start and end time. The end date cannot be earlier than the start date.',
-        });
+      return res.status(400).json({
+        error:
+          'You must provide valid start and end time. The end date cannot be earlier than the start date.',
+      });
     }
 
     const { user } = req.cookies['jwt'];
-    // TODO: Add validation
 
     let timeRecord = await timeRecordModel.update({
       startTime,

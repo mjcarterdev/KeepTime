@@ -1,5 +1,7 @@
 import { postTimeRecord } from '../../api/services.js';
 import { useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import Button from '../Button.jsx';
 
 const AddTimeModal = ({ projectId, subtaskId }) => {
   const {
@@ -8,12 +10,26 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
     formState: { errors },
   } = useForm();
 
+  const queryClient = useQueryClient();
+
+  const addTimeMutation = useMutation({
+    mutationFn: postTimeRecord,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['timeRecords'] });
+    },
+  });
+
   const handleAddTime = async (data) => {
     data.projectId = projectId;
     data.subtaskId = subtaskId;
-    data.startTime = new Date(data.startDate + ' ' + data.startTime).toISOString();
+    data.startTime = new Date(
+      data.startDate + ' ' + data.startTime,
+    ).toISOString();
     data.endTime = new Date(data.endDate + ' ' + data.endTime).toISOString();
-    await postTimeRecord(data);
+    addTimeMutation.mutate(data);
     document.getElementById('add_time').close();
   };
 
@@ -23,7 +39,7 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
   return (
     <>
       <dialog id="add_time" className="modal modal-middle">
-        <div className="modal-box">
+        <div className="modal-box max-w-[400px]">
           <h3 className="font-bold text-lg text-center">Add Time</h3>
           <div className="divider"></div>
           <div className="join">
@@ -38,7 +54,9 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
                 {...register('startDate', { required: true })}
               />
               <label className="label">
-                <span className={errors.title ? visible : hidden}>This is required</span>
+                <span className={errors.title ? visible : hidden}>
+                  This is required
+                </span>
               </label>
             </div>
             <div className="join-vertical">
@@ -52,7 +70,9 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
                 {...register('startTime', { required: true })}
               />
               <label className="label">
-                <span className={errors.title ? visible : hidden}>This is required</span>
+                <span className={errors.title ? visible : hidden}>
+                  This is required
+                </span>
               </label>
             </div>
           </div>
@@ -68,7 +88,9 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
                 {...register('endDate', { required: true })}
               />
               <label className="label">
-                <span className={errors.title ? visible : hidden}>This is required</span>
+                <span className={errors.title ? visible : hidden}>
+                  This is required
+                </span>
               </label>
             </div>
             <div className="join-vertical">
@@ -82,18 +104,23 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
                 {...register('endTime', { required: true })}
               />
               <label className="label">
-                <span className={errors.title ? visible : hidden}>This is required</span>
+                <span className={errors.title ? visible : hidden}>
+                  This is required
+                </span>
               </label>
             </div>
           </div>
           <div className="modal-action">
-            <button className="btn" onClick={() => document.getElementById('add_time').close()}>
+            <Button
+              className="btn"
+              onClick={() => document.getElementById('add_time').close()}
+            >
               Cancel
-            </button>
+            </Button>
             <form method="dialog" onSubmit={handleSubmit(handleAddTime)}>
-              <button type="submit" className="w-24 btn btn-primary">
+              <Button type="submit" btnType={'default'}>
                 OK
-              </button>
+              </Button>
             </form>
           </div>
         </div>

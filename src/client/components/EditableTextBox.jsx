@@ -21,6 +21,8 @@ const EditableText = ({
       if (item.title !== text) {
         updateProjectFn.mutate({ projectId: item.id, title: text });
       }
+    } else {
+      updateSubtaskFn.mutate({ id: item.id, title: text });
     }
     showEditFn(false);
   };

@@ -54,8 +54,12 @@ export const postSubtask = (data) => {
   return axiosClient.post(`subtask/createNew`, data);
 };
 
-export const updateSubtaskById = ({ title, id, description }) => {
-  return axiosClient.put(`subtask/update/${id}`, { title, description });
+export const updateSubtaskById = ({ title, id, description, completed }) => {
+  return axiosClient.put(`subtask/update/${id}`, {
+    title,
+    description,
+    completed,
+  });
 };
 
 export const deleteSubtask = (subtaskId) => {
