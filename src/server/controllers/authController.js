@@ -22,7 +22,7 @@ export const register = async (req, res, next) => {
         password,
         name,
       });
-      console.log('register user 2: ', user);
+
       const tokenId = v4();
       const { accessToken, refreshToken } = generateTokens(user, tokenId);
 

@@ -8,7 +8,7 @@ export const create = async (req, res, next) => {
     #swagger.security = [{"cookieAuth:": [] }]
   */
   try {
-    const { title, projectId } = req.body;
+    const { title, projectId, description } = req.body;
     if (!title) {
       return res
         .status(400)
@@ -24,6 +24,7 @@ export const create = async (req, res, next) => {
     let subtask = await subtaskModel.create({
       title,
       projectId: projectId,
+      description,
     });
     res.status(201).json(subtask);
   } catch (err) {

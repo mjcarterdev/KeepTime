@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useDoubleTap } from 'use-double-tap';
 
 const EditableText = ({
   initialText,
@@ -21,10 +20,6 @@ const EditableText = ({
     if (isProject) {
       if (item.title !== text) {
         updateProjectFn.mutate({ projectId: item.id, title: text });
-      }
-    } else {
-      if (item.title !== text) {
-        updateSubtaskFn.mutate({ id: item.id, title: text });
       }
     }
     showEditFn(false);

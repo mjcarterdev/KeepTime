@@ -1,4 +1,3 @@
-import Button from '../components/Button';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState, useEffect, useContext } from 'react';
 import Toolbar from '../components/Toolbar';
@@ -8,9 +7,7 @@ import {
   getAllProjects,
   postProject,
   updateProjectById,
-  postSubtask,
   updateSubtaskById,
-  deleteProject,
 } from '../api/services';
 import { useMutation } from '@tanstack/react-query';
 import NavBar from '../components/Navbar';
@@ -21,13 +18,24 @@ import useProjectStore from '../context/projectStore.jsx';
 import Spinner from '../components/Spinner.jsx';
 import { AuthContext } from '../context/AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import DeleteProjectModal from '../components/modals/DeleteProjectModal.jsx';
+import AddSubtaskModal from '../components/modals/AddSubtaskModal.jsx';
+import AddProjectModal from '../components/modals/AddProjectModal.jsx';
 
 const ProjectPage = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { data, isLoading } = useQuery({
+  useEffect(() => {
+    if (user == '') {
+      navigate('/');
+    }
+  }, [user]);
+
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['projects'],
     queryFn: getAllProjects,
   });
@@ -36,13 +44,18 @@ const ProjectPage = () => {
   const setExpanded = useProjectStore((state) => state.setExpanded);
   const [workingData, setWorkingData] = useState([]);
   const [filterProjects, setFilterProjects] = useState(false);
+  const [showDeleteModel, setShowDeleteModel] = useState(false);
+  const [showAddSubtask, setShowAddSubtask] = useState(false);
+  const [showAddProject, setShowAddProject] = useState(false);
   const isProjectsEmpty = workingData?.length > 0;
 
-  useEffect(() => {
-    if (user === null) {
-      navigate('/');
-    }
-  }, [user]);
+  if (isError) {
+    toast.error('project Error', {
+      position: toast.POSITION.TOP_RIGHT,
+      toastId: 'projectError',
+      className: 'notification',
+    });
+  }
 
   useEffect(() => {
     let list;
@@ -56,67 +69,18 @@ const ProjectPage = () => {
 
   // Query Functions
 
-  const deleteProjectMutation = useMutation({
-    mutationFn: deleteProject,
-    onError: (error) => {
-      console.log(error);
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
-      setExpanded(false);
-    },
-  });
-
-  const addProjectMutation = useMutation({
-    mutationFn: postProject,
-    onError: (error) => {
-      console.log(error);
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
-    },
-  });
-
   const updateProjectMutation = useMutation({
     mutationFn: updateProjectById,
     onError: (error) => {
       console.log(error);
     },
-    onSuccess: (data) => {
-      setExpanded(data.data);
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
-    },
-  });
-
-  const addSubtaskMutation = useMutation({
-    mutationFn: postSubtask,
-    onError: (error) => {
-      console.log(error);
-    },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['projects'] });
-    },
-  });
-
-  const updateSubtaskNameMutation = useMutation({
-    mutationFn: updateSubtaskById,
-    onError: (error) => {
-      console.log(error);
-    },
-    onSuccess: (data) => {
+    onSuccess: () => {
+      setExpanded(false);
       queryClient.invalidateQueries({ queryKey: ['projects'] });
     },
   });
 
   // handlers
-
-  const handleAddProject = () => {
-    addProjectMutation.mutate({ title: 'new project' });
-  };
-
-  const handleAddSubtask = () => {
-    addSubtaskMutation.mutate({ title: 'new subtask', projectId: expanded.id });
-  };
 
   const handleCompleteProject = () => {
     updateProjectMutation.mutate({
@@ -128,7 +92,6 @@ const ProjectPage = () => {
 
   const handleToggleProjects = () => {
     setFilterProjects(!filterProjects);
-    setExpanded(false);
   };
 
   return (
@@ -136,7 +99,21 @@ const ProjectPage = () => {
       <NavBar
         location={filterProjects ? 'Archived Projects' : 'Active Projects'}
       />
-
+      {showDeleteModel && (
+        <DeleteProjectModal
+          projectId={expanded.id}
+          closeFn={setShowDeleteModel}
+          setExpanded={setExpanded}
+        />
+      )}
+      {showAddSubtask && (
+        <AddSubtaskModal
+          projectId={expanded.id}
+          closeFn={setShowAddSubtask}
+          setExpanded={setExpanded}
+        />
+      )}
+      {showAddProject && <AddProjectModal closeFn={setShowAddProject} />}
       <div
         className={`flex pb-32 pt-24 flex-col flex-1 h-[100dvh] w-full gap-2 p-4 overflow-y-scroll md:items-center scrollbar-hide md:scrollbar-default `}
       >
@@ -152,10 +129,7 @@ const ProjectPage = () => {
                     item={item}
                     expanded={expanded}
                     setExpanded={setExpanded}
-                    addProject={addProjectMutation}
                     updateProject={updateProjectMutation}
-                    addSubtask={addSubtaskMutation}
-                    updateSubtask={updateSubtaskNameMutation}
                   />
                 );
               })
@@ -165,12 +139,13 @@ const ProjectPage = () => {
           </AnimatePresence>
         )}
       </div>
+
       <Toolbar>
         {expanded ? (
           <>
             <RoundButtonWithLabel
               label={
-                expanded.completed ? 'Restore Project' : 'Complete Project'
+                expanded?.completed ? 'Restore Project' : 'Complete Project'
               }
               onClick={() => {
                 handleCompleteProject();
@@ -184,7 +159,7 @@ const ProjectPage = () => {
             <RoundButtonWithLabel
               label={'Delete Project'}
               onClick={() => {
-                deleteProjectMutation.mutate(expanded.id);
+                setShowDeleteModel(!showDeleteModel);
               }}
             >
               <Icon iconName={'delete'} className={'text-accent-content'} />
@@ -193,7 +168,7 @@ const ProjectPage = () => {
             <RoundButtonWithLabel
               label={'Add Subtask'}
               onClick={() => {
-                handleAddSubtask();
+                setShowAddSubtask(!showAddSubtask);
               }}
             >
               <Icon iconName={'add'} className={'text-accent-content'} />
@@ -212,7 +187,7 @@ const ProjectPage = () => {
             <RoundButtonWithLabel
               label={'Add Project'}
               onClick={() => {
-                handleAddProject();
+                setShowAddProject(!showAddProject);
               }}
             >
               <Icon iconName={'add'} className={'text-accent-content'} />
@@ -220,6 +195,8 @@ const ProjectPage = () => {
           </>
         )}
       </Toolbar>
+
+      <ToastContainer hideProgressBar limit={3} />
     </>
   );
 };

@@ -8,33 +8,70 @@ import { Link, useNavigate } from 'react-router-dom';
 import useRegistration from '../hooks/useRegistration';
 import { useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import Spinner from '../components/Spinner';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const registrationSchema = z
+  .object({
+    name: z.string().min(1, { message: 'Name is required' }),
+    email: z.string().min(1, { message: 'Email is required' }).email({
+      message: 'Must be a valid email',
+    }),
+    password: z
+      .string()
+      .min(6, { message: 'Password must be atleast 6 characters' }),
+    confirm: z.string().min(1, { message: 'Confirm Password is required' }),
+  })
+  .refine((data) => data.password === data.confirm, {
+    path: ['confirm'],
+    message: 'Password and Confirm Password do not match',
+  });
 
 const SignUpPage = () => {
   const { user, errorMessage, setErrorMessage } = useContext(AuthContext);
-  const { registerData, registerError, registerIsLoading, registerOnSubmit } =
+  const { registerData, registerIsLoading, registerError, registerOnSubmit } =
     useRegistration();
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+    formState: { errors, isDirty, isValid },
+  } = useForm({
+    resolver: zodResolver(registrationSchema),
+    mode: 'onChange',
+    delayError: 1000,
+  });
 
   useEffect(() => {
+    if (registerData) {
+      console.log(registerData);
+      toast.success('success register', {
+        position: toast.POSITION.TOP_RIGHT,
+        toastId: 'registerSuccess',
+        className: 'notification',
+      });
+    }
     if (user) {
-      console.log('user project: ', user.user);
       navigate('/projects');
     }
-  }, [user]);
+  }, [user, registerData]);
 
   const onSubmit = async (data) => {
     registerOnSubmit(data);
   };
 
   const hidden = 'invisible label-text-alt';
-  const visible = 'label-text-alt';
+  const visible = 'label-text-alt text-error';
+
+  if (registerError) {
+    toast.error(registerError.response.data.message, {
+      position: toast.POSITION.TOP_RIGHT,
+      toastId: 'registerError',
+      className: 'notification',
+    });
+  }
 
   return (
     <>
@@ -63,7 +100,7 @@ const SignUpPage = () => {
             />
             <label className="pl-4 label">
               <span className={errors.name ? visible : hidden}>
-                This is required
+                {errors.name?.message}
               </span>
             </label>
 
@@ -79,7 +116,7 @@ const SignUpPage = () => {
             />
             <label className="pl-4 label">
               <span className={errors.email ? visible : hidden}>
-                This is required
+                {errors.email?.message}
               </span>
             </label>
 
@@ -96,7 +133,7 @@ const SignUpPage = () => {
             />
             <label className="label">
               <span className={errors.password ? visible : hidden}>
-                Min. of 8 characters
+                {errors.password?.message}
               </span>
             </label>
 
@@ -115,7 +152,7 @@ const SignUpPage = () => {
             />
             <label className="label">
               <span className={errors.confirm ? visible : hidden}>
-                Min. of 8 characters
+                {errors.confirm?.message}
               </span>
             </label>
             <div className="flex pt-4 justify-evenly">
@@ -123,6 +160,8 @@ const SignUpPage = () => {
                 type="submit"
                 className="w-full"
                 isLoading={registerIsLoading}
+                disabled={!isDirty || !isValid}
+                btnType={'default'}
               >
                 Register
               </Button>
@@ -151,6 +190,7 @@ const SignUpPage = () => {
           </div>
         )}
       </div>
+      <ToastContainer />
     </>
   );
 };

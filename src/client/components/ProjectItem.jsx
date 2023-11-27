@@ -4,6 +4,7 @@ import Icon from './Icon';
 import useProjectStore from '../context/projectStore.jsx';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
   const expanded = useProjectStore((state) => state.expanded);
@@ -11,6 +12,7 @@ export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
   const isOpen = expanded.id === item.id;
   const isSubTasksEmpty = item.subTasks.length > 0 ? true : false;
   const [isEdit, setIsEdit] = useState(false);
+  const nav = useNavigate();
 
   return (
     <div className="h-auto">
@@ -44,7 +46,7 @@ export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
               event.stopPropagation();
               setIsEdit(!isEdit);
             }}
-            className={'cursor-pointer'}
+            className={'cursor-pointer '}
           >
             <Icon iconName={'edit-sm'} className={'text-[0.5rem]'} />
           </div>
@@ -68,9 +70,11 @@ export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
             {isSubTasksEmpty ? (
               [...item.subTasks].map((item) => {
                 return (
-                  <div
-                    key={item.id}
+                  <Link
                     className="flex items-center justify-between w-full px-4 text-center bg-transparent text-secondary min-h-12 hover:bg-accent hover:bg-opacity-20"
+                    key={item.id}
+                    to={`/subtask/${item.id}`}
+                    from={'/projects'}
                   >
                     <EditableText
                       initialText={item.title}
@@ -78,21 +82,14 @@ export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
                       className={
                         'flex p-2 min-w-min70 text-secondary items-start'
                       }
-                      showEdit={item.title === 'new subtask'}
-                      showEditFn={setIsEdit}
                       item={item}
                       isProject={false}
                     />
-                    <Link
-                      key={item.id}
-                      to={`/subtask/${item.id}`}
-                      from={'/projects'}
-                    >
-                      <div className={'p-2'}>
-                        <Icon iconName={'arrow-right'} />
-                      </div>
-                    </Link>
-                  </div>
+
+                    <div className={'p-2'}>
+                      <Icon iconName={'arrow-right'} />
+                    </div>
+                  </Link>
                 );
               })
             ) : (

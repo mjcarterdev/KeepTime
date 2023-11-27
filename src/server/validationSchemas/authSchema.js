@@ -9,7 +9,7 @@ export const loginSchema = z.object({
       .max(255, { message: 'Must be less than 255 characters long' }),
     password: z
       .string()
-      .min(8, { message: 'Must be 8 or more characters long' })
+      .min(6, { message: 'Must be 6 or more characters long' })
       .max(40, { message: 'Must be less than 40 characters long' }),
   }),
 });
@@ -28,11 +28,11 @@ export const registerSchema = z.object({
         .max(255, { message: 'Must be less than 255 characters long' }),
       password: z
         .string()
-        .min(8, { message: 'Must be 8 or more characters long' })
+        .min(6, { message: 'Must be 6 or more characters long' })
         .max(40, { message: 'Must be less than 40 characters long' }),
       confirm: z
         .string()
-        .min(8, { message: 'Must be 8 or more characters long' })
+        .min(6, { message: 'Must be 6 or more characters long' })
         .max(40, { message: 'Must be less than 40 characters long' }),
     })
     .refine((schema) => schema.password === schema.confirm, {
@@ -43,6 +43,9 @@ export const registerSchema = z.object({
 
 export const revokeRefreshTokensSchema = z.object({
   body: z.object({
-    userId: z.string().uuid({ message: 'Not a uuid' }).min(1, { message: 'userId is missing' }),
+    userId: z
+      .string()
+      .uuid({ message: 'Not a uuid' })
+      .min(1, { message: 'userId is missing' }),
   }),
 });
