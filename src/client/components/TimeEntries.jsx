@@ -1,13 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, forwardRef } from 'react';
 import { getAllTimeRecordsBySubtaskId } from '../api/services';
 import Spinner from '../components/Spinner.jsx';
 
-const TimeEntries = ({ subtaskId, totalDuration, isEditMode }) => {
+const TimeEntries = forwardRef((props, ref) => {
   const [timeRecordsList, setTimeRecordsList] = useState([]);
+  const [selectedTimeEntry, setSelectedTimeEntry] = useState(null);
 
   const { data, isLoading } = useQuery({
-    queryKey: [`timeRecords`, subtaskId],
+    queryKey: [`timeRecords`, props.subtaskId],
     queryFn: ({ queryKey }) => getAllTimeRecordsBySubtaskId(queryKey[1]),
   });
 
@@ -18,7 +19,10 @@ const TimeEntries = ({ subtaskId, totalDuration, isEditMode }) => {
 
   const modifyTimeRecords = (data) => {
     let list = data.map((timeRecord) => {
-      timeRecord.startTime = new Intl.DateTimeFormat('fr-CA', {
+      timeRecord.totalDuration = timeRecord.endTime
+        ? calculateTotalDuration(timeRecord.startTime, timeRecord.endTime)
+        : 'In progress';
+      timeRecord.startTime = new Intl.DateTimeFormat('en-US', {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
@@ -26,7 +30,34 @@ const TimeEntries = ({ subtaskId, totalDuration, isEditMode }) => {
       return timeRecord;
     });
 
-    return list.sort((a, b) => a.createdAt - b.createdAt);
+    return list.sort(
+      (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt),
+    );
+  };
+
+  const calculateTotalDuration = (startTime, endTime) => {
+    let totalMs = Date.parse(endTime) - Date.parse(startTime);
+
+    let seconds = Math.floor(totalMs / 1000);
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+
+    seconds = seconds % 60;
+    minutes = minutes % 60;
+
+    return (
+      hours.toString().padStart(2, '0') +
+      ':' +
+      minutes.toString().padStart(2, '0') +
+      ':' +
+      seconds.toString().padStart(2, '0')
+    );
+  };
+
+  const selectTimeEntry = (item) => {
+    setSelectedTimeEntry(item);
+    // Send selected entrry to subtask page to change Toolbar buttons
+    props.selectedEntry(item);
   };
 
   return (
@@ -38,7 +69,7 @@ const TimeEntries = ({ subtaskId, totalDuration, isEditMode }) => {
           <>
             <div className="flex items-center font-medium justify-between w-full px-4 text-center bg-transparent min-h-12 border-2 border-transparent border-b-accent">
               <span>Time Entries: </span>
-              <span>{totalDuration}</span>
+              <span>{props.totalDuration}</span>
             </div>
             <section className="overflow-y-auto divide-y-2 divide-accent divide-opacity-20">
               {timeRecordsList && timeRecordsList.length > 0 ? (
@@ -46,17 +77,17 @@ const TimeEntries = ({ subtaskId, totalDuration, isEditMode }) => {
                   <div
                     key={item.id}
                     item={item}
-                    className="flex items-center justify-between w-full px-4 text-center bg-transparent min-h-12 hover:bg-accent hover:bg-opacity-30"
+                    className={`flex items-center justify-between cursor-pointer w-full px-4 text-center min-h-12 hover:bg-accent hover:bg-opacity-30 ${
+                      selectedTimeEntry && selectedTimeEntry.id == item.id
+                        ? 'bg-neutral bg-opacity-20 bg-purple-700'
+                        : 'bg-transparent'
+                    }`}
+                    onClick={() => {
+                      selectTimeEntry(item);
+                    }}
                   >
-                    {isEditMode ? (
-                      <input
-                        type="date"
-                        className=""
-                        defaultValue={item.startTime}
-                      />
-                    ) : (
-                      <div className="text-secondary ">{item.startTime}</div>
-                    )}
+                    <div className="text-secondary ">{item.startTime}</div>
+                    <div className="text-secondary ">{item.totalDuration}</div>
                   </div>
                 ))
               ) : (
@@ -71,6 +102,6 @@ const TimeEntries = ({ subtaskId, totalDuration, isEditMode }) => {
       </div>
     </>
   );
-};
+});
 
 export default TimeEntries;

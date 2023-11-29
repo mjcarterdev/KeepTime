@@ -1,22 +1,27 @@
 import { updateTimeRecordById } from '../../api/services.js';
 import { useForm } from 'react-hook-form';
+import Button from '../Button.jsx';
 
 const UpdateTimeModal = ({ timeRecord }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty, isValid },
   } = useForm({
     defaultValues: {
-      startDate: new Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(
-        new Date(timeRecord.startTime),
-      ),
+      startDate: new Intl.DateTimeFormat('fr-CA', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }).format(new Date(timeRecord.startTime)),
       startTime: new Intl.DateTimeFormat('en-GB', {
         timeStyle: 'short',
       }).format(new Date(timeRecord.startTime)),
-      endDate: new Intl.DateTimeFormat('fr-CA', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(
-        new Date(timeRecord.endTime),
-      ),
+      endDate: new Intl.DateTimeFormat('fr-CA', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }).format(new Date(timeRecord.endTime)),
       endTime: new Intl.DateTimeFormat('en-GB', {
         timeStyle: 'short',
       }).format(new Date(timeRecord.endTime)),
@@ -25,7 +30,9 @@ const UpdateTimeModal = ({ timeRecord }) => {
 
   const handleUpdateTime = async (data) => {
     data.timeRecordId = timeRecord.id;
-    data.startTime = new Date(data.startDate + ' ' + data.startTime).toISOString();
+    data.startTime = new Date(
+      data.startDate + ' ' + data.startTime,
+    ).toISOString();
     data.endTime = new Date(data.endDate + ' ' + data.endTime).toISOString();
     await updateTimeRecordById(data);
     document.getElementById('update_time_record').close();
@@ -52,7 +59,9 @@ const UpdateTimeModal = ({ timeRecord }) => {
                 {...register('startDate', { required: true })}
               />
               <label className="label">
-                <span className={errors.title ? visible : hidden}>This is required</span>
+                <span className={errors.title ? visible : hidden}>
+                  This is required
+                </span>
               </label>
             </div>
             <div className="join-vertical">
@@ -66,7 +75,9 @@ const UpdateTimeModal = ({ timeRecord }) => {
                 {...register('startTime', { required: true })}
               />
               <label className="label">
-                <span className={errors.title ? visible : hidden}>This is required</span>
+                <span className={errors.title ? visible : hidden}>
+                  This is required
+                </span>
               </label>
             </div>
           </div>
@@ -82,7 +93,9 @@ const UpdateTimeModal = ({ timeRecord }) => {
                 {...register('endDate', { required: true })}
               />
               <label className="label">
-                <span className={errors.title ? visible : hidden}>This is required</span>
+                <span className={errors.title ? visible : hidden}>
+                  This is required
+                </span>
               </label>
             </div>
             <div className="join-vertical">
@@ -96,18 +109,30 @@ const UpdateTimeModal = ({ timeRecord }) => {
                 {...register('endTime', { required: true })}
               />
               <label className="label">
-                <span className={errors.title ? visible : hidden}>This is required</span>
+                <span className={errors.title ? visible : hidden}>
+                  This is required
+                </span>
               </label>
             </div>
           </div>
           <div className="modal-action">
-            <button className="btn" onClick={() => document.getElementById('update_time_record').close()}>
+            <Button
+              className="btn btn-ghost"
+              onClick={() =>
+                document.getElementById('update_time_record').close()
+              }
+            >
               Cancel
-            </button>
+            </Button>
             <form method="dialog" onSubmit={handleSubmit(handleUpdateTime)}>
-              <button type="submit" className="w-24 btn btn-primary">
+              <Button
+                type="submit"
+                disabled={!isDirty || !isValid}
+                btnType={'default'}
+                className={'w-20'}
+              >
                 OK
-              </button>
+              </Button>
             </form>
           </div>
         </div>

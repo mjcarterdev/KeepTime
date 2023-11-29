@@ -49,6 +49,16 @@ const Timer = forwardRef((props, ref) => {
     },
   });
 
+  const deleteTimeRecordMutation = useMutation({
+    mutationFn: deleteTimeRecordById,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['timeRecords'] });
+    },
+  });
+
   useImperativeHandle(ref, () => ({
     async start() {
       setRunning(true);
@@ -62,7 +72,7 @@ const Timer = forwardRef((props, ref) => {
       setCurrentTimeRecordId(timer.id);
     },
 
-    async stop() {
+    stop() {
       setRunning(false);
 
       addTimeRecordMutation.mutate(currentTimeRecordId);
@@ -70,23 +80,27 @@ const Timer = forwardRef((props, ref) => {
       setCurrentTimeRecordId(null);
     },
 
-    async cancel() {
+    cancel() {
       setRunning(false);
-      await deleteTimeRecordById(currentTimeRecordId);
+      deleteTimeRecordMutation.mutate(currentTimeRecordId);
       setTime(0);
       setCurrentTimeRecordId(null);
     },
 
-    async reset() {
+    reset() {
       setRunning(false);
-      await deleteTimeRecordById(currentTimeRecordId);
+      deleteTimeRecordMutation.mutate(currentTimeRecordId);
       setTime(0);
       this.start();
+    },
+
+    deleteById(id) {
+      deleteTimeRecordMutation.mutate(id);
     },
   }));
 
   return (
-    <div className="flex flex-col items-center justify-center py-10 text-2xl font-bold text-gray-900">
+    <div className="flex flex-col items-center justify-center py-10 text-4xl font-mono text-gray-900">
       {formatTime(time)}
     </div>
   );

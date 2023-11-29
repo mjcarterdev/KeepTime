@@ -7,7 +7,7 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty, isValid },
   } = useForm();
 
   const queryClient = useQueryClient();
@@ -50,7 +50,7 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
               <input
                 id="start-date"
                 type="date"
-                className="join-item input input-primary"
+                className="join-item p-2 pl-4 bg-white border border-gray-100 rounded-md shadow-md input-ghost bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 rounded-10px focus:outline-accent autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)]"
                 {...register('startDate', { required: true })}
               />
               <label className="label">
@@ -66,7 +66,7 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
               <input
                 id="start-time"
                 type="time"
-                className="join-item input input-primary"
+                className="join-item p-2 pl-4 bg-white border border-gray-100 rounded-md shadow-md input-ghost bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 rounded-10px focus:outline-accent autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)]"
                 {...register('startTime', { required: true })}
               />
               <label className="label">
@@ -84,7 +84,7 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
               <input
                 id="end-date"
                 type="date"
-                className="join-item input input-primary"
+                className="join-item p-2 pl-4 bg-white border border-gray-100 rounded-md shadow-md input-ghost bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 rounded-10px focus:outline-accent autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)] "
                 {...register('endDate', { required: true })}
               />
               <label className="label">
@@ -100,7 +100,7 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
               <input
                 id="end-time"
                 type="time"
-                className="join-item input input-primary"
+                className="join-item p-2 pl-4 bg-white border border-gray-100 rounded-md shadow-md input-ghost bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 rounded-10px focus:outline-accent autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)]"
                 {...register('endTime', { required: true })}
               />
               <label className="label">
@@ -110,15 +110,20 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
               </label>
             </div>
           </div>
-          <div className="modal-action">
+          <div className="modal-action flex justify-end gap-2 pt-2">
             <Button
-              className="btn"
+              className="btn btn-ghost"
               onClick={() => document.getElementById('add_time').close()}
             >
               Cancel
             </Button>
             <form method="dialog" onSubmit={handleSubmit(handleAddTime)}>
-              <Button type="submit" btnType={'default'}>
+              <Button
+                disabled={!isDirty || !isValid}
+                type="submit"
+                btnType={'default'}
+                className={'w-20'}
+              >
                 OK
               </Button>
             </form>

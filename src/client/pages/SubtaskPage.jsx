@@ -11,6 +11,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import AddTimeModal from '../components/modals/AddTimeModal';
 import DeleteSubtaskModal from '../components/modals/DeleteSubtaskModal';
 import EditableText from '../components/EditableTextBox';
+import EditableTextArea from '../components/EditableTextArea';
 import Icon from '../components/Icon';
 import NavBar from '../components/Navbar';
 import RoundButtonWithLabel from '../components/RoundButtonWithLabel';
@@ -24,11 +25,15 @@ const SubtaskPage = () => {
   const loader = useLoaderData();
   const subtaskId = loader.subtaskId;
   const timerRef = useRef();
+  const timeListRef = useRef(null);
+  const timeDeleteRef = useRef();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const [isTimerRunning, setTimerRunning] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
+  const [isEditTitle, setIsEditTitle] = useState(false);
+  const [isEditDescription, setIsEditDescription] = useState(false);
+  const [selectedTimeEntry, setSelectedTimeEntry] = useState(null);
 
   const { data, isLoading } = useQuery({
     queryKey: [`subtask`, subtaskId],
@@ -69,6 +74,25 @@ const SubtaskPage = () => {
     }
   }, [user]);
 
+  // Deselect time entry if a  user clicks outside list
+  /*useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        timeListRef.current &&
+        !timeListRef.current.contains(event.target) &&
+        timeDeleteRef.current &&
+        !timeDeleteRef.current.contains(event.target)
+      ) {
+        setSelectedTimeEntry(null);
+        props.selectedEntry(null);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [timeListRef, timeDeleteRef]);*/
+
   const handleTimerStart = () => {
     timerRef.current.start();
     setTimerRunning(true);
@@ -89,11 +113,21 @@ const SubtaskPage = () => {
     setTimerRunning(false);
   };
 
+  const handleDeleteTime = () => {
+    timerRef.current.deleteById(selectedTimeEntry.id);
+    setSelectedTimeEntry(null);
+  };
+
   const handleCompleteSubtask = (isComplete) => {
     completeSubtaskMutation.mutate({
       id: subtaskId,
       completed: isComplete,
     });
+  };
+
+  // Assign value reseived from TimeEntries component
+  const handleSelectedTimeEntry = (value) => {
+    setSelectedTimeEntry(value);
   };
 
   return (
@@ -106,37 +140,68 @@ const SubtaskPage = () => {
           <Spinner />
         ) : (
           <>
-            <div className="flex items-center">
-              <EditableText
-                initialText={data?.data.title}
-                updateSubtaskFn={updateSubtaskMutation}
-                className={' p-2 min-w-min70 text-secondary font-medium'}
-                showEdit={isEdit}
-                showEditFn={setIsEdit}
-                item={data?.data}
-                isProject={false}
-                isTitle={true}
-              />
+            <div className="indicator">
+              {data?.data.completed ? (
+                <span className="indicator-item badge">Completed</span>
+              ) : null}
+              <div className="card card-side glass px-2 md:w-[40rem]">
+                <div className="flex items-center">
+                  <EditableText
+                    initialText={data?.data.title}
+                    updateSubtaskFn={updateSubtaskMutation}
+                    className={' p-2 min-w-min70 text-secondary font-medium'}
+                    showEdit={isEditTitle}
+                    showEditFn={setIsEditTitle}
+                    item={data?.data}
+                    isProject={false}
+                    isTitle={true}
+                  />
 
-              <div
-                onClick={(event) => {
-                  setIsEdit(!isEdit);
-                }}
-                className={'cursor-pointer '}
-              >
-                <Icon iconName={'edit-sm'} className={'text-[0.5rem]'} />
+                  <div
+                    onClick={(event) => {
+                      setIsEditTitle(!isEditTitle);
+                    }}
+                    className={'cursor-pointer '}
+                  >
+                    <Icon iconName={'edit-sm'} className={'text-[0.5rem]'} />
+                  </div>
+                </div>
               </div>
             </div>
-            <div>description: {data?.data.description}</div>
+            <div className="card glass md:w-[40rem] mt-6">
+              <div className="flex items-center font-medium w-full px-4 text-center bg-transparent min-h-12 border-2 border-transparent border-b-accent">
+                <span>Description:</span>
+              </div>
+              <div className="flex items-center px-2">
+                <EditableTextArea
+                  initialText={data?.data.description}
+                  updateSubtaskFn={updateSubtaskMutation}
+                  className={' p-2 text-secondary font-medium'}
+                  showEdit={isEditDescription}
+                  showEditFn={setIsEditDescription}
+                  item={data?.data}
+                />
+
+                <div
+                  onClick={(event) => {
+                    setIsEditDescription(!isEditDescription);
+                  }}
+                  className={'cursor-pointer '}
+                >
+                  <Icon iconName={'edit-sm'} className={'text-[0.5rem]'} />
+                </div>
+              </div>
+            </div>
             <Timer
               ref={timerRef}
               subtaskId={data?.data.id}
               projectId={data?.data.projectId}
             ></Timer>
             <TimeEntries
+              ref={timeListRef}
               subtaskId={data?.data.id}
               totalDuration={data?.data.totalDuration}
-              isEditMode={false}
+              selectedEntry={handleSelectedTimeEntry}
             ></TimeEntries>
           </>
         )}
@@ -167,6 +232,18 @@ const SubtaskPage = () => {
               }}
             >
               <Icon iconName={'stop'} className={'text-accent-content'} />
+            </RoundButtonWithLabel>
+          </>
+        ) : selectedTimeEntry ? (
+          <>
+            <RoundButtonWithLabel
+              ref={timeDeleteRef}
+              label={'Delete Time'}
+              onClick={() => {
+                handleDeleteTime();
+              }}
+            >
+              <Icon iconName={'delete'} className={'text-accent-content'} />
             </RoundButtonWithLabel>
           </>
         ) : (
