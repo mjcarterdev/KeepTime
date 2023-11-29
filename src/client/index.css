@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .background-image {
-  background-image: url('./images/background-lg.jpg');
+  background-image: url('./images/blue-sky-watercolor-background_.jpg');
   background-repeat: repeat-y;
   background-position: center;
   background-size: cover;

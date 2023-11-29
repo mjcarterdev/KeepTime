@@ -43,9 +43,9 @@ const NavBar = ({ location = '' }) => {
   };
 
   return (
-    <nav className="absolute top-0 z-50 w-full h-16 p-2 px-1 rounded-md py-0w-full border bg-neutral border-gray-100 rounded-md shadow-[2px_4px_5px_2px_#00000024] min-h-[4rem] py-0w-full bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 text-black navbar max-h-16">
+    <nav className="absolute top-0 z-50 w-full h-16 p-2 px-1 rounded-md py-0w-full border bg-neutral border-gray-100 rounded-md shadow-[2px_4px_5px_2px_#00000024] min-h-[4rem] py-0w-full bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-40 text-black navbar max-h-16">
       <div className="navbar-start">
-        <span className="px-4 text-3xl font-medium underline normal-case underline-offset-6 decoration-accent whitespace-nowrap">
+        <span className="px-4 text-3xl font-medium normal-case underline-offset-6 text-accent whitespace-nowrap">
           <h2>{location} </h2>
         </span>
       </div>

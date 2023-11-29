@@ -49,7 +49,7 @@ const AddProjectModal = ({ closeFn }) => {
   return (
     <>
       <div className="absolute z-50 transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 w-[80%] max-w-[400px]">
-        <Card className={'shadow-2xl gap-4'}>
+        <Card className={'shadow-2xl gap-4 border-gray-200'}>
           <span className="px-4 text-xl font-medium text-center normal-case ">
             <h2>Add New Project </h2>
           </span>

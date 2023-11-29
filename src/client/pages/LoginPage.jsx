@@ -39,11 +39,11 @@ const LoginPage = () => {
   const hidden = 'invisible label-text-alt';
   const visible = 'label-text-alt text-error';
 
-  useEffect(() => {
-    if (user !== '') {
-      navigate('/projects');
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user !== '') {
+  //     navigate('/projects');
+  //   }
+  // }, [user]);
 
   const onSubmit = async (data) => {
     loginOnSubmit(data);
@@ -76,7 +76,7 @@ const LoginPage = () => {
             Your Time. Your Way.
           </p>
         </div>
-        <Card>
+        <Card className={'bg-opacity-40'}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <label className="pb-1 pl-4 label">
               <span className="text-neutral-content label-text">Email</span>
