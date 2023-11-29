@@ -1,19 +1,35 @@
 import { postTimeRecord } from '../../api/services.js';
 import { useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import Button from '../Button.jsx';
 
 const AddTimeModal = ({ projectId, subtaskId }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty, isValid },
   } = useForm();
+
+  const queryClient = useQueryClient();
+
+  const addTimeMutation = useMutation({
+    mutationFn: postTimeRecord,
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['timeRecords'] });
+    },
+  });
 
   const handleAddTime = async (data) => {
     data.projectId = projectId;
     data.subtaskId = subtaskId;
-    data.startTime = new Date(data.startDate + ' ' + data.startTime).toISOString();
+    data.startTime = new Date(
+      data.startDate + ' ' + data.startTime,
+    ).toISOString();
     data.endTime = new Date(data.endDate + ' ' + data.endTime).toISOString();
-    await postTimeRecord(data);
+    addTimeMutation.mutate(data);
     document.getElementById('add_time').close();
   };
 
@@ -23,7 +39,7 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
   return (
     <>
       <dialog id="add_time" className="modal modal-middle">
-        <div className="modal-box">
+        <div className="modal-box max-w-[400px]">
           <h3 className="font-bold text-lg text-center">Add Time</h3>
           <div className="divider"></div>
           <div className="join">
@@ -34,11 +50,13 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
               <input
                 id="start-date"
                 type="date"
-                className="join-item input input-primary"
+                className="join-item p-2 pl-4 bg-white border border-gray-100 rounded-md shadow-md input-ghost bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 rounded-10px focus:outline-accent autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)]"
                 {...register('startDate', { required: true })}
               />
               <label className="label">
-                <span className={errors.title ? visible : hidden}>This is required</span>
+                <span className={errors.title ? visible : hidden}>
+                  This is required
+                </span>
               </label>
             </div>
             <div className="join-vertical">
@@ -48,11 +66,13 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
               <input
                 id="start-time"
                 type="time"
-                className="join-item input input-primary"
+                className="join-item p-2 pl-4 bg-white border border-gray-100 rounded-md shadow-md input-ghost bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 rounded-10px focus:outline-accent autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)]"
                 {...register('startTime', { required: true })}
               />
               <label className="label">
-                <span className={errors.title ? visible : hidden}>This is required</span>
+                <span className={errors.title ? visible : hidden}>
+                  This is required
+                </span>
               </label>
             </div>
           </div>
@@ -64,11 +84,13 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
               <input
                 id="end-date"
                 type="date"
-                className="join-item input input-primary"
+                className="join-item p-2 pl-4 bg-white border border-gray-100 rounded-md shadow-md input-ghost bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 rounded-10px focus:outline-accent autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)] "
                 {...register('endDate', { required: true })}
               />
               <label className="label">
-                <span className={errors.title ? visible : hidden}>This is required</span>
+                <span className={errors.title ? visible : hidden}>
+                  This is required
+                </span>
               </label>
             </div>
             <div className="join-vertical">
@@ -78,22 +100,32 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
               <input
                 id="end-time"
                 type="time"
-                className="join-item input input-primary"
+                className="join-item p-2 pl-4 bg-white border border-gray-100 rounded-md shadow-md input-ghost bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-40 rounded-10px focus:outline-accent autofill:shadow-[inset_0_0_0px_1000px_rgb(255,255,255)]"
                 {...register('endTime', { required: true })}
               />
               <label className="label">
-                <span className={errors.title ? visible : hidden}>This is required</span>
+                <span className={errors.title ? visible : hidden}>
+                  This is required
+                </span>
               </label>
             </div>
           </div>
-          <div className="modal-action">
-            <button className="btn" onClick={() => document.getElementById('add_time').close()}>
+          <div className="modal-action flex justify-end gap-2 pt-2">
+            <Button
+              className="btn btn-ghost"
+              onClick={() => document.getElementById('add_time').close()}
+            >
               Cancel
-            </button>
+            </Button>
             <form method="dialog" onSubmit={handleSubmit(handleAddTime)}>
-              <button type="submit" className="w-24 btn btn-primary">
+              <Button
+                disabled={!isDirty || !isValid}
+                type="submit"
+                btnType={'default'}
+                className={'w-20'}
+              >
                 OK
-              </button>
+              </Button>
             </form>
           </div>
         </div>

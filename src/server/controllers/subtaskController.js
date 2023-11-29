@@ -39,7 +39,7 @@ export const deleteSubtask = async (req, res, next) => {
     #swagger.security = [{"cookieAuth:": [] }]
   */
   try {
-    const subtaskId = req.params.id;
+    const subtaskId = req.params.subtaskId;
     if (!subtaskId) {
       return res.status(400).json({ error: 'You must provide a subtask id.' });
     }
