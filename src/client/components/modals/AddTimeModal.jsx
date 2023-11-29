@@ -18,7 +18,11 @@ const AddTimeModal = ({ projectId, subtaskId }) => {
       console.log(error);
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['timeRecords'] });
+      queryClient.invalidateQueries({
+        predicate: (query) => {
+          return ['timeRecords', 'subtask'].includes(query.queryKey[0]);
+        },
+      });
     },
   });
 

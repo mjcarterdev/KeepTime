@@ -19,6 +19,7 @@ import Spinner from '../components/Spinner';
 import Timer from '../components/Timer';
 import TimeEntries from '../components/TimeEntries';
 import Toolbar from '../components/Toolbar';
+import UpdateTimeModal from '../components/modals/UpdateTimeModal';
 
 const SubtaskPage = () => {
   const { user } = useContext(AuthContext);
@@ -74,25 +75,6 @@ const SubtaskPage = () => {
     }
   }, [user]);
 
-  // Deselect time entry if a  user clicks outside list
-  /*useEffect(() => {
-    function handleClickOutside(event) {
-      if (
-        timeListRef.current &&
-        !timeListRef.current.contains(event.target) &&
-        timeDeleteRef.current &&
-        !timeDeleteRef.current.contains(event.target)
-      ) {
-        setSelectedTimeEntry(null);
-        props.selectedEntry(null);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [timeListRef, timeDeleteRef]);*/
-
   const handleTimerStart = () => {
     timerRef.current.start();
     setTimerRunning(true);
@@ -128,6 +110,10 @@ const SubtaskPage = () => {
   // Assign value reseived from TimeEntries component
   const handleSelectedTimeEntry = (value) => {
     setSelectedTimeEntry(value);
+  };
+
+  const handleDeselectTimeEntry = () => {
+    timeListRef.current.selectTimeEntry(null);
   };
 
   return (
@@ -237,6 +223,14 @@ const SubtaskPage = () => {
         ) : selectedTimeEntry ? (
           <>
             <RoundButtonWithLabel
+              label={'Cancel'}
+              onClick={() => {
+                handleDeselectTimeEntry();
+              }}
+            >
+              <Icon iconName={'cross'} className={'text-accent-content'} />
+            </RoundButtonWithLabel>
+            <RoundButtonWithLabel
               ref={timeDeleteRef}
               label={'Delete Time'}
               onClick={() => {
@@ -244,6 +238,14 @@ const SubtaskPage = () => {
               }}
             >
               <Icon iconName={'delete'} className={'text-accent-content'} />
+            </RoundButtonWithLabel>
+            <RoundButtonWithLabel
+              label={'Edit Time'}
+              onClick={() => {
+                document.getElementById('update_time_record').showModal();
+              }}
+            >
+              <Icon iconName={'edit'} className={'text-accent-content'} />
             </RoundButtonWithLabel>
           </>
         ) : (
@@ -294,6 +296,9 @@ const SubtaskPage = () => {
       <ToastContainer hideProgressBar limit={3} />
       <DeleteSubtaskModal subtaskId={subtaskId} />
       <AddTimeModal projectId={data?.data.projectId} subtaskId={subtaskId} />
+      {selectedTimeEntry ? (
+        <UpdateTimeModal timeRecord={selectedTimeEntry} />
+      ) : null}
     </>
   );
 };
