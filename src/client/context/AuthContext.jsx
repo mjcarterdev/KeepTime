@@ -8,10 +8,15 @@ const KEEPTIME = 'keeptime-session';
 const AuthContext = createContext({
   user: null,
   setUser: () => {},
+  removeLocalStorageItem: () => {},
 });
 
 const AuthContextProvider = ({ children }) => {
-  const [user, setUser] = useLocalStorage(KEEPTIME);
+  const {
+    value: user,
+    setLocalStorageValue: setUser,
+    removeLocalStorageItem,
+  } = useLocalStorage(KEEPTIME);
 
   // const {
   //   data: user,
@@ -22,7 +27,9 @@ const AuthContextProvider = ({ children }) => {
   //   queryFn: getUser,
   // });
   return (
-    <AuthContext.Provider value={useMemo(() => ({ user, setUser }), [user])}>
+    <AuthContext.Provider
+      value={useMemo(() => ({ user, setUser, removeLocalStorageItem }), [user])}
+    >
       {children}
     </AuthContext.Provider>
   );

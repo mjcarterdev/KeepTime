@@ -39,12 +39,11 @@ const LoginPage = () => {
   const hidden = 'invisible label-text-alt';
   const visible = 'label-text-alt text-error';
 
-  // useEffect(() => {
-  //   console.log(user);
-  //   if (user) {
-  //     navigate('/projects');
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (user) {
+      navigate('/projects');
+    }
+  }, [user]);
 
   const onSubmit = async (data) => {
     loginOnSubmit(data);

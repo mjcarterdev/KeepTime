@@ -50,10 +50,21 @@ const router = createBrowserRouter(
 
       <Route
         path={'/subtask/:subtaskId'}
-        element={<SubtaskPage />}
+        element={
+          <ProtectedRoute>
+            <SubtaskPage />
+          </ProtectedRoute>
+        }
         loader={subtaskLoader}
       />
-      <Route path="/profile" element={<ProfilePage />} />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
     </Route>,
   ),
 );

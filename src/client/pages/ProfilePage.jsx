@@ -57,7 +57,7 @@ const ProfilePage = () => {
   const visible = 'label-text-alt text-error';
 
   useEffect(() => {
-    if (user == '') {
+    if (user === null) {
       navigate('/');
     }
   }, [user]);
