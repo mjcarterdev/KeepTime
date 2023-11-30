@@ -6,6 +6,11 @@ export const getUser = async () => {
   return res.data;
 };
 
+export const updateUser = async (data) => {
+  const res = await axiosClient.post('/user/profile');
+  return res.data;
+};
+
 // Auth API functions
 export const postRegistration = ({ email, password, name, confirm }) => {
   return axiosClient.post('auth/register', { email, password, name, confirm });
