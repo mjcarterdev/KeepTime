@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { useState, useEffect, forwardRef } from 'react';
+import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { getAllTimeRecordsBySubtaskId } from '../api/services';
 import Spinner from '../components/Spinner.jsx';
 
@@ -22,23 +22,21 @@ const TimeEntries = forwardRef((props, ref) => {
       timeRecord.totalDuration = timeRecord.endTime
         ? calculateTotalDuration(timeRecord.startTime, timeRecord.endTime)
         : 'In progress';
-      timeRecord.startTime = new Intl.DateTimeFormat('en-US', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      }).format(new Date(timeRecord.startTime));
+      timeRecord.startTimeFormatted = new Intl.DateTimeFormat('en-GB').format(
+        new Date(timeRecord.startTime),
+      );
       return timeRecord;
     });
 
     return list.sort(
-      (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt),
+      (a, b) => Date.parse(b.startTime) - Date.parse(a.startTime),
     );
   };
 
   const calculateTotalDuration = (startTime, endTime) => {
     let totalMs = Date.parse(endTime) - Date.parse(startTime);
 
-    let seconds = Math.floor(totalMs / 1000);
+    let seconds = Math.round(totalMs / 1000);
     let minutes = Math.floor(seconds / 60);
     let hours = Math.floor(minutes / 60);
 
@@ -53,6 +51,10 @@ const TimeEntries = forwardRef((props, ref) => {
       seconds.toString().padStart(2, '0')
     );
   };
+
+  useImperativeHandle(ref, () => ({
+    selectTimeEntry,
+  }));
 
   const selectTimeEntry = (item) => {
     setSelectedTimeEntry(item);
@@ -86,7 +88,9 @@ const TimeEntries = forwardRef((props, ref) => {
                       selectTimeEntry(item);
                     }}
                   >
-                    <div className="text-secondary ">{item.startTime}</div>
+                    <div className="text-secondary ">
+                      {item.startTimeFormatted}
+                    </div>
                     <div className="text-secondary ">{item.totalDuration}</div>
                   </div>
                 ))

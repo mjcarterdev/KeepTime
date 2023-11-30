@@ -45,7 +45,11 @@ const Timer = forwardRef((props, ref) => {
       console.log(error);
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['timeRecords'] });
+      queryClient.invalidateQueries({
+        predicate: (query) => {
+          return ['timeRecords', 'subtask'].includes(query.queryKey[0]);
+        },
+      });
     },
   });
 
@@ -55,7 +59,11 @@ const Timer = forwardRef((props, ref) => {
       console.log(error);
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['timeRecords'] });
+      queryClient.invalidateQueries({
+        predicate: (query) => {
+          return ['timeRecords', 'subtask'].includes(query.queryKey[0]);
+        },
+      });
     },
   });
 
@@ -87,9 +95,9 @@ const Timer = forwardRef((props, ref) => {
       setCurrentTimeRecordId(null);
     },
 
-    reset() {
+    async reset() {
       setRunning(false);
-      deleteTimeRecordMutation.mutate(currentTimeRecordId);
+      await deleteTimeRecordById(currentTimeRecordId);
       setTime(0);
       this.start();
     },
