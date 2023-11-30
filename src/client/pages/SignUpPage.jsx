@@ -179,16 +179,6 @@ const SignUpPage = () => {
             </p>
           </form>
         </Card>
-        {errorMessage && (
-          <div
-            className="cursor-pointer toast-top toast-end"
-            onClick={() => setErrorMessage(null)}
-          >
-            <div className="alert alert-error">
-              <span>{errorMessage}</span>
-            </div>
-          </div>
-        )}
       </div>
       <ToastContainer />
     </>
