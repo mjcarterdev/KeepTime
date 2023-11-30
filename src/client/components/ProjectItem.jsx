@@ -76,16 +76,22 @@ export const ProjectItem = ({ item, updateProject, updateSubtask }) => {
                     to={`/subtask/${item.id}`}
                     from={'/projects'}
                   >
-                    <EditableText
-                      initialText={item.title}
-                      updateSubtaskFn={updateSubtask}
-                      className={
-                        'flex p-2 min-w-min70 text-secondary items-start'
-                      }
-                      item={item}
-                      isProject={false}
-                    />
-
+                    <div className="flex items-center">
+                      {item.completed ? (
+                        <Icon iconName={'check'} />
+                      ) : (
+                        <div className="w-6" />
+                      )}
+                      <EditableText
+                        initialText={item.title}
+                        updateSubtaskFn={updateSubtask}
+                        className={
+                          'flex p-2 min-w-min70 text-secondary items-start'
+                        }
+                        item={item}
+                        isProject={false}
+                      />
+                    </div>
                     <div className={'p-2'}>
                       <Icon iconName={'arrow-right'} />
                     </div>
