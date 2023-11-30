@@ -40,7 +40,8 @@ const LoginPage = () => {
   const visible = 'label-text-alt text-error';
 
   // useEffect(() => {
-  //   if (user !== '') {
+  //   console.log(user);
+  //   if (user) {
   //     navigate('/projects');
   //   }
   // }, [user]);

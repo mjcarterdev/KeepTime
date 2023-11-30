@@ -34,6 +34,8 @@ const SubtaskPage = () => {
   const [isEditTitle, setIsEditTitle] = useState(false);
   const [isEditDescription, setIsEditDescription] = useState(false);
   const [selectedTimeEntry, setSelectedTimeEntry] = useState(null);
+  const [showAddTime, setShowAddTime] = useState(false);
+  const [showDeleteSubtask, setShowDeleteSubtask] = useState(false);
 
   const { data, isLoading } = useQuery({
     queryKey: [`subtask`, subtaskId],
@@ -73,25 +75,6 @@ const SubtaskPage = () => {
       navigate('/');
     }
   }, [user]);
-
-  // Deselect time entry if a  user clicks outside list
-  /*useEffect(() => {
-    function handleClickOutside(event) {
-      if (
-        timeListRef.current &&
-        !timeListRef.current.contains(event.target) &&
-        timeDeleteRef.current &&
-        !timeDeleteRef.current.contains(event.target)
-      ) {
-        setSelectedTimeEntry(null);
-        props.selectedEntry(null);
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [timeListRef, timeDeleteRef]);*/
 
   const handleTimerStart = () => {
     timerRef.current.start();
@@ -169,7 +152,7 @@ const SubtaskPage = () => {
               </div>
             </div>
             <div className="card glass md:w-[40rem] mt-6">
-              <div className="flex items-center font-medium w-full px-4 text-center bg-transparent min-h-12 border-2 border-transparent border-b-accent">
+              <div className="flex items-center w-full px-4 font-medium text-center bg-transparent border-2 border-transparent min-h-12 border-b-accent">
                 <span>Description:</span>
               </div>
               <div className="flex items-center px-2">
@@ -261,7 +244,7 @@ const SubtaskPage = () => {
             <RoundButtonWithLabel
               label={'Delete Subtask'}
               onClick={() => {
-                document.getElementById('delete_subtask').showModal();
+                setShowDeleteSubtask(!showDeleteSubtask);
               }}
             >
               <Icon iconName={'delete'} className={'text-accent-content'} />
@@ -281,7 +264,7 @@ const SubtaskPage = () => {
                   disabled={data?.data.completed}
                   label={'Add Time'}
                   onClick={() => {
-                    document.getElementById('add_time').showModal();
+                    setShowAddTime(!showAddTime);
                   }}
                 >
                   <Icon iconName={'add'} className={'text-accent-content'} />
@@ -292,8 +275,20 @@ const SubtaskPage = () => {
         )}
       </Toolbar>
       <ToastContainer hideProgressBar limit={3} />
-      <DeleteSubtaskModal subtaskId={subtaskId} />
-      <AddTimeModal projectId={data?.data.projectId} subtaskId={subtaskId} />
+      {showDeleteSubtask && (
+        <DeleteSubtaskModal
+          subtaskId={subtaskId}
+          closeFn={setShowDeleteSubtask}
+        />
+      )}
+
+      {showAddTime && (
+        <AddTimeModal
+          projectId={data?.data.projectId}
+          subtaskId={subtaskId}
+          closeFn={setShowAddTime}
+        />
+      )}
     </>
   );
 };

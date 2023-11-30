@@ -17,11 +17,11 @@ const useLogout = () => {
   } = useMutation({
     mutationFn: getLogout,
     onError: () => {
-      setUser('');
+      setUser({});
     },
     onSuccess: () => {
       queryClient.clear();
-      setUser('');
+      setUser({});
     },
   });
 

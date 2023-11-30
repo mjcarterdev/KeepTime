@@ -19,6 +19,7 @@ const useLogin = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries(['projects']);
+      console.log(data.data.user);
       setUser(data.data.user);
     },
   });

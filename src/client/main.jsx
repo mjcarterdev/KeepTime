@@ -1,7 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {
   createBrowserRouter,
@@ -18,6 +22,7 @@ import ProfilePage from './pages/ProfilePage';
 import AboutUsPage from './pages/AboutUsPage';
 import SubtaskPage from './pages/SubtaskPage';
 import AuthContextProvider from './context/AuthContext';
+import { getUser } from './api/services';
 
 // Create a client
 const queryClient = new QueryClient();
@@ -27,7 +32,15 @@ const projectLoader = async () => {
 };
 
 const authLoader = () => {
-  return null;
+  const {
+    data: user,
+    isLoading: userIsLoading,
+    isError: userIsError,
+  } = useQuery({
+    queryKey: ['user'],
+    queryFn: getUser,
+  });
+  return { user, userIsError, userIsLoading };
 };
 
 const loader = async () => {
