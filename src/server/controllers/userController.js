@@ -1,4 +1,4 @@
-import { findUserById } from '../models/userModel.js';
+import { findUserById, updateUserByEmail } from '../models/userModel.js';
 
 export const getUserById = async (req, res, next) => {
   try {
@@ -8,5 +8,17 @@ export const getUserById = async (req, res, next) => {
     res.json(resp);
   } catch (err) {
     next(err);
+  }
+};
+
+export const updateUser = async (req, res, next) => {
+  try {
+    const { user } = req.cookies['jwt'];
+    const { name, email } = req.body;
+    const resp = await updateUserByEmail(user.email, name, email);
+    delete resp.password;
+    res.json(resp);
+  } catch (error) {
+    next(error);
   }
 };

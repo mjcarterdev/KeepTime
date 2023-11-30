@@ -23,3 +23,15 @@ export const findUserById = (id) => {
     },
   });
 };
+
+export const updateUserByEmail = (user, name, email) => {
+  return db.user.update({
+    where: {
+      email: user,
+    },
+    data: {
+      name,
+      email,
+    },
+  });
+};
