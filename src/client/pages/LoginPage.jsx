@@ -60,7 +60,7 @@ const LoginPage = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center min-h-screen gap-6 pt-20 pb-8 overflow-y-scroll bg-transparent background-image scrollbar-hide md:scrollbar-default">
+      <div className="flex flex-col items-center min-h-screen gap-6 p-4 pt-20 pb-8 overflow-y-scroll bg-transparent background-image scrollbar-hide md:scrollbar-default">
         <NavBar />
         <div className="relative flex flex-col items-center justify-center pt-4">
           <Logo

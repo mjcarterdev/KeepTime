@@ -20,6 +20,7 @@ import Timer from '../components/Timer';
 import TimeEntries from '../components/TimeEntries';
 import Toolbar from '../components/Toolbar';
 import UpdateTimeModal from '../components/modals/UpdateTimeModal';
+import Card from '../components/Card';
 
 const SubtaskPage = () => {
   const { user } = useContext(AuthContext);
@@ -120,7 +121,7 @@ const SubtaskPage = () => {
 
   return (
     <>
-      <NavBar location={data?.data.title} />
+      <NavBar location={'Subtask'} />
       <div
         className={`flex pb-32 pt-24 flex-col flex-1 h-[100vh] w-full gap-2 p-4 overflow-y-scroll md:items-center scrollbar-hide md:scrollbar-default `}
       >
@@ -128,16 +129,22 @@ const SubtaskPage = () => {
           <Spinner />
         ) : (
           <>
-            <div className="indicator">
+            <div className="flex items-center w-full md:max-w-[32rem]">
               {data?.data.completed ? (
-                <span className="indicator-item badge">Completed</span>
-              ) : null}
-              <div className="card card-side glass px-2 md:w-[40rem]">
-                <div className="flex items-center">
+                <span className="pl-4">
+                  <Icon iconName={'check-big'} />
+                </span>
+              ) : (
+                <span className="w-2"></span>
+              )}
+              <div className="w-full underline underline-offset-2 decoration-accent">
+                <div className="flex items-center justify-between w-full cursor-default">
                   <EditableText
                     initialText={data?.data.title}
                     updateSubtaskFn={updateSubtaskMutation}
-                    className={' p-2 min-w-min70 text-secondary font-medium'}
+                    className={
+                      ' p-2 min-w-min70 text-secondary font-medium text-3xl border-accent'
+                    }
                     showEdit={isEditTitle}
                     showEditFn={setIsEditTitle}
                     item={data?.data}
@@ -149,37 +156,41 @@ const SubtaskPage = () => {
                     onClick={(event) => {
                       setIsEditTitle(!isEditTitle);
                     }}
-                    className={'cursor-pointer '}
+                    className={'cursor-pointer pr-4'}
                   >
                     <Icon iconName={'edit-sm'} className={'text-[0.5rem]'} />
                   </div>
                 </div>
               </div>
             </div>
-            <div className="card glass md:w-[40rem] mt-6">
-              <div className="flex items-center w-full px-4 font-medium text-center bg-transparent border-2 border-transparent min-h-12 border-b-accent">
-                <span>Description:</span>
-              </div>
-              <div className="flex items-center px-2">
-                <EditableTextArea
-                  initialText={data?.data.description}
-                  updateSubtaskFn={updateSubtaskMutation}
-                  className={' p-2 text-secondary font-medium'}
-                  showEdit={isEditDescription}
-                  showEditFn={setIsEditDescription}
-                  item={data?.data}
-                />
 
+            <Card>
+              <div className="flex items-center justify-between pb-2">
+                <span className="px-4 text-xl font-medium cursor-default">
+                  Description
+                </span>
                 <div
                   onClick={(event) => {
                     setIsEditDescription(!isEditDescription);
                   }}
-                  className={'cursor-pointer '}
+                  className={'cursor-pointer px-4'}
                 >
                   <Icon iconName={'edit-sm'} className={'text-[0.5rem]'} />
                 </div>
               </div>
-            </div>
+              <span className="w-full border-b-2 border-accent"></span>
+              <div className="flex items-center px-2">
+                <EditableTextArea
+                  initialText={data?.data.description}
+                  updateSubtaskFn={updateSubtaskMutation}
+                  className={' p-2 text-secondary w-full'}
+                  showEdit={isEditDescription}
+                  showEditFn={setIsEditDescription}
+                  item={data?.data}
+                />
+              </div>
+            </Card>
+
             <Timer
               ref={timerRef}
               subtaskId={data?.data.id}
@@ -295,7 +306,7 @@ const SubtaskPage = () => {
           </>
         )}
       </Toolbar>
-      <ToastContainer hideProgressBar limit={3} />
+      <ToastContainer hideProgressBar limit={3} autoClose={3000} />
       {showDeleteSubtask && (
         <DeleteSubtaskModal
           subtaskId={subtaskId}
@@ -310,8 +321,7 @@ const SubtaskPage = () => {
           closeFn={setShowAddTime}
         />
       )}
-      <DeleteSubtaskModal subtaskId={subtaskId} />
-      <AddTimeModal projectId={data?.data.projectId} subtaskId={subtaskId} />
+
       {selectedTimeEntry ? (
         <UpdateTimeModal timeRecord={selectedTimeEntry} />
       ) : null}

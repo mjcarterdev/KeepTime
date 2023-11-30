@@ -32,15 +32,7 @@ const projectLoader = async () => {
 };
 
 const authLoader = () => {
-  const {
-    data: user,
-    isLoading: userIsLoading,
-    isError: userIsError,
-  } = useQuery({
-    queryKey: ['user'],
-    queryFn: getUser,
-  });
-  return { user, userIsError, userIsLoading };
+  return null;
 };
 
 const loader = async () => {

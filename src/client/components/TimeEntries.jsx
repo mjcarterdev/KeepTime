@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { getAllTimeRecordsBySubtaskId } from '../api/services';
 import Spinner from '../components/Spinner.jsx';
+import Card from './Card.jsx';
 
 const TimeEntries = forwardRef((props, ref) => {
   const [timeRecordsList, setTimeRecordsList] = useState([]);
@@ -64,46 +65,44 @@ const TimeEntries = forwardRef((props, ref) => {
 
   return (
     <>
-      <div className="flex flex-col py-2 h-80 md:w-[40rem] shadow-[2px_4px_5px_2px_#00000024] md:min-w-min50 md:h-50 rounded-[25px] bg-neutral bg-opacity-50 border border-gray-100 bg-clip-padding backdrop-filter backdrop-blur-lg">
-        {isLoading ? (
-          <Spinner />
-        ) : (
-          <>
-            <div className="flex items-center font-medium justify-between w-full px-4 text-center bg-transparent min-h-12 border-2 border-transparent border-b-accent">
-              <span>Time Entries: </span>
-              <span>{props.totalDuration}</span>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <Card>
+          <div className="flex justify-between w-full pb-2 border-b-2 border-accent">
+            <span className="pl-4 text-xl font-medium cursor-default">
+              Time Entries:{' '}
+            </span>
+            <span className="pr-4 text-xl font-medium cursor-default">
+              {props.totalDuration}
+            </span>
+          </div>
+          {timeRecordsList && timeRecordsList.length > 0 ? (
+            [...timeRecordsList].map((item) => (
+              <div
+                key={item.id}
+                item={item}
+                className={`flex items-center justify-between cursor-pointer w-full px-4 text-center min-h-12 hover:bg-accent hover:bg-opacity-30 border-b-2 border-accent border-opacity-20 ${
+                  selectedTimeEntry && selectedTimeEntry.id == item.id
+                    ? ' bg-opacity-20 bg-primary'
+                    : 'bg-transparent'
+                }`}
+                onClick={() => {
+                  selectTimeEntry(item);
+                }}
+              >
+                <div className="text-secondary ">{item.startTimeFormatted}</div>
+                <div className="text-secondary ">{item.totalDuration}</div>
+              </div>
+            ))
+          ) : (
+            <div className="px-4 py-10 text-secondary min-h-12">
+              No time records found... Click Start to record the time for the
+              subtask.
             </div>
-            <section className="overflow-y-auto divide-y-2 divide-accent divide-opacity-20">
-              {timeRecordsList && timeRecordsList.length > 0 ? (
-                [...timeRecordsList].map((item) => (
-                  <div
-                    key={item.id}
-                    item={item}
-                    className={`flex items-center justify-between cursor-pointer w-full px-4 text-center min-h-12 hover:bg-accent hover:bg-opacity-30 ${
-                      selectedTimeEntry && selectedTimeEntry.id == item.id
-                        ? 'bg-neutral bg-opacity-20 bg-purple-700'
-                        : 'bg-transparent'
-                    }`}
-                    onClick={() => {
-                      selectTimeEntry(item);
-                    }}
-                  >
-                    <div className="text-secondary ">
-                      {item.startTimeFormatted}
-                    </div>
-                    <div className="text-secondary ">{item.totalDuration}</div>
-                  </div>
-                ))
-              ) : (
-                <div className="text-secondary px-4 py-10 min-h-12">
-                  No time records found... Click Start to record the time for
-                  the subtask.
-                </div>
-              )}
-            </section>
-          </>
-        )}
-      </div>
+          )}
+        </Card>
+      )}
     </>
   );
 });

@@ -108,7 +108,7 @@ const Timer = forwardRef((props, ref) => {
   }));
 
   return (
-    <div className="flex flex-col items-center justify-center py-10 text-4xl font-mono text-gray-900">
+    <div className="flex flex-col items-center justify-center py-10 font-mono text-4xl text-gray-900 cursor-default">
       {formatTime(time)}
     </div>
   );
