@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from 'react';
 const getLocalStorageValue = (key) => {
   const value = localStorage.getItem(key);
   if (!value) return null;
-
   try {
     return JSON.parse(value);
   } catch {
@@ -28,7 +27,11 @@ const useLocalStorage = (key) => {
     [key],
   );
 
-  return [value, setLocalStorageValue];
+  const removeLocalStorageItem = (key) => {
+    localStorage.removeItem(key);
+  };
+
+  return { value, setLocalStorageValue, removeLocalStorageItem };
 };
 
 export default useLocalStorage;

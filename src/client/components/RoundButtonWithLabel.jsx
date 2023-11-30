@@ -8,7 +8,7 @@ const RoundButtonWithLabel = ({
   showText = true,
 }) => {
   return (
-    <div className="flex flex-col items-center justify-center gap-1">
+    <div className="flex flex-col w-28 items-center justify-center gap-1">
       <Button
         className={`rounded-[50%] w-14 h-14 ${className}`}
         onClick={onClick}

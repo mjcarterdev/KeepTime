@@ -146,6 +146,23 @@ const Icon = ({ iconName, className }) => {
           <polyline points="20 6 9 17 4 12"></polyline>
         </svg>
       );
+    case 'check-big':
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="40"
+          height="40"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={`feather feather-check text-accent ${className}`}
+        >
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      );
     case 'restart':
       return (
         <svg

@@ -1,21 +1,34 @@
-import { createContext, useMemo } from 'react';
+import { createContext, useEffect, useMemo } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage.js';
+// import { useQuery } from 'react-query';
+// import { getUser } from '../api/services.js';
 
 const KEEPTIME = 'keeptime-session';
 
 const AuthContext = createContext({
   user: null,
-  isLoading: false,
-  error: null,
   setUser: () => {},
+  removeLocalStorageItem: () => {},
 });
 
 const AuthContextProvider = ({ children }) => {
-  const [user, setUser] = useLocalStorage(KEEPTIME);
+  const {
+    value: user,
+    setLocalStorageValue: setUser,
+    removeLocalStorageItem,
+  } = useLocalStorage(KEEPTIME);
 
+  // const {
+  //   data: user,
+  //   isLoading: userIsLoading,
+  //   isError: userIsError,
+  // } = useQuery({
+  //   queryKey: ['user'],
+  //   queryFn: getUser,
+  // });
   return (
     <AuthContext.Provider
-      value={useMemo(() => ({ user, setUser }), [user, setUser])}
+      value={useMemo(() => ({ user, setUser, removeLocalStorageItem }), [user])}
     >
       {children}
     </AuthContext.Provider>

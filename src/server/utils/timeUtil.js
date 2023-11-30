@@ -1,6 +1,10 @@
 export const totalDurationInMs = (timeRecords) => {
   return timeRecords.reduce(
-    (total, timeRecord) => total + (Date.parse(timeRecord.endTime) - Date.parse(timeRecord.startTime)),
+    (total, timeRecord) =>
+      timeRecord.endTime
+        ? total +
+          (Date.parse(timeRecord.endTime) - Date.parse(timeRecord.startTime))
+        : total,
     0,
   );
 };

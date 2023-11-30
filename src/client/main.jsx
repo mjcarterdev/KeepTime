@@ -1,7 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import {
   createBrowserRouter,
@@ -18,25 +22,11 @@ import ProfilePage from './pages/ProfilePage';
 import AboutUsPage from './pages/AboutUsPage';
 import SubtaskPage from './pages/SubtaskPage';
 import AuthContextProvider from './context/AuthContext';
+import { getUser } from './api/services';
+import { ProtectedRoute } from './pages/ProtectedRoute';
 
 // Create a client
 const queryClient = new QueryClient();
-
-const projectLoader = async () => {
-  return null;
-};
-
-const authLoader = () => {
-  return null;
-};
-
-const loader = async () => {
-  return null;
-};
-
-const profileLoader = async () => {
-  return null;
-};
 
 const subtaskLoader = async ({ params }) => {
   const { subtaskId } = params;
@@ -45,27 +35,36 @@ const subtaskLoader = async ({ params }) => {
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route
-      path="/"
-      element={<App />}
-      loader={loader}
-      errorElement={<ErrorPage />}
-    >
-      <Route path="/" index element={<LoginPage />} loader={authLoader} />
-      <Route path="/signup" element={<SignUpPage />} loader={authLoader} />
-      <Route path="/about" element={<AboutUsPage />} loader={loader} />
+    <Route path="/" element={<App />} errorElement={<ErrorPage />}>
+      <Route path="/" index element={<LoginPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/about" element={<AboutUsPage />} />
       <Route
         path="/projects"
-        element={<ProjectPage />}
-        loader={projectLoader}
+        element={
+          <ProtectedRoute>
+            <ProjectPage />
+          </ProtectedRoute>
+        }
       />
 
       <Route
         path={'/subtask/:subtaskId'}
-        element={<SubtaskPage />}
+        element={
+          <ProtectedRoute>
+            <SubtaskPage />
+          </ProtectedRoute>
+        }
         loader={subtaskLoader}
       />
-      <Route path="/profile" element={<ProfilePage />} loader={profileLoader} />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
     </Route>,
   ),
 );

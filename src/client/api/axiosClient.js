@@ -62,7 +62,7 @@ const createAxiosClient = () => {
         console.log('Refresh token expired - hopefully will be logged out');
         const res = await client(getLogout());
         if (res.status == 200) {
-          localStorage.setItem(localStorageKey, JSON.stringify({ user: {} }));
+          localStorage.removeItem(localStorageKey);
         }
 
         return Promise.resolve(error);

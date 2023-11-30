@@ -6,7 +6,7 @@ import { AuthContext } from '../context/AuthContext';
 const KEEPTIME = 'keeptime-session';
 
 const useLogout = () => {
-  const { setUser } = useContext(AuthContext);
+  const { removeLocalStorageItem } = useContext(AuthContext);
   const queryClient = useQueryClient();
 
   const {
@@ -17,11 +17,11 @@ const useLogout = () => {
   } = useMutation({
     mutationFn: getLogout,
     onError: () => {
-      setUser('');
+      removeLocalStorageItem(KEEPTIME);
     },
     onSuccess: () => {
       queryClient.clear();
-      setUser('');
+      removeLocalStorageItem(KEEPTIME);
     },
   });
 

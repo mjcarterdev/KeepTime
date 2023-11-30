@@ -1,23 +1,36 @@
 import NavBar from '../components/Navbar';
+import Logo from '../components/Logo';
+import Skyline from '../images/skyline.svg';
+import Card from '../components/Card';
 
 const AboutUsPage = () => {
   return (
     <>
-      <NavBar location="About Us" />
-      <div
-        className={`flex pb-32 pt-24 flex-col flex-1 h-[100vh] w-full gap-2 p-4 overflow-y-scroll md:items-center scrollbar-hide md:scrollbar-default `}
-      >
-        <div>
-          <p>About Us Page</p>
-
-          <h2>Contribution Attribute</h2>
-          <div>
-            <a href="https://www.freepik.com/free-photo/vivid-blurred-colorful-wallpaper-background_18137267.htm#query=glassmorphism%20background&position=14&from_view=search&track=ais">
-              Background Image by user3802032
-            </a>{' '}
-            on Freepik
-          </div>
+      <div className="flex flex-col items-center min-h-screen gap-6 p-4 pt-20 pb-8 overflow-y-scroll bg-transparent background-image scrollbar-hide md:scrollbar-default">
+        <NavBar location="About Us" />
+        <div className="relative flex flex-col items-center justify-center pt-4">
+          <Logo
+            className={
+              'absolute top-4  text-6xl  md:text-8xl p-5 font-bold z-10 max-w-max90'
+            }
+          />
+          <img src={Skyline} className="w-full pt-20 md:max-w-[40rem]" />
         </div>
+        <div className="card ">
+          <p className="py-1 text-xl leading-loose text-center text-neutral-content md:text-2xl">
+            Unlock your productivity potential.
+            <br />
+            Your Time. Your Way.
+          </p>
+        </div>
+        <Card className={'bg-opacity-40'}>
+          <article className="leading-loose prose text-center">
+            A time management tool for tracking time spent on projects and
+            tasks. Record each activity with a click of a button. Track personal
+            progress anywhere at any time with a Designed for mobile-first
+            approach.
+          </article>
+        </Card>
       </div>
     </>
   );

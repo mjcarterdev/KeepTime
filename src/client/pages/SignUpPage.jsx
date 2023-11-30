@@ -46,7 +46,6 @@ const SignUpPage = () => {
 
   useEffect(() => {
     if (registerData) {
-      console.log(registerData);
       toast.success('success register', {
         position: toast.POSITION.TOP_RIGHT,
         toastId: 'registerSuccess',
