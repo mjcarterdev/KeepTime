@@ -9,6 +9,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { updateUser } from '../api/services';
 
 const registrationSchema = z.object({
   name: z.string().min(1, { message: 'Name is required' }),
@@ -18,7 +20,7 @@ const registrationSchema = z.object({
 });
 
 const ProfilePage = () => {
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const {
     register,
@@ -34,6 +36,23 @@ const ProfilePage = () => {
     delayError: 1000,
   });
 
+  const queryClient = useQueryClient();
+
+  const {
+    mutate: updateUserOnSubmit,
+    data: updateUserData,
+    error: updateUserError,
+    isLoading: updateUserIsLoading,
+  } = useMutation({
+    mutationFn: updateUser,
+    onError: (error) => {
+      setErrorMessage(error.response.data.error);
+    },
+    onSuccess: (data) => {
+      setUser(data);
+    },
+  });
+
   const hidden = 'invisible label-text-alt';
   const visible = 'label-text-alt text-error';
 
@@ -44,7 +63,7 @@ const ProfilePage = () => {
   }, [user]);
 
   const onSubmit = async (data) => {
-    console.log(data);
+    updateUserOnSubmit(data);
   };
 
   return (
@@ -87,7 +106,12 @@ const ProfilePage = () => {
               </span>
             </label>
             <div className="flex pt-4 justify-evenly">
-              <Button type="submit" className="w-full" btnType={'default'}>
+              <Button
+                type="submit"
+                className="w-full"
+                btnType={'default'}
+                isLoading={updateUserIsLoading}
+              >
                 Update User
               </Button>
             </div>

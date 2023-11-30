@@ -7,7 +7,7 @@ export const getUser = async () => {
 };
 
 export const updateUser = async (data) => {
-  const res = await axiosClient.post('/user/profile');
+  const res = await axiosClient.post('/user/profile', data);
   return res.data;
 };
 

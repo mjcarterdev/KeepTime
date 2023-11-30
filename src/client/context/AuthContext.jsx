@@ -7,6 +7,7 @@ const KEEPTIME = 'keeptime-session';
 
 const AuthContext = createContext({
   user: null,
+  setUser: () => {},
 });
 
 const AuthContextProvider = ({ children }) => {
