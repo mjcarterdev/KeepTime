@@ -1,4 +1,3 @@
-import e from 'express';
 import { axiosClient } from './axiosClient';
 
 // User API functions
@@ -6,16 +5,6 @@ export const getUser = async () => {
   const res = await axiosClient.get('/user/profile');
   return res.data;
 };
-
-// export const changePassword = async (data) => {
-//   const res = await axiosClient.post('/user/changePassword', data);
-//   return res.data;
-// };
-
-// export const updateUser = async (data) => {
-//   const res = await axiosClient.patch('/user/profile', data);
-//   return res.data;
-// };
 
 // Auth API functions
 export const postRegistration = ({ email, password, name, confirm }) => {
