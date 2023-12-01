@@ -115,12 +115,12 @@ const AddTimeModal = ({ projectId, subtaskId, closeFn }) => {
       </div>
 
       <div className="flex justify-end gap-2 pt-2 modal-action">
-        <Button
+        <button
           className="btn btn-ghost rounded-[25px]"
           onClick={() => closeFn(false)}
         >
           Cancel
-        </Button>
+        </button>
         <form method="dialog" onSubmit={handleSubmit(handleAddTime)}>
           <Button type="submit" btnType={'default'} className={'w-20'}>
             OK

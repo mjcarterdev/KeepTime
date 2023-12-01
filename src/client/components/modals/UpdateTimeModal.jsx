@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Button from '../Button.jsx';
 import Modal from '../Modal.jsx';
 
-const UpdateTimeModal = ({ timeRecord }) => {
+const UpdateTimeModal = ({ timeRecord, closeFn }) => {
   const queryClient = useQueryClient();
 
   const {
@@ -53,15 +53,15 @@ const UpdateTimeModal = ({ timeRecord }) => {
     ).toISOString();
     data.endTime = new Date(data.endDate + ' ' + data.endTime).toISOString();
     updateTimeRecordMutation.mutate(data);
-    document.getElementById('update_time_record').close();
+    closeFn(false);
   };
 
   const hidden = 'invisible label-text-alt';
   const visible = 'label-text-alt text-error';
 
   return (
-    <Modal title="Update Time?">
-      <div className="join">
+    <Modal title="Update Time">
+      <div className="flex justify-center gap-8">
         <div className="join-vertical">
           <label className="label">
             <span className="label-text">Start Date</span>
@@ -95,7 +95,7 @@ const UpdateTimeModal = ({ timeRecord }) => {
           </label>
         </div>
       </div>
-      <div className="join">
+      <div className="flex justify-center gap-8">
         <div className="join-vertical">
           <label className="label">
             <span className="label-text">End Date</span>
@@ -130,19 +130,14 @@ const UpdateTimeModal = ({ timeRecord }) => {
         </div>
       </div>
       <div className="modal-action">
-        <Button
-          className="btn btn-ghost"
-          onClick={() => document.getElementById('update_time_record').close()}
+        <button
+          className="btn btn-ghost rounded-[25px]"
+          onClick={() => closeFn(false)}
         >
           Cancel
-        </Button>
+        </button>
         <form method="dialog" onSubmit={handleSubmit(handleUpdateTime)}>
-          <Button
-            type="submit"
-            disabled={!isDirty || !isValid}
-            btnType={'default'}
-            className={'w-20'}
-          >
+          <Button type="submit" btnType={'default'} className={'w-20'}>
             OK
           </Button>
         </form>
