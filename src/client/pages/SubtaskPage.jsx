@@ -323,7 +323,10 @@ const SubtaskPage = () => {
       )}
 
       {selectedTimeEntry ? (
-        <UpdateTimeModal timeRecord={selectedTimeEntry} />
+        <UpdateTimeModal
+          timeRecord={selectedTimeEntry}
+          closeFn={setSelectedTimeEntry}
+        />
       ) : null}
     </>
   );
