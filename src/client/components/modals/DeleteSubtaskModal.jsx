@@ -10,7 +10,7 @@ const DeleteSubtaskModal = ({ subtaskId, closeFn }) => {
 
   const handleDeleteSubtask = async () => {
     await deleteSubtask(subtaskId);
-    document.getElementById('delete_subtask').close();
+    closeFn(false);
     navigate('/projects');
   };
 
